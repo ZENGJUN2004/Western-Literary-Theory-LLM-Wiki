@@ -123,13 +123,21 @@ def resolve_link(target):
     return None, display
 
 
+# GitHub Pages subpath base URL
+BASE_HREF = "/Western-Literary-Theory-LLM-Wiki/"
+
+
 def convert_wiki_links(text):
     """将 [[...]] 链接转换为 HTML <a> 标签"""
     def replace_link(m):
         inner = m.group(1)
         href, display = resolve_link(inner)
         if href:
-            return f'<a href={href} class="wiki-link">{display}</a>'
+            # 将相对路径转换为相对于 <base> 的路径
+            # href 格式: "concepts/互文性.html" → /Western-Literary-Theory-LLM-Wiki/concepts/互文性.html
+            href_clean = href.strip('"')
+            absolute_href = BASE_HREF + href_clean
+            return f'<a href="{absolute_href}" class="wiki-link">{display}</a>'
         else:
             # 未找到的链接显示为灰色提示
             return f'<span class="wiki-missing">{inner}</span>'
@@ -520,7 +528,7 @@ function buildNav() {{
     for (const [slug, info] of Object.entries(items)) {{
       const title = info.title || slug;
       const active = window.location.pathname.includes(slug + '.html') ? ' active' : '';
-      html += `<a class="nav-item${{active}}" href="/wiki/${{slug}}.html">${{title}}</a>`;
+      html += `<a class="nav-item${{active}}" href="${{BASE_HREF}}{{slug}}.html">${{title}}</a>`;
     }}
     html += '</div>';
   }}
@@ -615,7 +623,7 @@ def generate_page(filepath):
     tags = fm.get("tags", [])
     for tag in tags[:5]:
         # 标签链接到搜索
-        meta_parts.append(f'<a class="meta-tag" href="/wiki/search.html?q={tag}">{tag}</a>')
+        meta_parts.append(f'<a class="meta-tag" href="{BASE_HREF}search.html?q={tag}">{tag}</a>')
 
     lifespan = fm.get("wiki_lifespan", "")
     if lifespan:
@@ -817,6 +825,7 @@ h2 {{ font-size: 20px; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8p
 
 <script>
 const INDEX = {search_json};
+const BASE_HREF = "{{base_href}}";
 const TYPE_LABELS = {{figure:"人物", concept:"概念", movement:"流派", work:"原典",
   comparison:"对比", overview:"谱系", synthesis:"综合", summary:"摘要"}};
 
@@ -831,7 +840,7 @@ function doSearch(q) {{
   ).slice(0, 20);
   results.innerHTML = hits.map(p => `
     <li>
-      <a href="/wiki/${{p.slug}}.html">
+      <a href="{{base_href}}{{p.slug}}.html">
         <span class="result-type">${{TYPE_LABELS[p.type] || p.type}}</span>
         <span class="result-title">${{p.title}}</span>
       </a>
@@ -852,7 +861,7 @@ TYPE_ORDER.forEach(t => {{
   if (!byType[t]) return;
   allPages.innerHTML += `<li style="margin-top:12px;font-weight:600;color:var(--accent)">${{TYPE_LABELS[t]||t}}（${{byType[t].length}}）</li>`;
   byType[t].slice(0, 50).forEach(p => {{
-    allPages.innerHTML += `<li><a href="/wiki/${{p.slug}}.html">${{p.title}}</a></li>`;
+    allPages.innerHTML += `<li><a href="${{BASE_HREF}}{{{{p.slug}}}}.html">${{p.title}}</a></li>`;
   }});
   if (byType[t].length > 50) allPages.innerHTML += `<li style="color:var(--muted)">… 还有 ${{byType[t].length - 50}} 个</li>`;
 }});
@@ -870,6 +879,7 @@ TYPE_ORDER.forEach(t => {{
         summaries=sum(1 for p in search_idx if p["type"] == "summary"),
         others=sum(1 for p in search_idx if p["type"] not in ("figure","concept","movement","work","summary")),
         search_json=json.dumps(search_idx, ensure_ascii=False, indent=2),
+        base_href=BASE_HREF,
     ), encoding="utf-8")
     print(f"首页: {home_path}")
 
@@ -908,7 +918,7 @@ li a {{ font-size:15px; }}
                     type_html += '</ul></div>\n'
                 current_letter = first_char
                 type_html += f'<div class="letter-group"><div class="letter">{first_char}</div><ul>\n'
-            type_html += f'<li><a href="/wiki/{p["slug"]}.html">{title}</a></li>\n'
+            type_html += f'<li><a href="{BASE_HREF}{p["slug"]}.html">{title}</a></li>\n'
         if current_letter:
             type_html += '</ul></div>\n'
 
