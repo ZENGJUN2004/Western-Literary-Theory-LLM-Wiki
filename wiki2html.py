@@ -8,7 +8,8 @@ from pathlib import Path
 from datetime import datetime
 
 # 路径配置
-KB_ROOT = Path(r"d:\BaiduNetdiskDownload\西方文论教材\kb\wiki")
+SCRIPT_DIR = Path(__file__).parent.resolve()
+KB_ROOT = SCRIPT_DIR / "kb" / "wiki"
 OUTPUT_DIR = KB_ROOT.parent.parent / "wiki-site" / "docs"
 RAW_DIR = KB_ROOT.parent.parent / "raw"
 
