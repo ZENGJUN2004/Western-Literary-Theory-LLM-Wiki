@@ -26,6 +26,7 @@ _broken*.py
 
 # 生成的站点目录（不提交docs内容，只提交CI配置）
 wiki-site/docs/
+!.nojekyll
 
 # 原始PDF文件
 [OCR]*.pdf
