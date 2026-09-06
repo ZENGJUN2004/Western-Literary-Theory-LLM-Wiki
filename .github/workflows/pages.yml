@@ -20,20 +20,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          cache: 'pip'
-
-      - name: Install dependencies
-        run: pip install pyyaml
 
       - name: Generate static site
         run: python wiki2html.py
+
+      - name: Create .nojekyll marker
+        run: touch wiki-site/docs/.nojekyll
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
