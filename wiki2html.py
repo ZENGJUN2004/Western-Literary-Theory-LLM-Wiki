@@ -1,0 +1,919 @@
+"""
+西方文论 Wiki 静态站点生成器
+将 kb/wiki/ 下的 markdown 页面转换为 GitHub Pages 静态 HTML
+支持：frontmatter 解析、[[wiki-link]] 转换、目录生成、搜索索引
+"""
+import os, re, sys, json, html as html_mod
+from pathlib import Path
+from datetime import datetime
+
+# 路径配置
+KB_ROOT = Path(r"d:\BaiduNetdiskDownload\西方文论教材\kb\wiki")
+OUTPUT_DIR = KB_ROOT.parent.parent / "wiki-site" / "docs"
+RAW_DIR = KB_ROOT.parent.parent / "raw"
+
+# 确保输出目录存在
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# 类型路由
+TYPE_DIRS = {
+    "figure": "figures",
+    "concept": "concepts",
+    "movement": "movements",
+    "work": "works",
+    "comparison": "comparisons",
+    "overview": "overviews",
+    "synthesis": "synthesis",
+    "summary": "summaries",
+}
+
+# ============================================================
+# 1. Frontmatter 解析
+# ============================================================
+def parse_frontmatter(content):
+    """解析 YAML frontmatter，返回 (fm_dict, body_str)"""
+    if not content.startswith("---"):
+        return {}, content
+    m = re.match(r"^---\s*\n(.*?)\n---\s*\n", content, re.DOTALL)
+    if not m:
+        return {}, content
+    fm_text = m.group(1)
+    body = content[m.end():]
+
+    # 简易 YAML 解析（不需要 PyYAML 依赖）
+    fm = {}
+    for line in fm_text.split("\n"):
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if ":" not in line:
+            continue
+        key, _, val = line.partition(":")
+        key = key.strip()
+        val = val.strip()
+        # 列表格式
+        if val.startswith("["):
+            items = re.findall(r'"([^"]*)"', val)
+            if not items:
+                items = re.findall(r"'([^']*)'", val)
+            fm[key] = items
+        elif val.startswith('"') and val.endswith('"'):
+            fm[key] = val[1:-1]
+        elif val.startswith("'") and val.endswith("'"):
+            fm[key] = val[1:-1]
+        else:
+            fm[key] = val
+    return fm, body
+
+
+# ============================================================
+# 2. 链接解析：[[type/name|display]] → <a href>
+# ============================================================
+# 已知的页面路径映射
+PAGE_PATHS = {}
+
+def build_page_index():
+    """建立所有页面的 path → title 映射"""
+    global PAGE_PATHS
+    PAGE_PATHS = {}
+    for type_dir, dir_name in TYPE_DIRS.items():
+        dir_path = KB_ROOT / dir_name
+        if not dir_path.exists():
+            continue
+        for f in dir_path.glob("*.md"):
+            rel = f.relative_to(KB_ROOT)
+            slug = str(rel.with_suffix("")).replace("\\", "/")
+            PAGE_PATHS[slug] = {"type": type_dir, "file": str(f), "slug": slug}
+            # 也建立别名映射
+            try:
+                fm, _ = parse_frontmatter(f.read_text(encoding="utf-8-sig"))
+                for alias in fm.get("aliases", []):
+                    alias_slug = alias.replace("/", "_").replace(" ", "-").lower()
+                    PAGE_PATHS[alias_slug] = {"type": type_dir, "file": str(f), "slug": slug}
+            except:
+                pass
+
+build_page_index()
+
+def resolve_link(target):
+    """解析 [[type/name]] 链接，返回 (href, display_text)"""
+    # 清理：去掉 type/ 前缀和 | display 部分
+    target = re.sub(r"^\w+/", "", target)  # 去掉 figures/ 等前缀
+    parts = target.split("|")
+    display = parts[-1].strip()
+    key = parts[0].strip()
+
+    # 去掉尾部的 URL 参数，如 |古典文论]] → 古典文论
+    key = re.sub(r">\s*$", "", key)
+
+    # 查找匹配
+    if key in PAGE_PATHS:
+        info = PAGE_PATHS[key]
+        return f'"{info["slug"]}.html"', display
+
+    # 尝试模糊匹配（去掉空格/标点）
+    key_norm = re.sub(r"[\s\-·•]", "", key)
+    for slug, info in PAGE_PATHS.items():
+        slug_norm = re.sub(r"[\s\-·•]", "", slug)
+        if key_norm == slug_norm or key_norm in slug_norm or slug_norm in key_norm:
+            return f'"{info["slug"]}.html"', display
+
+    # 未找到，返回原文本但不加链接
+    return None, display
+
+
+def convert_wiki_links(text):
+    """将 [[...]] 链接转换为 HTML <a> 标签"""
+    def replace_link(m):
+        inner = m.group(1)
+        href, display = resolve_link(inner)
+        if href:
+            return f'<a href={href} class="wiki-link">{display}</a>'
+        else:
+            # 未找到的链接显示为灰色提示
+            return f'<span class="wiki-missing">{inner}</span>'
+
+    return re.sub(r"\[\[([^\]|]+)(?:\|([^]]+))?\]\]", replace_link, text)
+
+
+# ============================================================
+# 3. Markdown → HTML 转换
+# ============================================================
+def md_to_html(md_text):
+    """将 markdown 转换为 HTML"""
+    lines = md_text.split("\n")
+    html_lines = []
+    in_code_block = False
+    in_table = False
+    table_rows = []
+
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+
+        # 代码块
+        if line.startswith("```"):
+            if in_code_block:
+                html_lines.append(f"<pre><code>{html_mod.escape(''.join(table_rows))}</code></pre>")
+                table_rows = []
+                in_code_block = False
+            else:
+                in_code_block = True
+                table_rows = []
+            i += 1
+            continue
+
+        if in_code_block:
+            table_rows.append(line)
+            i += 1
+            continue
+
+        # 空行
+        if not line.strip():
+            html_lines.append("")
+            i += 1
+            continue
+
+        # 标题
+        if line.startswith("# "):
+            html_lines.append(f'<h1>{convert_wiki_links(html_mod.escape(line[2:]))}</h1>')
+        elif line.startswith("## "):
+            html_lines.append(f'<h2>{convert_wiki_links(html_mod.escape(line[3:]))}</h2>')
+        elif line.startswith("### "):
+            html_lines.append(f'<h3>{convert_wiki_links(html_mod.escape(line[4:]))}</h3>')
+        elif line.startswith("#### "):
+            html_lines.append(f'<h4>{convert_wiki_links(html_mod.escape(line[5:]))}</h4>')
+        # 引用块
+        elif line.startswith("> "):
+            content = convert_wiki_links(html_mod.escape(line[2:]))
+            html_lines.append(f'<blockquote>{content}</blockquote>')
+        # 表格行
+        elif line.startswith("|") and line.endswith("|"):
+            cells = [html_mod.escape(c.strip()) for c in line.strip("|").split("|")]
+            html_lines.append(f"<tr>{''.join(f'<td>{c}</td>' for c in cells)}</tr>")
+        # 分隔线
+        elif line.startswith("---") or line.startswith("***"):
+            html_lines.append("<hr>")
+        # 无序列表
+        elif line.startswith("- "):
+            content = convert_wiki_links(html_mod.escape(line[2:]))
+            html_lines.append(f'<li>{content}</li>')
+        # 有序列表
+        elif re.match(r"^\d+\. ", line):
+            content = convert_wiki_links(html_mod.escape(line.split(". ", 1)[1]))
+            html_lines.append(f'<li>{content}</li>')
+        # 普通段落
+        else:
+            content = convert_wiki_links(html_mod.escape(line))
+            html_lines.append(f"<p>{content}</p>")
+
+        i += 1
+
+    # 处理代码块残留
+    if table_rows:
+        html_lines.append(f"<pre><code>{html_mod.escape(''.join(table_rows))}</code></pre>")
+
+    # 将连续的 <li> 包在 <ul> 中
+    result = []
+    in_ul = False
+    for line in html_lines:
+        if line.startswith("<li>"):
+            if not in_ul:
+                result.append("<ul>")
+                in_ul = True
+            result.append(line)
+        else:
+            if in_ul:
+                result.append("</ul>")
+                in_ul = False
+            result.append(line)
+    if in_ul:
+        result.append("</ul>")
+
+    return "\n".join(result)
+
+
+# ============================================================
+# 4. HTML 模板
+# ============================================================
+TEMPLATE = '''<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title} - 西方文论 Wiki</title>
+<style>
+:root {{
+  --bg: #fafaf8;
+  --fg: #1a1a1a;
+  --muted: #6b6b6b;
+  --accent: #2563eb;
+  --accent-light: #dbeafe;
+  --border: #e2e2e0;
+  --card-bg: #ffffff;
+  --tag-bg: #f0f0ed;
+  --sidebar-bg: #f5f5f3;
+  --link-color: #1d4ed8;
+}}
+@media (prefers-color-scheme: dark) {{
+  :root {{
+    --bg: #1a1a1a;
+    --fg: #e8e8e6;
+    --muted: #999;
+    --accent: #60a5fa;
+    --accent-light: #1e3a5f;
+    --border: #333;
+    --card-bg: #222;
+    --tag-bg: #2a2a2a;
+    --sidebar-bg: #1e1e1e;
+    --link-color: #93c5fd;
+  }}
+}}
+* {{ box-sizing: border-box; margin: 0; padding: 0; }}
+body {{
+  font-family: -apple-system, "Noto Serif SC", "Source Han Serif CN", Georgia, serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.8;
+  font-size: 16px;
+}}
+a {{ color: var(--link-color); text-decoration: none; }}
+a:hover {{ text-decoration: underline; }}
+.wiki-link {{ color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-light); }}
+.wiki-link:hover {{ border-bottom-color: var(--accent); text-decoration: none; }}
+.wiki-missing {{ color: var(--muted); font-style: italic; opacity: 0.6; }}
+
+/* 布局 */
+.layout {{ display: flex; min-height: 100vh; }}
+
+/* 侧边栏 */
+.sidebar {{
+  width: 260px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  padding: 20px 16px;
+  overflow-y: auto;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+}}
+.sidebar-header {{
+  padding: 8px 0 16px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 16px;
+}}
+.sidebar-header h1 {{
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}}
+.sidebar-header p {{
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}}
+.nav-section {{ margin-bottom: 20px; }}
+.nav-section-title {{
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  padding: 4px 8px;
+  margin-bottom: 4px;
+}}
+.nav-item {{
+  display: block;
+  padding: 4px 8px;
+  font-size: 14px;
+  color: var(--fg);
+  border-radius: 4px;
+  text-decoration: none;
+}}
+.nav-item:hover {{ background: var(--accent-light); color: var(--accent); text-decoration: none; }}
+.nav-item.active {{ background: var(--accent-light); color: var(--accent); font-weight: 600; }}
+.search-box {{
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card-bg);
+  color: var(--fg);
+  font-size: 14px;
+  margin-bottom: 16px;
+  outline: none;
+}}
+.search-box:focus {{ border-color: var(--accent); }}
+
+/* 主内容区 */
+.main {{
+  flex: 1;
+  margin-left: 260px;
+  padding: 40px 60px;
+  max-width: 900px;
+}}
+.content {{
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 40px 48px;
+}}
+.content h1 {{
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border);
+}}
+.content h2 {{
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}}
+.content h3 {{ font-size: 17px; margin-top: 24px; margin-bottom: 8px; }}
+.content h4 {{ font-size: 15px; margin-top: 20px; margin-bottom: 6px; }}
+.content p {{ margin-bottom: 12px; }}
+.content blockquote {{
+  border-left: 3px solid var(--accent);
+  padding: 8px 16px;
+  margin: 16px 0;
+  background: var(--accent-light);
+  border-radius: 0 4px 4px 0;
+  font-style: italic;
+}}
+.content ul {{ margin: 12px 0 12px 24px; }}
+.content li {{ margin-bottom: 4px; }}
+.content table {{
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+}}
+.content th, .content td {{
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  text-align: left;
+}}
+.content th {{ background: var(--sidebar-bg); font-weight: 600; }}
+.content pre {{
+  background: var(--sidebar-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  overflow-x: auto;
+  font-size: 13px;
+  margin: 16px 0;
+}}
+.content code {{ font-family: "JetBrains Mono", "Fira Code", monospace; font-size: 13px; }}
+.content hr {{ border: none; border-top: 1px solid var(--border); margin: 24px 0; }}
+
+/* 元数据栏 */
+.meta-bar {{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}}
+.meta-tag {{
+  display: inline-block;
+  padding: 2px 10px;
+  background: var(--tag-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+}}
+.meta-tag:hover {{ background: var(--accent-light); color: var(--accent); border-color: var(--accent); text-decoration: none; }}
+.meta-type {{
+  padding: 2px 10px;
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+}}
+.meta-info {{ font-size: 12px; color: var(--muted); margin-left: auto; }}
+
+/* 导航栏（上一页/下一页） */
+.page-nav {{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}}
+.page-nav a {{
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--fg);
+  text-decoration: none;
+}}
+.page-nav a:hover {{ border-color: var(--accent); color: var(--accent); text-decoration: none; }}
+
+/* 移动端 */
+.menu-toggle {{
+  display: none;
+  position: fixed;
+  top: 12px; left: 12px;
+  z-index: 200;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 18px;
+  cursor: pointer;
+}}
+@media (max-width: 768px) {{
+  .sidebar {{ transform: translateX(-100%); transition: transform 0.3s; }}
+  .sidebar.open {{ transform: translateX(0); }}
+  .main {{ margin-left: 0; padding: 60px 16px 40px; }}
+  .content {{ padding: 24px 20px; }}
+  .menu-toggle {{ display: block; }}
+}}
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<div class="layout">
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h1>西方文论 Wiki</h1>
+    <p>Western Literary Theory Knowledge Base</p>
+  </div>
+  <input type="text" class="search-box" placeholder="搜索页面…" id="searchBox" onkeyup="filterNav()">
+  <div id="navTree"></div>
+</nav>
+
+<main class="main">
+  <article class="content" id="content">
+    {body_html}
+  </article>
+  <div class="page-nav" id="pageNav">
+    {prev_next}
+  </div>
+</main>
+</div>
+
+<script>
+// 侧边栏导航数据
+const NAV_DATA = {nav_json};
+
+function buildNav() {{
+  const tree = document.getElementById('navTree');
+  let html = '';
+  for (const [section, items] of Object.entries(NAV_DATA)) {{
+    html += `<div class="nav-section">
+      <div class="nav-section-title">${{section}}</div>`;
+    for (const [slug, info] of Object.entries(items)) {{
+      const title = info.title || slug;
+      const active = window.location.pathname.includes(slug + '.html') ? ' active' : '';
+      html += `<a class="nav-item${{active}}" href="/wiki/${{slug}}.html">${{title}}</a>`;
+    }}
+    html += '</div>';
+  }}
+  tree.innerHTML = html;
+}}
+buildNav();
+
+function filterNav() {{
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  document.querySelectorAll('.nav-item').forEach(a => {{
+    const match = !q || a.textContent.toLowerCase().includes(q) || a.href.toLowerCase().includes(q);
+    a.style.display = match ? '' : 'none';
+  }});
+  document.querySelectorAll('.nav-section').forEach(sec => {{
+    sec.style.display = sec.querySelector('.nav-item:not([style*="none"])') ? '' : 'none';
+  }});
+}}
+</script>
+</body>
+</html>'''
+
+
+# ============================================================
+# 5. 主生成逻辑
+# ============================================================
+def generate_nav_data():
+    """生成侧边栏导航 JSON"""
+    nav = {}
+    for type_dir, dir_name in TYPE_DIRS.items():
+        dir_path = KB_ROOT / dir_name
+        if not dir_path.exists():
+            continue
+        items = {}
+        for f in sorted(dir_path.glob("*.md")):
+            rel = f.relative_to(KB_ROOT)
+            slug = str(rel.with_suffix("")).replace("\\", "/")
+            try:
+                content = f.read_text(encoding="utf-8-sig")
+                fm, body = parse_frontmatter(content)
+                # 取标题：# 标题 或文件名
+                title = ""
+                for bl in body.split("\n"):
+                    if bl.startswith("# "):
+                        title = bl[2:].strip()
+                        break
+                if not title:
+                    title = f.stem
+                items[slug] = {"title": title}
+            except Exception as e:
+                items[slug] = {"title": f.stem, "error": str(e)}
+        if items:
+            nav[dir_name.capitalize()] = items
+    return json.dumps(nav, ensure_ascii=False, indent=2)
+
+
+def get_prev_next(slug, all_slugs):
+    """获取上一页/下一页链接"""
+    try:
+        idx = all_slugs.index(slug)
+    except ValueError:
+        return "", ""
+    prev = f'"{all_slugs[idx-1]}.html"' if idx > 0 else ""
+    next_ = f'"{all_slugs[idx+1]}.html"' if idx < len(all_slugs) - 1 else ""
+    return prev, next_
+
+
+def generate_page(filepath):
+    """生成单个页面的 HTML"""
+    content = filepath.read_text(encoding="utf-8-sig")
+    fm, body = parse_frontmatter(content)
+
+    # 提取标题
+    title = ""
+    for bl in body.split("\n"):
+        if bl.startswith("# "):
+            title = bl[2:].strip()
+            break
+    if not title:
+        title = filepath.stem
+
+    # 生成 HTML 正文
+    body_html = md_to_html(body)
+
+    # 构建元数据栏
+    meta_parts = []
+    type_label = fm.get("type", "page")
+    type_names = {"figure": "人物", "concept": "概念", "movement": "流派",
+                  "work": "原典", "comparison": "对比", "overview": "谱系",
+                  "synthesis": "综合", "summary": "摘要"}
+    meta_parts.append(f'<span class="meta-type">{type_names.get(type_label, type_label)}</span>')
+
+    tags = fm.get("tags", [])
+    for tag in tags[:5]:
+        # 标签链接到搜索
+        meta_parts.append(f'<a class="meta-tag" href="/wiki/search.html?q={tag}">{tag}</a>')
+
+    lifespan = fm.get("wiki_lifespan", "")
+    if lifespan:
+        meta_parts.append(f'<span class="meta-info">{lifespan}</span>')
+
+    updated = fm.get("updated", "")
+    if updated:
+        meta_parts.append(f'<span class="meta-info">更新于 {updated}</span>')
+
+    meta_bar = "<div class='meta-bar'>" + "".join(meta_parts) + "</div>"
+
+    # 完整 HTML
+    full_html = TEMPLATE.format(
+        title=title,
+        body_html=meta_bar + body_html,
+        nav_json=generate_nav_data(),
+        prev_next=""  # 将由后续处理填充
+    )
+
+    return full_html, title, fm
+
+
+def main():
+    print("=" * 50)
+    print("西方文论 Wiki 静态站点生成器")
+    print("=" * 50)
+
+    # 收集所有页面并排序
+    all_pages = []
+    for type_dir, dir_name in TYPE_DIRS.items():
+        dir_path = KB_ROOT / dir_name
+        if not dir_path.exists():
+            continue
+        for f in sorted(dir_path.glob("*.md")):
+            all_pages.append((type_dir, f))
+
+    print(f"总页面数: {len(all_pages)}")
+
+    # 按 slug 排序以计算 prev/next
+    all_slugs = []
+    for type_dir, f in all_pages:
+        rel = f.relative_to(KB_ROOT)
+        slug = str(rel.with_suffix("")).replace("\\", "/")
+        all_slugs.append(slug)
+
+    generated = 0
+    errors = []
+
+    for type_dir, filepath in all_pages:
+        rel = filepath.relative_to(KB_ROOT)
+        slug = str(rel.with_suffix("")).replace("\\", "/")
+        try:
+            html, title, fm = generate_page(filepath)
+
+            # 添加上一页/下一页
+            prev, next_ = get_prev_next(slug, all_slugs)
+            nav_html = ""
+            if prev:
+                nav_html += f'<a href={prev}>← 上一页</a>'
+            else:
+                nav_html += '<span></span>'
+            if next_:
+                nav_html += f'<a href={next_}>下一页 →</a>'
+            else:
+                nav_html += '<span></span>'
+            html = html.replace('{prev_next}', nav_html)
+
+            # 写文件
+            out_path = OUTPUT_DIR / f"{slug}.html"
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            out_path.write_text(html, encoding="utf-8")
+            generated += 1
+
+        except Exception as e:
+            errors.append(f"  ✗ {slug}: {e}")
+            print(f"  ✗ {slug}: {e}")
+
+    print(f"\n生成完成: {generated} 个页面")
+    if errors:
+        print(f"错误 ({len(errors)}):")
+        for e in errors[:5]:
+            print(e)
+
+    # 生成搜索索引
+    print("\n生成搜索索引…")
+    search_idx = []
+    for type_dir, filepath in all_pages:
+        try:
+            content = filepath.read_text(encoding="utf-8-sig")
+            fm, body = parse_frontmatter(content)
+            rel = filepath.relative_to(KB_ROOT)
+            slug = str(rel.with_suffix("")).replace("\\", "/")
+            title = ""
+            for bl in body.split("\n"):
+                if bl.startswith("# "):
+                    title = bl[2:].strip()
+                    break
+            if not title:
+                title = filepath.stem
+            search_idx.append({
+                "slug": slug,
+                "title": title,
+                "type": type_dir,
+                "tags": fm.get("tags", []),
+                "body": body[:500],  # 只索引前 500 字
+            })
+        except:
+            pass
+
+    idx_path = OUTPUT_DIR / "search-index.json"
+    idx_path.write_text(json.dumps(search_idx, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"搜索索引: {len(search_idx)} 条记录 → {idx_path}")
+
+    # 生成首页
+    generate_homepage(search_idx)
+
+    print("\n✓ 生成完毕，站点位于:", OUTPUT_DIR)
+
+
+def generate_homepage(search_idx):
+    """生成首页"""
+    home_html = '''<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>西方文论 Wiki · 首页</title>
+<style>
+:root {{
+  --bg: #fafaf8; --fg: #1a1a1a; --muted: #6b6b6b;
+  --accent: #2563eb; --accent-light: #dbeafe;
+  --border: #e2e2e0; --card-bg: #ffffff;
+}}
+@media (prefers-color-scheme: dark) {{
+  :root {{
+    --bg: #1a1a1a; --fg: #e8e8e6; --muted: #999;
+    --accent: #60a5fa; --accent-light: #1e3a5f;
+    --border: #333; --card-bg: #222;
+  }}
+}}
+* {{ box-sizing: border-box; margin: 0; padding: 0; }}
+body {{ font-family: -apple-system, "Noto Serif SC", Georgia, serif; background: var(--bg); color: var(--fg); line-height: 1.7; }}
+a {{ color: var(--accent); text-decoration: none; }}
+a:hover {{ text-decoration: underline; }}
+.container {{ max-width: 900px; margin: 0 auto; padding: 40px 24px; }}
+h1 {{ font-size: 32px; font-weight: 700; margin-bottom: 8px; }}
+.subtitle {{ color: var(--muted); font-size: 16px; margin-bottom: 32px; }}
+.stats {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 40px; }}
+.stat-card {{ background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }}
+.stat-num {{ font-size: 28px; font-weight: 700; color: var(--accent); }}
+.stat-label {{ font-size: 13px; color: var(--muted); margin-top: 4px; }}
+h2 {{ font-size: 20px; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }}
+.search-box {{ width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--card-bg); color: var(--fg); font-size: 16px; margin-bottom: 24px; outline: none; }}
+.search-box:focus {{ border-color: var(--accent); }}
+.result-list {{ list-style: none; }}
+.result-list li {{ padding: 8px 12px; border-radius: 6px; margin-bottom: 4px; }}
+.result-list li:hover {{ background: var(--accent-light); }}
+.result-type {{ display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; margin-right: 8px; background: var(--accent-light); color: var(--accent); }}
+.result-title {{ font-weight: 500; }}
+.result-body {{ font-size: 13px; color: var(--muted); margin-top: 2px; }}
+.section-nav {{ display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }}
+.section-nav a {{ padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px; font-size: 14px; color: var(--fg); }}
+.section-nav a:hover {{ border-color: var(--accent); color: var(--accent); text-decoration: none; }}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>西方文论 Wiki</h1>
+  <p class="subtitle">Western Literary Theory Knowledge Base · 共 {total} 个页面</p>
+
+  <div class="stats">
+    <div class="stat-card"><div class="stat-num">{figures}</div><div class="stat-label">人物</div></div>
+    <div class="stat-card"><div class="stat-num">{concepts}</div><div class="stat-label">概念</div></div>
+    <div class="stat-card"><div class="stat-num">{movements}</div><div class="stat-label">流派</div></div>
+    <div class="stat-card"><div class="stat-num">{works}</div><div class="stat-label">原典</div></div>
+    <div class="stat-card"><div class="stat-num">{summaries}</div><div class="stat-label">章节摘要</div></div>
+    <div class="stat-card"><div class="stat-num">{others}</div><div class="stat-label">其他</div></div>
+  </div>
+
+  <div class="section-nav">
+    <a href="/wiki/figures/">人物</a>
+    <a href="/wiki/concepts/">概念</a>
+    <a href="/wiki/movements/">流派</a>
+    <a href="/wiki/works/">原典</a>
+    <a href="/wiki/comparisons/">对比</a>
+    <a href="/wiki/overviews/">谱系</a>
+    <a href="/wiki/synthesis/">综合</a>
+    <a href="/wiki/summaries/">摘要</a>
+  </div>
+
+  <input class="search-box" type="text" id="searchInput" placeholder="搜索页面…" oninput="doSearch(this.value)">
+
+  <h2>搜索结果</h2>
+  <ul class="result-list" id="results"></ul>
+
+  <h2>全部页面</h2>
+  <ul class="result-list" id="allPages"></ul>
+</div>
+
+<script>
+const INDEX = {search_json};
+const TYPE_LABELS = {{figure:"人物", concept:"概念", movement:"流派", work:"原典",
+  comparison:"对比", overview:"谱系", synthesis:"综合", summary:"摘要"}};
+
+function doSearch(q) {{
+  const results = document.getElementById('results');
+  if (!q.trim()) {{ results.innerHTML = ''; return; }}
+  q = q.toLowerCase();
+  const hits = INDEX.filter(p =>
+    p.title.toLowerCase().includes(q) ||
+    p.body.toLowerCase().includes(q) ||
+    p.tags.some(t => t.toLowerCase().includes(q))
+  ).slice(0, 20);
+  results.innerHTML = hits.map(p => `
+    <li>
+      <a href="/wiki/${{p.slug}}.html">
+        <span class="result-type">${{TYPE_LABELS[p.type] || p.type}}</span>
+        <span class="result-title">${{p.title}}</span>
+      </a>
+      <div class="result-body">${{p.body.substring(0, 100)}}…</div>
+    </li>
+  `).join('');
+}}
+
+// 渲染全部页面（按类型分组）
+const allPages = document.getElementById('allPages');
+const byType = {{}};
+INDEX.forEach(p => {{
+  if (!byType[p.type]) byType[p.type] = [];
+  byType[p.type].push(p);
+}});
+const TYPE_ORDER = ['figure','concept','movement','work','comparison','overview','synthesis','summary'];
+TYPE_ORDER.forEach(t => {{
+  if (!byType[t]) return;
+  allPages.innerHTML += `<li style="margin-top:12px;font-weight:600;color:var(--accent)">${{TYPE_LABELS[t]||t}}（${{byType[t].length}}）</li>`;
+  byType[t].slice(0, 50).forEach(p => {{
+    allPages.innerHTML += `<li><a href="/wiki/${{p.slug}}.html">${{p.title}}</a></li>`;
+  }});
+  if (byType[t].length > 50) allPages.innerHTML += `<li style="color:var(--muted)">… 还有 ${{byType[t].length - 50}} 个</li>`;
+}});
+</script>
+</body>
+</html>'''
+
+    home_path = OUTPUT_DIR / "index.html"
+    home_path.write_text(home_html.format(
+        total=len(search_idx),
+        figures=sum(1 for p in search_idx if p["type"] == "figure"),
+        concepts=sum(1 for p in search_idx if p["type"] == "concept"),
+        movements=sum(1 for p in search_idx if p["type"] == "movement"),
+        works=sum(1 for p in search_idx if p["type"] == "work"),
+        summaries=sum(1 for p in search_idx if p["type"] == "summary"),
+        others=sum(1 for p in search_idx if p["type"] not in ("figure","concept","movement","work","summary")),
+        search_json=json.dumps(search_idx, ensure_ascii=False, indent=2),
+    ), encoding="utf-8")
+    print(f"首页: {home_path}")
+
+    # 为每个类型目录生成索引页（用keys而不是values）
+    for type_key in TYPE_DIRS.keys():
+        type_dir = TYPE_DIRS[type_key]
+        type_path = OUTPUT_DIR / type_dir
+        type_path.mkdir(parents=True, exist_ok=True)
+        items = [p for p in search_idx if p["type"] == type_key]
+        items.sort(key=lambda x: x["title"])
+        type_html = f'''<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>{type_dir} · 西方文论 Wiki</title>
+<style>
+:root {{ --bg:#fafaf8; --fg:#1a1a1a; --muted:#6b6b6b; --accent:#2563eb; --accent-light:#dbeafe; --border:#e2e2e0; --card-bg:#fff; }}
+@media (prefers-color-scheme:dark) {{ :root {{ --bg:#1a1a1a; --fg:#e8e8e6; --muted:#999; --accent:#60a5fa; --accent-light:#1e3a5f; --border:#333; --card-bg:#222; }} }}
+body {{ font-family:-apple-system,"Noto Serif SC",Georgia,serif; background:var(--bg); color:var(--fg); line-height:1.7; margin:0; padding:40px 24px; }}
+a {{ color:var(--accent); text-decoration:none; }}
+h1 {{ font-size:28px; margin-bottom:8px; }}
+.back {{ font-size:14px; color:var(--muted); margin-bottom:24px; display:block; }}
+.letter-group {{ margin-bottom:24px; }}
+.letter {{ font-size:22px; font-weight:700; color:var(--accent); margin:16px 0 8px; border-bottom:1px solid var(--border); padding-bottom:4px; }}
+ul {{ list-style:none; padding:0; }}
+li {{ padding:4px 0; }}
+li a {{ font-size:15px; }}
+</style></head><body>
+<h1>{type_dir}</h1>
+<a class="back" href="/">← 返回首页</a>
+'''
+        # 按拼音首字母分组
+        current_letter = ""
+        for idx2, p in enumerate(items):
+            title = p["title"]
+            first_char = title[0] if title else "?"
+            if first_char != current_letter:
+                if current_letter and idx2 > 0:
+                    type_html += '</ul></div>\n'
+                current_letter = first_char
+                type_html += f'<div class="letter-group"><div class="letter">{first_char}</div><ul>\n'
+            type_html += f'<li><a href="/wiki/{p["slug"]}.html">{title}</a></li>\n'
+        if current_letter:
+            type_html += '</ul></div>\n'
+
+        type_html += '</body></html>'
+        (type_path / "index.html").write_text(type_html, encoding="utf-8")
+        print(f"  {type_dir}/index.html ({len(items)} 页)")
+
+
+if __name__ == "__main__":
+    main()

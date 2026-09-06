@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 临时诊断脚本
+_step*.py
+_fix*.py
+_check*.py
+_verify*.py
+_locate*.py
+_diag*.py
+_dedup*.py
+_full*.py
+_p*.py
+_quality*.py
+_broken*.py
+
+# 生成的站点目录（不提交docs内容，只提交CI配置）
+wiki-site/docs/
+
+# 原始PDF文件
+[OCR]*.pdf

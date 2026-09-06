@@ -1,0 +1,41 @@
+[
+  {
+    "file": "伊塞尔.md",
+    "title": "伊塞尔",
+    "aliases_searched": [
+      "Wolfgang Iser",
+      "Iser"
+    ],
+    "wiki_data": {
+      "matched_page": {
+        "title": "Wolfgang Iser",
+        "extract": "Wolfgang Iser (22 July 1926 – 24 January 2007) was a German literary scholar.",
+        "url": "https://en.wikipedia.org/wiki/Wolfgang_Iser",
+        "length": 12180,
+        "wikibase": "Q60486",
+        "disambiguation": false,
+        "match_confidence": "high"
+      },
+      "lang": "en",
+      "matched_title": "Wolfgang Iser",
+      "match_confidence": "high",
+      "lifespan": [
+        "1926–2007"
+      ],
+      "nationality": [
+        "德国"
+      ],
+      "works": [],
+      "source_url": "https://en.wikipedia.org/wiki/Wolfgang_Iser"
+    },
+    "actions": [
+      "wiki_search:en:Wolfgang Iser",
+      "frontmatter:wiki_lifespan=1926–2007",
+      "frontmatter:wiki_nationality=德国",
+      "file_saved"
+    ],
+    "success": true,
+    "error": null,
+    "conflict": null
+  }
+]
