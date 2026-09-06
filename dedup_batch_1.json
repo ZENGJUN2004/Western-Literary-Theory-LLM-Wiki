@@ -1,0 +1,315 @@
+[
+ {
+  "canon": "concepts/意识形态",
+  "dup": "concepts/上层建筑与经济基础",
+  "shared_alias": [
+   "上层建筑"
+  ],
+  "canon_size": 1931,
+  "dup_size": 1317,
+  "canon_in": 5,
+  "dup_in": 2
+ },
+ {
+  "canon": "concepts/上层建筑与经济基础",
+  "dup": "concepts/经济基础与上层建筑",
+  "shared_alias": [
+   "上层建筑"
+  ],
+  "canon_size": 1317,
+  "dup_size": 2655,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/生产力与生产关系",
+  "dup": "concepts/唯物史观",
+  "shared_alias": [
+   "历史唯物主义"
+  ],
+  "canon_size": 2044,
+  "dup_size": 1622,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/意识形态",
+  "dup": "concepts/意识形态批判",
+  "shared_alias": [
+   "意识形态",
+   "ideology"
+  ],
+  "canon_size": 1931,
+  "dup_size": 3030,
+  "canon_in": 5,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/文化霸权",
+  "dup": "concepts/意识形态",
+  "shared_alias": [
+   "文化霸权"
+  ],
+  "canon_size": 2324,
+  "dup_size": 1931,
+  "canon_in": 9,
+  "dup_in": 5
+ },
+ {
+  "canon": "concepts/意识形态",
+  "dup": "concepts/经济基础与上层建筑",
+  "shared_alias": [
+   "上层建筑"
+  ],
+  "canon_size": 1931,
+  "dup_size": 2655,
+  "canon_in": 5,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/意识形态",
+  "dup": "concepts/领导权",
+  "shared_alias": [
+   "文化霸权"
+  ],
+  "canon_size": 1931,
+  "dup_size": 2427,
+  "canon_in": 5,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/文化霸权",
+  "dup": "concepts/文化领导权",
+  "shared_alias": [
+   "霸权"
+  ],
+  "canon_size": 2324,
+  "dup_size": 2170,
+  "canon_in": 9,
+  "dup_in": 4
+ },
+ {
+  "canon": "concepts/文化霸权",
+  "dup": "concepts/霸权",
+  "shared_alias": [
+   "霸权"
+  ],
+  "canon_size": 2324,
+  "dup_size": 644,
+  "canon_in": 9,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/文化霸权",
+  "dup": "concepts/领导权",
+  "shared_alias": [
+   "文化霸权",
+   "cultural hegemony",
+   "霸权"
+  ],
+  "canon_size": 2324,
+  "dup_size": 2427,
+  "canon_in": 9,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/文化领导权",
+  "dup": "concepts/霸权",
+  "shared_alias": [
+   "霸权",
+   "hegemony"
+  ],
+  "canon_size": 2170,
+  "dup_size": 644,
+  "canon_in": 4,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/文化领导权",
+  "dup": "concepts/领导权",
+  "shared_alias": [
+   "霸权",
+   "文化领导权",
+   "领导权",
+   "hegemony"
+  ],
+  "canon_size": 2170,
+  "dup_size": 2427,
+  "canon_in": 4,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/经济基础与上层建筑",
+  "dup": "concepts/生产力与生产关系",
+  "shared_alias": [
+   "经济基础"
+  ],
+  "canon_size": 2655,
+  "dup_size": 2044,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/领导权",
+  "dup": "concepts/霸权",
+  "shared_alias": [
+   "霸权",
+   "hegemony"
+  ],
+  "canon_size": 2427,
+  "dup_size": 644,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/不可译性",
+  "dup": "concepts/不可翻译性",
+  "shared_alias": [
+   "untranslatability"
+  ],
+  "canon_size": 369,
+  "dup_size": 509,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/物化",
+  "dup": "concepts/人性异化",
+  "shared_alias": [
+   "异化",
+   "alienation"
+  ],
+  "canon_size": 2414,
+  "dup_size": 589,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/含混-复义",
+  "dup": "concepts/复义-复义",
+  "shared_alias": [
+   "复义",
+   "ambiguity",
+   "seven types of ambiguity"
+  ],
+  "canon_size": 2469,
+  "dup_size": 1327,
+  "canon_in": 31,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/现象学还原",
+  "dup": "concepts/悬搁",
+  "shared_alias": [
+   "现象学还原",
+   "phenomenological reduction"
+  ],
+  "canon_size": 2270,
+  "dup_size": 2400,
+  "canon_in": 3,
+  "dup_in": 2
+ },
+ {
+  "canon": "concepts/混成性",
+  "dup": "concepts/混成",
+  "shared_alias": [
+   "hybridity"
+  ],
+  "canon_size": 568,
+  "dup_size": 3392,
+  "canon_in": 3,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/细读法",
+  "dup": "concepts/细察",
+  "shared_alias": [
+   "close reading"
+  ],
+  "canon_size": 2764,
+  "dup_size": 2273,
+  "canon_in": 11,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/亨利·詹姆斯",
+  "dup": "figures/威廉·詹姆斯",
+  "shared_alias": [
+   "james"
+  ],
+  "canon_size": 3704,
+  "dup_size": 3638,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/列维-斯特劳斯",
+  "dup": "figures/列维-施特劳斯",
+  "shared_alias": [
+   "claude lévi-strauss"
+  ],
+  "canon_size": 2314,
+  "dup_size": 2794,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/艾柯",
+  "dup": "figures/埃科",
+  "shared_alias": [
+   "埃科",
+   "艾柯",
+   "umberto eco"
+  ],
+  "canon_size": 712,
+  "dup_size": 505,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/巴尔特",
+  "dup": "figures/巴特",
+  "shared_alias": [
+   "roland barthes",
+   "巴特"
+  ],
+  "canon_size": 1399,
+  "dup_size": 2286,
+  "canon_in": 73,
+  "dup_in": 6
+ },
+ {
+  "canon": "figures/维姆萨特",
+  "dup": "figures/温萨特",
+  "shared_alias": [
+   "wimsatt"
+  ],
+  "canon_size": 2036,
+  "dup_size": 1799,
+  "canon_in": 8,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/霍伽特",
+  "dup": "figures/霍加特",
+  "shared_alias": [
+   "richard hoggart"
+  ],
+  "canon_size": 2659,
+  "dup_size": 1361,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "movements/社会主义现实主义",
+  "dup": "movements/社会现实主义",
+  "shared_alias": [
+   "社会主义现实主义",
+   "社会现实主义"
+  ],
+  "canon_size": 2160,
+  "dup_size": 1555,
+  "canon_in": 3,
+  "dup_in": 0
+ }
+]

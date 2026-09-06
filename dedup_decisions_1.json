@@ -1,0 +1,193 @@
+[
+  {
+    "action": "aliasfix",
+    "edits": [
+      {"page": "concepts/意识形态", "remove_aliases": ["上层建筑"]}
+    ],
+    "reason": "对1：意识形态是上层建筑的组成部分，但二者为不同概念，'上层建筑'别名应归属 经济基础与上层建筑 页"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/经济基础与上层建筑",
+    "dup": "concepts/上层建筑与经济基础",
+    "aliases_to_add": ["上层建筑与经济基础", "superstructure and base"],
+    "reason": "对2：同一概念（base/superstructure）语序异名。canon 内容更完整（马克思经典表述、恩格斯补充、四大关键命题、跨教材表），dup 为别名式指向页，经比对无独有实质内容需迁移；canon 标准语序'经济基础与上层建筑'（经济基础决定上层建筑）"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {"page": "concepts/生产力与生产关系", "remove_aliases": ["历史唯物主义"]}
+    ],
+    "reason": "对3：生产力与生产关系是具体范畴，唯物史观（历史唯物主义）是方法论总体理论，二者相关但为独立概念；'历史唯物主义'别名保留于 唯物史观 页"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {"page": "concepts/意识形态批判", "remove_aliases": ["意识形态", "ideology"]}
+    ],
+    "reason": "对4：意识形态批判是对意识形态的批判方法（西马文论的中心任务），与意识形态概念本身为不同实体；canon 意识形态 页保留 意识形态/ideology 别名"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {"page": "concepts/意识形态", "remove_aliases": ["文化霸权"]}
+    ],
+    "reason": "对5：文化霸权=hegemony（葛兰西），是与意识形态不同的概念，意识形态页误含该别名；该别名归属 hegemony 簇 canon 页 文化霸权"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {"page": "concepts/意识形态", "remove_aliases": ["上层建筑"]}
+    ],
+    "reason": "对6：与对1同一处别名冲突（dup 为 经济基础与上层建筑 页），意识形态与上层建筑为不同概念，重复记录以保证逐对覆盖"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {"page": "concepts/意识形态", "remove_aliases": ["文化霸权"]}
+    ],
+    "reason": "对7：dup 领导权 页并入 文化霸权 簇；意识形态页的'文化霸权'别名与对5同一处误标，重复记录以保证逐对覆盖"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/文化霸权",
+    "dup": "concepts/文化领导权",
+    "aliases_to_add": ["文化领导权", "cultural leadership", "领导权"],
+    "reason": "对8：葛兰西 hegemony 的两种译名，同一概念。canon 文化霸权 入链9为簇内最高；已把 文化领导权 页独有的朱立元 ch9.3 文艺应用要点（文学作为领导权运作场所、作家做'民族教育者'）并入 canon 应用章节"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/文化霸权",
+    "dup": "concepts/霸权",
+    "aliases_to_add": ["hegemony"],
+    "reason": "对9：霸权=hegemony 同义 stub（644B）。独有要点已并入 canon：意大利语 egemonia、霸权的动态协商性、葛兰西综合马克思意识形态学说与列宁'领导权'概念"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/文化霸权",
+    "dup": "concepts/领导权",
+    "aliases_to_add": ["领导权", "文化领导权", "hegemony"],
+    "reason": "对10：领导权=hegemony 同义译名页（内容最详但入链0）。独有内容已并入 canon：思想意识领导权/政治领导权分层表、军事-经济-思想政治-文化理论四重控制、阵地战与运动战之别、有机知识分子、福柯呼应、汤姆林森/博德里亚延伸、@最新文论教程 ch8.1 引文"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/文化霸权",
+    "dup": "concepts/霸权",
+    "aliases_to_add": ["hegemony"],
+    "reason": "对11：hegemony 四页簇内两两配对（文化领导权 vs 霸权），两页均吸收进簇 canon 文化霸权，同对9的簇级记录"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/文化霸权",
+    "dup": "concepts/领导权",
+    "aliases_to_add": ["领导权", "文化领导权", "hegemony"],
+    "reason": "对12：hegemony 四页簇内两两配对（文化领导权 vs 领导权），两页均吸收进簇 canon 文化霸权，同对10的簇级记录"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {"page": "concepts/生产力与生产关系", "remove_aliases": ["经济基础"]}
+    ],
+    "reason": "对13：生产力与生产关系构成经济基础，但是不同范畴；'经济基础'别名归属 canon 页 经济基础与上层建筑"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/文化霸权",
+    "dup": "concepts/霸权",
+    "aliases_to_add": ["hegemony"],
+    "reason": "对14：hegemony 四页簇内两两配对（领导权 vs 霸权），两页均吸收进簇 canon 文化霸权，同对9的簇级记录"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/不可译性",
+    "dup": "concepts/不可翻译性",
+    "aliases_to_add": ["不可翻译性"],
+    "reason": "对15：untranslatability 同义译名。canon 不可译性 入链1（翻译学更通行术语），dup 原为内容页，其德里达《巴别塔》/斯坦纳定义与本雅明→德里达→斯坦纳源流及'沉默'关联已重写并入 canon"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {"page": "concepts/物化", "remove_aliases": ["异化", "alienation"]}
+    ],
+    "reason": "对16：物化（reification，卢卡契《历史与阶级意识》）与人性异化（alienation，黑格尔→马克思劳动异化）相关但不同概念；'异化/alienation'别名保留于 人性异化 页"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/含混-复义",
+    "dup": "concepts/复义-复义",
+    "aliases_to_add": ["复义-复义", "七种类型的复义"],
+    "reason": "对17：同一概念（ambiguity，燕卜荪），dup 文件名为错误生成的别名式指向页（其自身声明以 含混-复义 为主页面）。canon 入链31。dup 独有的'复义支持文学语言/科学语言区分（情感语言、伪陈述）'关联已并入 canon 相关章节"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {"page": "concepts/悬搁", "remove_aliases": ["现象学还原", "phenomenological reduction"]}
+    ],
+    "reason": "对18：epoché（悬搁/加括号）与 phenomenological reduction（现象学还原）为胡塞尔体系中先后可区分的两步，两页内容互补（互为'第一步/进一步'关系）而非重复，保持独立页面并互链；'现象学还原'别名归属 现象学还原 页"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/混成",
+    "dup": "concepts/混成性",
+    "aliases_to_add": ["混成性", "hybridity", "杂糅性"],
+    "reason": "对19：hybridity/hybridization 同一概念的不同译名。canon 混成 内容完整且教材（朱立元/最新文论教程）均用'混成'译名，dup 混成性 为 stub（虽有3入链，推翻脚本预选）；其'又译混成性/杂糅性'注记及身份政治/族性认同/块茎关联已并入 canon"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/细读法",
+    "dup": "concepts/细察",
+    "aliases_to_add": ["细察", "细读", "Scrutiny"],
+    "reason": "对20：close reading 同义（细察=Scrutiny 音译+close reading 意译合流页）。canon 细读法 入链11。dup 独有内容已并入 canon：利维斯《细察》杂志与'封闭阅读'、意图谬见/感受谬见作为细读法理论基础、兰色姆《批评公司》客观性、日内瓦学派'细察/直觉'三经验模式"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {"page": "figures/亨利·詹姆斯", "remove_aliases": ["James"]},
+      {"page": "figures/威廉·詹姆斯", "remove_aliases": ["James"]}
+    ],
+    "reason": "对21：亨利·詹姆斯（小说家，心理现实主义）与威廉·詹姆斯（心理学家/哲学家，意识流提出者）为兄弟二人、不同实体，移除歧义裸姓氏别名'James'（两页均含）"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/列维-斯特劳斯",
+    "dup": "figures/列维-施特劳斯",
+    "aliases_to_add": ["列维-施特劳斯", "克洛德·列维-施特劳斯"],
+    "reason": "对22：同一人（Claude Lévi-Strauss）异译，canon 入链3多于dup的1。dup 独有内容已并入 canon：生平细节（生于布鲁塞尔、圣保罗大学、结识雅各布森、法兰西学院）、亲属关系结构分析（《亲属关系的基本结构》1949）、《野性的思维》'具体科学'与结构四点说明、方法论五原则、《热带的忧伤》等著作补目、@最新文论教程 ch3 跨教材行"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/艾柯",
+    "dup": "figures/埃科",
+    "aliases_to_add": ["埃科", "安伯托·艾柯"],
+    "reason": "对23：同一人（Umberto Eco），'艾柯'为通行译名且入链2。dup 独有内容已并入 canon：中世纪文化研究者身份、《傅科摆》《昨日之岛》'学问小说'传统、开放作品/中世纪研究概念链接"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/巴尔特",
+    "dup": "figures/巴特",
+    "aliases_to_add": ["罗兰·巴特", "Barthes"],
+    "reason": "对24：同一人（Roland Barthes）异译，巴尔特入链73远高于巴特的6。dup 独有内容已并入 canon：符号学原理四大范畴（语言/言语、所指/能指、系统/组合段、直接/含蓄意指）、叙事作品三层面（功能/行动/叙事层）、东方文化解读（东京空洞中心/书法/俳句）、学术身份与随笔风格、格雷马斯关联"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/维姆萨特",
+    "dup": "figures/温萨特",
+    "aliases_to_add": ["温萨特", "威廉·沃伦·温萨特"],
+    "reason": "对25：同一人（W.K. Wimsatt，'温萨特'为OCR误名），维姆萨特为通行译名且入链8。dup 内容为 canon 子集（意图谬见/感受谬误已由 canon 更准确覆盖），仅将其独有的'文本自主性主张后来受解释学/读者反应批评/后结构主义挑战'要点并入 canon"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/霍加特",
+    "dup": "figures/霍伽特",
+    "aliases_to_add": ["霍伽特", "理查德·霍伽特", "Hoggart"],
+    "reason": "对26：同一人（Richard Hoggart）异译，'霍加特'为通行译名（两者入链均为0，按标准译名取霍加特）。dup 独有内容已并入 canon：品质阅读/价值阅读之分、审美-心理-文化三重背景、《当代批评》(1970) 文化研究理论向度"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {"page": "movements/社会主义现实主义", "remove_aliases": ["社会现实主义"]},
+      {"page": "movements/社会现实主义", "remove_aliases": ["社会主义现实主义"]}
+    ],
+    "reason": "对27：社会主义现实主义（1934年苏联作协确立的官方教条，日丹诺夫定义/党性原则）与社会现实主义（以卢卡契现实主义文论为理论基础的更宽泛现实主义思潮，苏联官方政策仅为其在苏联的表现形态）相关但为不同实体，互相移除对方译名别名"
+  }
+]

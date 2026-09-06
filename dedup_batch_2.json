@@ -1,0 +1,310 @@
+[
+ {
+  "canon": "concepts/分延",
+  "dup": "concepts/差异",
+  "shared_alias": [
+   "延异",
+   "différance"
+  ],
+  "canon_size": 1159,
+  "dup_size": 1994,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/分延",
+  "dup": "concepts/延异",
+  "shared_alias": [
+   "分延",
+   "延异",
+   "différance"
+  ],
+  "canon_size": 1159,
+  "dup_size": 1816,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/异延",
+  "dup": "concepts/分延",
+  "shared_alias": [
+   "分延",
+   "延异",
+   "différance"
+  ],
+  "canon_size": 590,
+  "dup_size": 1159,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/差异",
+  "dup": "concepts/延异",
+  "shared_alias": [
+   "延异",
+   "différance",
+   "差异与延宕"
+  ],
+  "canon_size": 1994,
+  "dup_size": 1816,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/异延",
+  "dup": "concepts/差异",
+  "shared_alias": [
+   "延异",
+   "différance"
+  ],
+  "canon_size": 590,
+  "dup_size": 1994,
+  "canon_in": 3,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/异延",
+  "dup": "concepts/延异",
+  "shared_alias": [
+   "分延",
+   "延异",
+   "différance"
+  ],
+  "canon_size": 590,
+  "dup_size": 1816,
+  "canon_in": 3,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/摹仿-mimesis",
+  "dup": "concepts/模仿-mimesis",
+  "shared_alias": [
+   "mimesis"
+  ],
+  "canon_size": 1248,
+  "dup_size": 461,
+  "canon_in": 28,
+  "dup_in": 3
+ },
+ {
+  "canon": "concepts/摹仿-mimesis",
+  "dup": "concepts/模仿论",
+  "shared_alias": [
+   "mimesis"
+  ],
+  "canon_size": 1248,
+  "dup_size": 688,
+  "canon_in": 28,
+  "dup_in": 8
+ },
+ {
+  "canon": "concepts/模仿论",
+  "dup": "concepts/模仿-mimesis",
+  "shared_alias": [
+   "mimesis"
+  ],
+  "canon_size": 688,
+  "dup_size": 461,
+  "canon_in": 8,
+  "dup_in": 3
+ },
+ {
+  "canon": "movements/后殖民主义",
+  "dup": "movements/后殖民批评",
+  "shared_alias": [
+   "后殖民批评"
+  ],
+  "canon_size": 3654,
+  "dup_size": 2148,
+  "canon_in": 4,
+  "dup_in": 4
+ },
+ {
+  "canon": "movements/后殖民理论",
+  "dup": "movements/后殖民主义",
+  "shared_alias": [
+   "后殖民批评",
+   "后殖民理论",
+   "postcolonialism",
+   "postcolonial theory"
+  ],
+  "canon_size": 1984,
+  "dup_size": 3654,
+  "canon_in": 5,
+  "dup_in": 4
+ },
+ {
+  "canon": "movements/后殖民理论",
+  "dup": "movements/后殖民批评",
+  "shared_alias": [
+   "后殖民批评"
+  ],
+  "canon_size": 1984,
+  "dup_size": 2148,
+  "canon_in": 5,
+  "dup_in": 4
+ },
+ {
+  "canon": "concepts/元叙事",
+  "dup": "concepts/叙述叙事",
+  "shared_alias": [
+   "元叙事"
+  ],
+  "canon_size": 2425,
+  "dup_size": 1899,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/神话",
+  "dup": "concepts/元叙事",
+  "shared_alias": [
+   "myth"
+  ],
+  "canon_size": 508,
+  "dup_size": 2425,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/身份认同",
+  "dup": "concepts/主体",
+  "shared_alias": [
+   "主体",
+   "subject",
+   "subjectivity"
+  ],
+  "canon_size": 4122,
+  "dup_size": 2666,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/净化-catharsis",
+  "dup": "concepts/观审",
+  "shared_alias": [
+   "情感净化"
+  ],
+  "canon_size": 940,
+  "dup_size": 1763,
+  "canon_in": 25,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/希望原理",
+  "dup": "concepts/希望哲学",
+  "shared_alias": [
+   "das prinzip hoffnung"
+  ],
+  "canon_size": 615,
+  "dup_size": 2644,
+  "canon_in": 2,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/情节",
+  "dup": "concepts/本事与情节",
+  "shared_alias": [
+   "情节"
+  ],
+  "canon_size": 2467,
+  "dup_size": 3194,
+  "canon_in": 4,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/绵延",
+  "dup": "concepts/生命哲学",
+  "shared_alias": [
+   "绵延"
+  ],
+  "canon_size": 3171,
+  "dup_size": 2774,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/自身",
+  "dup": "concepts/自我",
+  "shared_alias": [
+   "self"
+  ],
+  "canon_size": 1017,
+  "dup_size": 576,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/伍尔夫",
+  "dup": "figures/弗吉尼娅·沃尔夫",
+  "shared_alias": [
+   "弗吉尼亚·伍尔夫",
+   "弗吉尼娅·沃尔夫",
+   "virginia woolf"
+  ],
+  "canon_size": 1610,
+  "dup_size": 3643,
+  "canon_in": 5,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/热奈特",
+  "dup": "figures/勒兹拉",
+  "shared_alias": [
+   "gérard genette"
+  ],
+  "canon_size": 3301,
+  "dup_size": 450,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/奥斯丁",
+  "dup": "figures/简·奥斯丁",
+  "shared_alias": [
+   "简·奥斯丁",
+   "jane austen",
+   "珍·奥斯丁"
+  ],
+  "canon_size": 1932,
+  "dup_size": 1012,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/布迪厄",
+  "dup": "figures/皮埃尔·布尔迪厄",
+  "shared_alias": [
+   "布迪厄",
+   "pierre bourdieu"
+  ],
+  "canon_size": 3566,
+  "dup_size": 1308,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/爱伦·坡",
+  "dup": "figures/艾伦·坡",
+  "shared_alias": [
+   "埃德加·爱伦·坡",
+   "edgar allan poe",
+   "poe"
+  ],
+  "canon_size": 1661,
+  "dup_size": 2224,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "movements/史诗戏剧",
+  "dup": "movements/政治剧场",
+  "shared_alias": [
+   "布莱希特戏剧理论"
+  ],
+  "canon_size": 1767,
+  "dup_size": 1875,
+  "canon_in": 2,
+  "dup_in": 1
+ }
+]

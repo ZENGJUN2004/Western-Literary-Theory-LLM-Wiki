@@ -1,0 +1,317 @@
+[
+ {
+  "canon": "concepts/性别述行",
+  "dup": "concepts/述行性",
+  "shared_alias": [
+   "性别述行",
+   "述行性"
+  ],
+  "canon_size": 3040,
+  "dup_size": 2232,
+  "canon_in": 1,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/述行语言",
+  "dup": "concepts/性别述行",
+  "shared_alias": [
+   "性别述行",
+   "gender performativity",
+   "述行性"
+  ],
+  "canon_size": 3759,
+  "dup_size": 3040,
+  "canon_in": 1,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/言语行为",
+  "dup": "concepts/语言行为",
+  "shared_alias": [
+   "言语行为",
+   "speech act",
+   "言内行为",
+   "言外行为",
+   "言后行为"
+  ],
+  "canon_size": 2776,
+  "dup_size": 2234,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/言语行为",
+  "dup": "concepts/述行性",
+  "shared_alias": [
+   "述行语"
+  ],
+  "canon_size": 2776,
+  "dup_size": 2232,
+  "canon_in": 1,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/述行语言",
+  "dup": "concepts/言语行为",
+  "shared_alias": [
+   "述行语"
+  ],
+  "canon_size": 3759,
+  "dup_size": 2776,
+  "canon_in": 1,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/述行语言",
+  "dup": "concepts/述行性",
+  "shared_alias": [
+   "性别述行",
+   "述行性",
+   "述行语",
+   "performative"
+  ],
+  "canon_size": 3759,
+  "dup_size": 2232,
+  "canon_in": 1,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/哈特曼",
+  "dup": "figures/哈特维尔",
+  "shared_alias": [
+   "哈特曼",
+   "杰弗里·哈特曼",
+   "geoffrey hartman"
+  ],
+  "canon_size": 674,
+  "dup_size": 2017,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/哈特曼",
+  "dup": "figures/杰弗里·哈特曼",
+  "shared_alias": [
+   "杰弗里·哈特曼",
+   "geoffrey hartman"
+  ],
+  "canon_size": 674,
+  "dup_size": 2057,
+  "canon_in": 2,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/杰弗里·哈特曼",
+  "dup": "figures/哈特维尔",
+  "shared_alias": [
+   "杰弗里·哈特曼",
+   "geoffrey hartman",
+   "hartman"
+  ],
+  "canon_size": 2057,
+  "dup_size": 2017,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "movements/女性主义批评",
+  "dup": "movements/女性主义文论",
+  "shared_alias": [
+   "女性主义文论",
+   "女权主义文论",
+   "feminist literary theory"
+  ],
+  "canon_size": 4598,
+  "dup_size": 571,
+  "canon_in": 4,
+  "dup_in": 4
+ },
+ {
+  "canon": "movements/女性主义批评",
+  "dup": "movements/女权主义批评",
+  "shared_alias": [
+   "女性主义批评",
+   "女性主义文论",
+   "女权主义文论",
+   "feminist criticism",
+   "feminism"
+  ],
+  "canon_size": 4598,
+  "dup_size": 5937,
+  "canon_in": 4,
+  "dup_in": 3
+ },
+ {
+  "canon": "movements/女性主义文论",
+  "dup": "movements/女权主义批评",
+  "shared_alias": [
+   "女性主义文论",
+   "女权主义文论"
+  ],
+  "canon_size": 571,
+  "dup_size": 5937,
+  "canon_in": 4,
+  "dup_in": 3
+ },
+ {
+  "canon": "concepts/意象-image",
+  "dup": "concepts/复合体",
+  "shared_alias": [
+   "意象派"
+  ],
+  "canon_size": 2234,
+  "dup_size": 2122,
+  "canon_in": 21,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/意象-image",
+  "dup": "concepts/形象",
+  "shared_alias": [
+   "image"
+  ],
+  "canon_size": 2234,
+  "dup_size": 1345,
+  "canon_in": 21,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/互文性",
+  "dup": "concepts/文本间性",
+  "shared_alias": [
+   "互文性",
+   "intertextuality"
+  ],
+  "canon_size": 2357,
+  "dup_size": 1974,
+  "canon_in": 10,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/叙述",
+  "dup": "concepts/故事与话语",
+  "shared_alias": [
+   "故事与话语",
+   "story and discourse"
+  ],
+  "canon_size": 4415,
+  "dup_size": 2219,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/形式与内容的统一",
+  "dup": "concepts/形式与内容",
+  "shared_alias": [
+   "形式内容关系"
+  ],
+  "canon_size": 1858,
+  "dup_size": 719,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/文化帝国主义",
+  "dup": "concepts/文化扩张",
+  "shared_alias": [
+   "cultural imperialism"
+  ],
+  "canon_size": 2932,
+  "dup_size": 589,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/直觉",
+  "dup": "concepts/直觉-intuition",
+  "shared_alias": [
+   "直觉",
+   "intuition"
+  ],
+  "canon_size": 2795,
+  "dup_size": 1445,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/逻各斯中心主义",
+  "dup": "concepts/语音中心主义",
+  "shared_alias": [
+   "语音中心主义"
+  ],
+  "canon_size": 2006,
+  "dup_size": 1056,
+  "canon_in": 2,
+  "dup_in": 2
+ },
+ {
+  "canon": "figures/保罗·德·曼",
+  "dup": "figures/德·曼",
+  "shared_alias": [
+   "保罗·德·曼",
+   "paul de man"
+  ],
+  "canon_size": 2215,
+  "dup_size": 618,
+  "canon_in": 1,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/沃伦",
+  "dup": "figures/华伦",
+  "shared_alias": [
+   "r.p. warren",
+   "robert penn warren"
+  ],
+  "canon_size": 1470,
+  "dup_size": 1394,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/尤内斯库",
+  "dup": "figures/尤奈斯库",
+  "shared_alias": [
+   "尤内斯库",
+   "eugène ionesco"
+  ],
+  "canon_size": 1393,
+  "dup_size": 489,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/布鲁克斯",
+  "dup": "figures/彼得·布鲁克斯",
+  "shared_alias": [
+   "brooks"
+  ],
+  "canon_size": 2170,
+  "dup_size": 1900,
+  "canon_in": 3,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/理查兹",
+  "dup": "figures/瑞恰兹",
+  "shared_alias": [
+   "i.a. richards",
+   "瑞恰兹"
+  ],
+  "canon_size": 1099,
+  "dup_size": 3239,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "movements/后结构主义",
+  "dup": "movements/解构主义",
+  "shared_alias": [
+   "解构主义"
+  ],
+  "canon_size": 2254,
+  "dup_size": 3652,
+  "canon_in": 8,
+  "dup_in": 4
+ }
+]

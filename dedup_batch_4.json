@@ -1,0 +1,301 @@
+[
+ {
+  "canon": "concepts/具体化",
+  "dup": "concepts/空白",
+  "shared_alias": [
+   "具体化"
+  ],
+  "canon_size": 3213,
+  "dup_size": 1909,
+  "canon_in": 6,
+  "dup_in": 2
+ },
+ {
+  "canon": "concepts/期待视野",
+  "dup": "concepts/召唤结构",
+  "shared_alias": [
+   "期待视野"
+  ],
+  "canon_size": 3148,
+  "dup_size": 2364,
+  "canon_in": 5,
+  "dup_in": 4
+ },
+ {
+  "canon": "concepts/召唤结构",
+  "dup": "concepts/空白",
+  "shared_alias": [
+   "召唤结构"
+  ],
+  "canon_size": 2364,
+  "dup_size": 1909,
+  "canon_in": 4,
+  "dup_in": 2
+ },
+ {
+  "canon": "concepts/未定点",
+  "dup": "concepts/空白",
+  "shared_alias": [
+   "未定点"
+  ],
+  "canon_size": 2798,
+  "dup_size": 1909,
+  "canon_in": 5,
+  "dup_in": 2
+ },
+ {
+  "canon": "concepts/修辞阅读",
+  "dup": "concepts/不可决定性",
+  "shared_alias": [
+   "不可决定性"
+  ],
+  "canon_size": 1794,
+  "dup_size": 2021,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/修辞阅读",
+  "dup": "concepts/寓言阅读",
+  "shared_alias": [
+   "寓言阅读"
+  ],
+  "canon_size": 1794,
+  "dup_size": 2066,
+  "canon_in": 3,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/讽喻-allegory",
+  "dup": "concepts/寓言阅读",
+  "shared_alias": [
+   "讽喻"
+  ],
+  "canon_size": 1041,
+  "dup_size": 2066,
+  "canon_in": 4,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/威廉斯",
+  "dup": "figures/雷蒙·威廉斯",
+  "shared_alias": [
+   "雷蒙·威廉斯",
+   "raymond williams",
+   "williams"
+  ],
+  "canon_size": 6595,
+  "dup_size": 805,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/雷蒙德·威廉斯",
+  "dup": "figures/威廉斯",
+  "shared_alias": [
+   "雷蒙德·威廉斯",
+   "雷蒙·威廉斯",
+   "raymond williams",
+   "williams"
+  ],
+  "canon_size": 1153,
+  "dup_size": 6595,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/雷蒙德·威廉斯",
+  "dup": "figures/雷蒙·威廉斯",
+  "shared_alias": [
+   "雷蒙·威廉斯",
+   "raymond williams",
+   "williams"
+  ],
+  "canon_size": 1153,
+  "dup_size": 805,
+  "canon_in": 3,
+  "dup_in": 0
+ },
+ {
+  "canon": "movements/接受美学",
+  "dup": "movements/康士坦茨学派",
+  "shared_alias": [
+   "康斯坦茨学派"
+  ],
+  "canon_size": 1894,
+  "dup_size": 920,
+  "canon_in": 6,
+  "dup_in": 4
+ },
+ {
+  "canon": "movements/接受美学",
+  "dup": "movements/文学接受理论",
+  "shared_alias": [
+   "文学接受理论",
+   "reception aesthetics"
+  ],
+  "canon_size": 1894,
+  "dup_size": 3009,
+  "canon_in": 6,
+  "dup_in": 2
+ },
+ {
+  "canon": "movements/读者反应批评",
+  "dup": "movements/文学接受理论",
+  "shared_alias": [
+   "reception theory"
+  ],
+  "canon_size": 2521,
+  "dup_size": 3009,
+  "canon_in": 3,
+  "dup_in": 2
+ },
+ {
+  "canon": "concepts/间离化",
+  "dup": "concepts/间离效果",
+  "shared_alias": [
+   "alienation effect",
+   "verfremdungseffekt"
+  ],
+  "canon_size": 612,
+  "dup_size": 2495,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/陌生化效果",
+  "dup": "concepts/间离效果",
+  "shared_alias": [
+   "陌生化效果"
+  ],
+  "canon_size": 1878,
+  "dup_size": 2495,
+  "canon_in": 2,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/可读性与可写性",
+  "dup": "concepts/封闭阅读",
+  "shared_alias": [
+   "可读文本"
+  ],
+  "canon_size": 2126,
+  "dup_size": 1953,
+  "canon_in": 2,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/影响的焦虑",
+  "dup": "concepts/影响焦虑",
+  "shared_alias": [
+   "anxiety of influence"
+  ],
+  "canon_size": 2784,
+  "dup_size": 571,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/神话与原型",
+  "dup": "concepts/深层结构",
+  "shared_alias": [
+   "原型批评"
+  ],
+  "canon_size": 2397,
+  "dup_size": 2171,
+  "canon_in": 2,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/类象",
+  "dup": "concepts/符号消费",
+  "shared_alias": [
+   "simulacrum"
+  ],
+  "canon_size": 554,
+  "dup_size": 3074,
+  "canon_in": 4,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/阐释群体",
+  "dup": "concepts/阐释共同体",
+  "shared_alias": [
+   "interpretive community"
+  ],
+  "canon_size": 3461,
+  "dup_size": 595,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/兰色姆",
+  "dup": "figures/茅斯",
+  "shared_alias": [
+   "兰色姆",
+   "john crowe ransom",
+   "约翰·克劳·兰色姆"
+  ],
+  "canon_size": 2475,
+  "dup_size": 961,
+  "canon_in": 4,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/布鲁姆",
+  "dup": "figures/哈罗德·布鲁姆",
+  "shared_alias": [
+   "哈罗德·布鲁姆",
+   "harold bloom",
+   "bloom"
+  ],
+  "canon_size": 5313,
+  "dup_size": 1924,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/约翰生",
+  "dup": "figures/巴伯拉·约翰逊",
+  "shared_alias": [
+   "johnson"
+  ],
+  "canon_size": 1624,
+  "dup_size": 2018,
+  "canon_in": 7,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/斯宾格勒",
+  "dup": "figures/斯本格勒",
+  "shared_alias": [
+   "oswald spengler"
+  ],
+  "canon_size": 1867,
+  "dup_size": 463,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/米歇利特",
+  "dup": "figures/米歇莱",
+  "shared_alias": [
+   "jules michelet"
+  ],
+  "canon_size": 2234,
+  "dup_size": 439,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "movements/精神分析批评",
+  "dup": "movements/心理分析批评",
+  "shared_alias": [
+   "精神分析文论"
+  ],
+  "canon_size": 4958,
+  "dup_size": 2216,
+  "canon_in": 5,
+  "dup_in": 0
+ }
+]

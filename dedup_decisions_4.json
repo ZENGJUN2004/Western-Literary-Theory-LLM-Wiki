@@ -1,0 +1,178 @@
+[
+ {
+  "action": "aliasfix",
+  "edits": [
+   {"page": "concepts/空白", "remove_aliases": ["具体化", "英伽登"]}
+  ],
+  "reason": "具体化（英伽登 Konkretisation，读者的填充活动）与空白（伊塞尔 Leerstelle，文本的意义空缺）各自独立成条；'具体化'误挂于空白页，'英伽登'为人名误作概念别名"
+ },
+ {
+  "action": "aliasfix",
+  "edits": [
+   {"page": "concepts/召唤结构", "remove_aliases": ["期待视野", "horizons of expectation"]}
+  ],
+  "reason": "期待视野（姚斯 Erwartungshorizont）与召唤结构（伊塞尔 Appellstruktur）在教材中为各自独立的概念条目；'期待视野/horizons of expectation'误挂于召唤结构页"
+ },
+ {
+  "action": "aliasfix",
+  "edits": [
+   {"page": "concepts/空白", "remove_aliases": ["召唤结构"]}
+  ],
+  "reason": "空白是召唤结构的构成要素而非同一概念，裸别名应归 concepts/召唤结构"
+ },
+ {
+  "action": "aliasfix",
+  "edits": [
+   {"page": "concepts/空白", "remove_aliases": ["未定点"]}
+  ],
+  "reason": "未定点（英伽登 Unbestimmtheit）与空白（伊塞尔 Leerstelle）为存在论/阅读过程论两个层次的不同概念，各自独立成条"
+ },
+ {
+  "action": "aliasfix",
+  "edits": [
+   {"page": "concepts/修辞阅读", "remove_aliases": ["不可决定性"]}
+  ],
+  "reason": "不可决定性（undecidability）是独立概念页（德里达延异与德·曼修辞共有），非修辞阅读方法的别名"
+ },
+ {
+  "action": "merge",
+  "canon": "concepts/修辞阅读",
+  "dup": "concepts/寓言阅读",
+  "aliases_to_add": ["寓言阅读", "讽喻阅读", "allegorical reading"],
+  "reason": "德·曼同一种解构阅读方法的两个名称（rhetorical reading / allegories of reading），两页内容高度互补重叠；canon 取入链更高、更通用的方法名'修辞阅读'，寓言阅读独有内容（《阅读的寓言》1979、寓言/象征之辨、寓言的时间性、'所有阅读都是寓言性的'、卢梭/普鲁斯特/里尔克例证）已吸收；被吸收别名仅取术语义，'寓言''讽喻''保罗德曼'等歧义/人名别名不并入"
+ },
+ {
+  "action": "aliasfix",
+  "edits": [
+   {"page": "concepts/修辞阅读", "remove_aliases": ["讽喻", "寓言"]}
+  ],
+  "reason": "讽喻-allegory 是一般文学手法/中世纪寓意解经概念页（亚里士多德—但丁四义说—薄伽丘），与德·曼'阅读的寓言'不同；歧义裸别名'讽喻/寓言'不得归入德·曼方法页"
+ },
+ {
+  "action": "merge",
+  "canon": "figures/雷蒙德·威廉斯",
+  "dup": "figures/威廉斯",
+  "aliases_to_add": ["威廉斯"],
+  "reason": "同一人 Raymond Williams（1921-1988）；canon 取标准全译名且入链最高者'雷蒙德·威廉斯'，威廉斯页全部实质内容（生平、文化唯物主义、整体生活方式、大众传媒立场、跨教材对照、译名说明）已吸收，威廉斯页改为重定向"
+ },
+ {
+  "action": "merge",
+  "canon": "figures/雷蒙德·威廉斯",
+  "dup": "figures/雷蒙·威廉斯",
+  "aliases_to_add": [],
+  "reason": "同一人 Raymond Williams 的译名变体页；'雷蒙·威廉斯/Raymond Williams/Williams'本已在 canon 别名中，雷蒙·威廉斯页改为重定向"
+ },
+ {
+  "action": "merge",
+  "canon": "movements/接受美学",
+  "dup": "movements/康士坦茨学派",
+  "aliases_to_add": ["康士坦茨学派", "Konstanz School"],
+  "reason": "康斯坦茨学派即接受美学研究共同体的别称，该页内容为接受美学的子集/别名页；曼德尔、普列森丹茨及'1969年发表说'等独有信息已吸收进 canon '康斯坦茨学派'一节"
+ },
+ {
+  "action": "merge",
+  "canon": "movements/接受美学",
+  "dup": "movements/文学接受理论",
+  "aliases_to_add": ["文学接受论", "reception theory"],
+  "reason": "文学接受理论页自称'又称接受美学'，与 canon 同源同章节，实质为重复页；审美距离、垂直/水平接受、文学演变规律、哈贝马斯批判、艾柯、主要著作、姚斯后期修正、方法论遗产等独有内容已吸收"
+ },
+ {
+  "action": "aliasfix",
+  "edits": [
+   {"page": "movements/读者反应批评", "remove_aliases": ["reception theory"]}
+  ],
+  "reason": "reception theory/reception aesthetics 指德国接受理论（姚斯/伊塞尔），归接受美学；美国 reader-response criticism（费什/霍兰德）在教材中另为一派，保持分离"
+ },
+ {
+  "action": "merge",
+  "canon": "concepts/间离效果",
+  "dup": "concepts/间离化",
+  "aliases_to_add": ["间离化", "间离", "异化效果"],
+  "reason": "布莱希特 Verfremdungseffekt 译名群（间离效果/间离化/间离/异化效果）同一概念；canon 取内容最全的'间离效果'；'一译异化效果'及以'间离'与俄国形式主义'陌生化'相区分的说明已吸收"
+ },
+ {
+  "action": "aliasfix",
+  "edits": [
+   {"page": "concepts/间离效果", "remove_aliases": ["陌生化效果"]}
+  ],
+  "reason": "concepts/陌生化效果 是什克洛夫斯基 defamiliarization effect 的独立概念页（俄国形式主义语境，非布莱希特），裸别名须归该页；@马新国以'陌生化效果'称布莱希特的用法保留在 canon 正文译名说明中"
+ },
+ {
+  "action": "aliasfix",
+  "edits": [
+   {"page": "concepts/封闭阅读", "remove_aliases": ["可读文本", "读者之星"]}
+  ],
+  "reason": "可读文本（lisible）是文本类型别名，属 concepts/可读性与可写性；封闭阅读是阅读方式，为另一概念（正文亦以可读文本为其对象）；'读者之星'为 OCR 乱码别名一并清除"
+ },
+ {
+  "action": "merge",
+  "canon": "concepts/影响的焦虑",
+  "dup": "concepts/影响焦虑",
+  "aliases_to_add": ["影响焦虑"],
+  "reason": "布鲁姆 The Anxiety of Influence（1973）同一概念异译；canon 取内容最全且与书名一致的'影响的焦虑'；clinamen/六种修正比、弗洛伊德父权焦虑与拉康象征秩序关联、心理批评/盲视与洞见/前见链接已吸收"
+ },
+ {
+  "action": "aliasfix",
+  "edits": [
+   {"page": "concepts/深层结构", "remove_aliases": ["原型批评"]}
+  ],
+  "reason": "深层结构是乔姆斯基生成语言学/列维-斯特劳斯神话结构概念；原型批评属弗莱'神话与原型'概念群，两页正文互相独立"
+ },
+ {
+  "action": "aliasfix",
+  "edits": [
+   {"page": "concepts/符号消费", "remove_aliases": ["simulacrum"]}
+  ],
+  "reason": "simulacrum（类象）是鲍德里亚的独立概念页 concepts/类象 的专名；符号消费（symbolic consumption）为消费社会理论的另一概念，正文仅将类像作为其概念群之一"
+ },
+ {
+  "action": "merge",
+  "canon": "concepts/阐释共同体",
+  "dup": "concepts/阐释群体",
+  "aliases_to_add": ["阐释群体", "阐释团体", "解释团体", "解释社群"],
+  "reason": "费什 interpretive community 同一概念异译；canon 取规范译名'阐释共同体'，阐释群体页全部实质内容（布莱奇首倡、费希《阐释团体的权威》、限制因素论、@马新国 批判、跨教材对照）已吸收并统一措辞，阐释群体页改为重定向"
+ },
+ {
+  "action": "merge",
+  "canon": "figures/兰色姆",
+  "dup": "figures/茅斯",
+  "aliases_to_add": ["茅斯"],
+  "reason": "Ransom 异译/误名同一人（John Crowe Ransom）；canon 取教材译名且入链更高者'兰色姆'；《世界的躯体》（The World's Body, 1938）、南方文艺复兴/重农主义背景、structure/texture 译名说明已吸收；茅斯页'耶鲁大学任教'等讹误未吸收"
+ },
+ {
+  "action": "merge",
+  "canon": "figures/布鲁姆",
+  "dup": "figures/哈罗德·布鲁姆",
+  "aliases_to_add": [],
+  "reason": "同一人 Harold Bloom，canon 别名已含'哈罗德·布鲁姆/Harold Bloom/Bloom'；六种修正比、强/弱诗人、晚年正典捍卫（《西方正典》1994）、审美自律立场、生平卒年（1930-2019）已吸收，哈罗德·布鲁姆页改为重定向"
+ },
+ {
+  "action": "aliasfix",
+  "edits": [
+   {"page": "figures/约翰生", "remove_aliases": ["Johnson", "鲍斯韦尔"]},
+   {"page": "figures/巴伯拉·约翰逊", "remove_aliases": ["Johnson"]}
+  ],
+  "reason": "不同人物：塞缪尔·约翰生（Samuel Johnson，18世纪英国新古典主义批评家）≠芭芭拉·约翰逊（Barbara Johnson，解构主义批评家）；歧义裸别名'johnson'双方移除；'鲍斯韦尔'系约翰生的传记作者，误作别名一并移除"
+ },
+ {
+  "action": "merge",
+  "canon": "figures/斯宾格勒",
+  "dup": "figures/斯本格勒",
+  "aliases_to_add": ["斯本格勒"],
+  "reason": "Spengler 异译同一人；'被批评为非科学与悲观主义'、影响及于汤因比/海德格尔之说及历史循环论链接已吸收，斯本格勒页改为重定向"
+ },
+ {
+  "action": "merge",
+  "canon": "figures/米歇利特",
+  "dup": "figures/米歇莱",
+  "aliases_to_add": ["米歇莱"],
+  "reason": "Jules Michelet 异译同一人；《法国大革命史》、'以生动叙事将编年史提升为文学艺术'之评价、历史连续性/叙述链接已吸收，米歇莱页改为重定向"
+ },
+ {
+  "action": "merge",
+  "canon": "movements/精神分析批评",
+  "dup": "movements/心理分析批评",
+  "aliases_to_add": ["心理分析批评", "psychoanalytic literary criticism"],
+  "reason": "同一流派异译（psychoanalytic criticism）；'文学即梦境'阐释路径、克里斯蒂娃/伊里加瑞/西克苏斯与女性主义的交汇、彼得·布鲁克斯叙事学延伸、对象关系理论与后拉康多元发展等独有内容已吸收进 canon '后拉康时代的发展'一节（原页代表人物表中误挂于 concepts/文本间性 的一行已按克里斯蒂娃更正吸收），心理分析批评页改为重定向"
+ }
+]

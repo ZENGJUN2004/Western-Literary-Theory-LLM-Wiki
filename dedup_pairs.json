@@ -1,0 +1,1237 @@
+[
+ {
+  "canon": "concepts/意识形态",
+  "dup": "concepts/上层建筑与经济基础",
+  "shared_alias": [
+   "上层建筑"
+  ],
+  "canon_size": 1931,
+  "dup_size": 1317,
+  "canon_in": 5,
+  "dup_in": 2
+ },
+ {
+  "canon": "concepts/上层建筑与经济基础",
+  "dup": "concepts/经济基础与上层建筑",
+  "shared_alias": [
+   "上层建筑"
+  ],
+  "canon_size": 1317,
+  "dup_size": 2655,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/修辞阅读",
+  "dup": "concepts/不可决定性",
+  "shared_alias": [
+   "不可决定性"
+  ],
+  "canon_size": 1794,
+  "dup_size": 2021,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/不可译性",
+  "dup": "concepts/不可翻译性",
+  "shared_alias": [
+   "untranslatability"
+  ],
+  "canon_size": 369,
+  "dup_size": 509,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/身份认同",
+  "dup": "concepts/主体",
+  "shared_alias": [
+   "主体",
+   "subject",
+   "subjectivity"
+  ],
+  "canon_size": 4122,
+  "dup_size": 2666,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/互文性",
+  "dup": "concepts/文本间性",
+  "shared_alias": [
+   "互文性",
+   "intertextuality"
+  ],
+  "canon_size": 2357,
+  "dup_size": 1974,
+  "canon_in": 10,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/物化",
+  "dup": "concepts/人性异化",
+  "shared_alias": [
+   "异化",
+   "alienation"
+  ],
+  "canon_size": 2414,
+  "dup_size": 589,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/修辞阅读",
+  "dup": "concepts/寓言阅读",
+  "shared_alias": [
+   "寓言阅读"
+  ],
+  "canon_size": 1794,
+  "dup_size": 2066,
+  "canon_in": 3,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/元叙事",
+  "dup": "concepts/叙述叙事",
+  "shared_alias": [
+   "元叙事"
+  ],
+  "canon_size": 2425,
+  "dup_size": 1899,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/神话",
+  "dup": "concepts/元叙事",
+  "shared_alias": [
+   "myth"
+  ],
+  "canon_size": 508,
+  "dup_size": 2425,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/具体化",
+  "dup": "concepts/空白",
+  "shared_alias": [
+   "具体化"
+  ],
+  "canon_size": 3213,
+  "dup_size": 1909,
+  "canon_in": 6,
+  "dup_in": 2
+ },
+ {
+  "canon": "concepts/净化-catharsis",
+  "dup": "concepts/观审",
+  "shared_alias": [
+   "情感净化"
+  ],
+  "canon_size": 940,
+  "dup_size": 1763,
+  "canon_in": 25,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/分延",
+  "dup": "concepts/差异",
+  "shared_alias": [
+   "延异",
+   "différance"
+  ],
+  "canon_size": 1159,
+  "dup_size": 1994,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/分延",
+  "dup": "concepts/延异",
+  "shared_alias": [
+   "分延",
+   "延异",
+   "différance"
+  ],
+  "canon_size": 1159,
+  "dup_size": 1816,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/异延",
+  "dup": "concepts/分延",
+  "shared_alias": [
+   "分延",
+   "延异",
+   "différance"
+  ],
+  "canon_size": 590,
+  "dup_size": 1159,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/叙述",
+  "dup": "concepts/故事与话语",
+  "shared_alias": [
+   "故事与话语",
+   "story and discourse"
+  ],
+  "canon_size": 4415,
+  "dup_size": 2219,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/期待视野",
+  "dup": "concepts/召唤结构",
+  "shared_alias": [
+   "期待视野"
+  ],
+  "canon_size": 3148,
+  "dup_size": 2364,
+  "canon_in": 5,
+  "dup_in": 4
+ },
+ {
+  "canon": "concepts/召唤结构",
+  "dup": "concepts/空白",
+  "shared_alias": [
+   "召唤结构"
+  ],
+  "canon_size": 2364,
+  "dup_size": 1909,
+  "canon_in": 4,
+  "dup_in": 2
+ },
+ {
+  "canon": "concepts/可读性与可写性",
+  "dup": "concepts/封闭阅读",
+  "shared_alias": [
+   "可读文本"
+  ],
+  "canon_size": 2126,
+  "dup_size": 1953,
+  "canon_in": 2,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/含混-复义",
+  "dup": "concepts/复义-复义",
+  "shared_alias": [
+   "复义",
+   "ambiguity",
+   "seven types of ambiguity"
+  ],
+  "canon_size": 2469,
+  "dup_size": 1327,
+  "canon_in": 31,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/生产力与生产关系",
+  "dup": "concepts/唯物史观",
+  "shared_alias": [
+   "历史唯物主义"
+  ],
+  "canon_size": 2044,
+  "dup_size": 1622,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/意象-image",
+  "dup": "concepts/复合体",
+  "shared_alias": [
+   "意象派"
+  ],
+  "canon_size": 2234,
+  "dup_size": 2122,
+  "canon_in": 21,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/讽喻-allegory",
+  "dup": "concepts/寓言阅读",
+  "shared_alias": [
+   "讽喻"
+  ],
+  "canon_size": 1041,
+  "dup_size": 2066,
+  "canon_in": 4,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/差异",
+  "dup": "concepts/延异",
+  "shared_alias": [
+   "延异",
+   "différance",
+   "差异与延宕"
+  ],
+  "canon_size": 1994,
+  "dup_size": 1816,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/异延",
+  "dup": "concepts/差异",
+  "shared_alias": [
+   "延异",
+   "différance"
+  ],
+  "canon_size": 590,
+  "dup_size": 1994,
+  "canon_in": 3,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/希望原理",
+  "dup": "concepts/希望哲学",
+  "shared_alias": [
+   "das prinzip hoffnung"
+  ],
+  "canon_size": 615,
+  "dup_size": 2644,
+  "canon_in": 2,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/异延",
+  "dup": "concepts/延异",
+  "shared_alias": [
+   "分延",
+   "延异",
+   "différance"
+  ],
+  "canon_size": 590,
+  "dup_size": 1816,
+  "canon_in": 3,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/形式与内容的统一",
+  "dup": "concepts/形式与内容",
+  "shared_alias": [
+   "形式内容关系"
+  ],
+  "canon_size": 1858,
+  "dup_size": 719,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/意象-image",
+  "dup": "concepts/形象",
+  "shared_alias": [
+   "image"
+  ],
+  "canon_size": 2234,
+  "dup_size": 1345,
+  "canon_in": 21,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/影响的焦虑",
+  "dup": "concepts/影响焦虑",
+  "shared_alias": [
+   "anxiety of influence"
+  ],
+  "canon_size": 2784,
+  "dup_size": 571,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/性别述行",
+  "dup": "concepts/述行性",
+  "shared_alias": [
+   "性别述行",
+   "述行性"
+  ],
+  "canon_size": 3040,
+  "dup_size": 2232,
+  "canon_in": 1,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/述行语言",
+  "dup": "concepts/性别述行",
+  "shared_alias": [
+   "性别述行",
+   "gender performativity",
+   "述行性"
+  ],
+  "canon_size": 3759,
+  "dup_size": 3040,
+  "canon_in": 1,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/现象学还原",
+  "dup": "concepts/悬搁",
+  "shared_alias": [
+   "现象学还原",
+   "phenomenological reduction"
+  ],
+  "canon_size": 2270,
+  "dup_size": 2400,
+  "canon_in": 3,
+  "dup_in": 2
+ },
+ {
+  "canon": "concepts/情节",
+  "dup": "concepts/本事与情节",
+  "shared_alias": [
+   "情节"
+  ],
+  "canon_size": 2467,
+  "dup_size": 3194,
+  "canon_in": 4,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/意识形态",
+  "dup": "concepts/意识形态批判",
+  "shared_alias": [
+   "意识形态",
+   "ideology"
+  ],
+  "canon_size": 1931,
+  "dup_size": 3030,
+  "canon_in": 5,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/文化霸权",
+  "dup": "concepts/意识形态",
+  "shared_alias": [
+   "文化霸权"
+  ],
+  "canon_size": 2324,
+  "dup_size": 1931,
+  "canon_in": 9,
+  "dup_in": 5
+ },
+ {
+  "canon": "concepts/意识形态",
+  "dup": "concepts/经济基础与上层建筑",
+  "shared_alias": [
+   "上层建筑"
+  ],
+  "canon_size": 1931,
+  "dup_size": 2655,
+  "canon_in": 5,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/意识形态",
+  "dup": "concepts/领导权",
+  "shared_alias": [
+   "文化霸权"
+  ],
+  "canon_size": 1931,
+  "dup_size": 2427,
+  "canon_in": 5,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/摹仿-mimesis",
+  "dup": "concepts/模仿-mimesis",
+  "shared_alias": [
+   "mimesis"
+  ],
+  "canon_size": 1248,
+  "dup_size": 461,
+  "canon_in": 28,
+  "dup_in": 3
+ },
+ {
+  "canon": "concepts/摹仿-mimesis",
+  "dup": "concepts/模仿论",
+  "shared_alias": [
+   "mimesis"
+  ],
+  "canon_size": 1248,
+  "dup_size": 688,
+  "canon_in": 28,
+  "dup_in": 8
+ },
+ {
+  "canon": "concepts/文化帝国主义",
+  "dup": "concepts/文化扩张",
+  "shared_alias": [
+   "cultural imperialism"
+  ],
+  "canon_size": 2932,
+  "dup_size": 589,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/文化霸权",
+  "dup": "concepts/文化领导权",
+  "shared_alias": [
+   "霸权"
+  ],
+  "canon_size": 2324,
+  "dup_size": 2170,
+  "canon_in": 9,
+  "dup_in": 4
+ },
+ {
+  "canon": "concepts/文化霸权",
+  "dup": "concepts/霸权",
+  "shared_alias": [
+   "霸权"
+  ],
+  "canon_size": 2324,
+  "dup_size": 644,
+  "canon_in": 9,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/文化霸权",
+  "dup": "concepts/领导权",
+  "shared_alias": [
+   "文化霸权",
+   "cultural hegemony",
+   "霸权"
+  ],
+  "canon_size": 2324,
+  "dup_size": 2427,
+  "canon_in": 9,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/文化领导权",
+  "dup": "concepts/霸权",
+  "shared_alias": [
+   "霸权",
+   "hegemony"
+  ],
+  "canon_size": 2170,
+  "dup_size": 644,
+  "canon_in": 4,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/文化领导权",
+  "dup": "concepts/领导权",
+  "shared_alias": [
+   "霸权",
+   "文化领导权",
+   "领导权",
+   "hegemony"
+  ],
+  "canon_size": 2170,
+  "dup_size": 2427,
+  "canon_in": 4,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/未定点",
+  "dup": "concepts/空白",
+  "shared_alias": [
+   "未定点"
+  ],
+  "canon_size": 2798,
+  "dup_size": 1909,
+  "canon_in": 5,
+  "dup_in": 2
+ },
+ {
+  "canon": "concepts/模仿论",
+  "dup": "concepts/模仿-mimesis",
+  "shared_alias": [
+   "mimesis"
+  ],
+  "canon_size": 688,
+  "dup_size": 461,
+  "canon_in": 8,
+  "dup_in": 3
+ },
+ {
+  "canon": "concepts/神话与原型",
+  "dup": "concepts/深层结构",
+  "shared_alias": [
+   "原型批评"
+  ],
+  "canon_size": 2397,
+  "dup_size": 2171,
+  "canon_in": 2,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/混成性",
+  "dup": "concepts/混成",
+  "shared_alias": [
+   "hybridity"
+  ],
+  "canon_size": 568,
+  "dup_size": 3392,
+  "canon_in": 3,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/经济基础与上层建筑",
+  "dup": "concepts/生产力与生产关系",
+  "shared_alias": [
+   "经济基础"
+  ],
+  "canon_size": 2655,
+  "dup_size": 2044,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/绵延",
+  "dup": "concepts/生命哲学",
+  "shared_alias": [
+   "绵延"
+  ],
+  "canon_size": 3171,
+  "dup_size": 2774,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/直觉",
+  "dup": "concepts/直觉-intuition",
+  "shared_alias": [
+   "直觉",
+   "intuition"
+  ],
+  "canon_size": 2795,
+  "dup_size": 1445,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/类象",
+  "dup": "concepts/符号消费",
+  "shared_alias": [
+   "simulacrum"
+  ],
+  "canon_size": 554,
+  "dup_size": 3074,
+  "canon_in": 4,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/细读法",
+  "dup": "concepts/细察",
+  "shared_alias": [
+   "close reading"
+  ],
+  "canon_size": 2764,
+  "dup_size": 2273,
+  "canon_in": 11,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/自身",
+  "dup": "concepts/自我",
+  "shared_alias": [
+   "self"
+  ],
+  "canon_size": 1017,
+  "dup_size": 576,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/言语行为",
+  "dup": "concepts/语言行为",
+  "shared_alias": [
+   "言语行为",
+   "speech act",
+   "言内行为",
+   "言外行为",
+   "言后行为"
+  ],
+  "canon_size": 2776,
+  "dup_size": 2234,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "concepts/言语行为",
+  "dup": "concepts/述行性",
+  "shared_alias": [
+   "述行语"
+  ],
+  "canon_size": 2776,
+  "dup_size": 2232,
+  "canon_in": 1,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/述行语言",
+  "dup": "concepts/言语行为",
+  "shared_alias": [
+   "述行语"
+  ],
+  "canon_size": 3759,
+  "dup_size": 2776,
+  "canon_in": 1,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/逻各斯中心主义",
+  "dup": "concepts/语音中心主义",
+  "shared_alias": [
+   "语音中心主义"
+  ],
+  "canon_size": 2006,
+  "dup_size": 1056,
+  "canon_in": 2,
+  "dup_in": 2
+ },
+ {
+  "canon": "concepts/述行语言",
+  "dup": "concepts/述行性",
+  "shared_alias": [
+   "性别述行",
+   "述行性",
+   "述行语",
+   "performative"
+  ],
+  "canon_size": 3759,
+  "dup_size": 2232,
+  "canon_in": 1,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/间离化",
+  "dup": "concepts/间离效果",
+  "shared_alias": [
+   "alienation effect",
+   "verfremdungseffekt"
+  ],
+  "canon_size": 612,
+  "dup_size": 2495,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/陌生化效果",
+  "dup": "concepts/间离效果",
+  "shared_alias": [
+   "陌生化效果"
+  ],
+  "canon_size": 1878,
+  "dup_size": 2495,
+  "canon_in": 2,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/阐释群体",
+  "dup": "concepts/阐释共同体",
+  "shared_alias": [
+   "interpretive community"
+  ],
+  "canon_size": 3461,
+  "dup_size": 595,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "concepts/领导权",
+  "dup": "concepts/霸权",
+  "shared_alias": [
+   "霸权",
+   "hegemony"
+  ],
+  "canon_size": 2427,
+  "dup_size": 644,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/亨利·詹姆斯",
+  "dup": "figures/威廉·詹姆斯",
+  "shared_alias": [
+   "james"
+  ],
+  "canon_size": 3704,
+  "dup_size": 3638,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/伍尔夫",
+  "dup": "figures/弗吉尼娅·沃尔夫",
+  "shared_alias": [
+   "弗吉尼亚·伍尔夫",
+   "弗吉尼娅·沃尔夫",
+   "virginia woolf"
+  ],
+  "canon_size": 1610,
+  "dup_size": 3643,
+  "canon_in": 5,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/保罗·德·曼",
+  "dup": "figures/德·曼",
+  "shared_alias": [
+   "保罗·德·曼",
+   "paul de man"
+  ],
+  "canon_size": 2215,
+  "dup_size": 618,
+  "canon_in": 1,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/兰色姆",
+  "dup": "figures/茅斯",
+  "shared_alias": [
+   "兰色姆",
+   "john crowe ransom",
+   "约翰·克劳·兰色姆"
+  ],
+  "canon_size": 2475,
+  "dup_size": 961,
+  "canon_in": 4,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/列维-斯特劳斯",
+  "dup": "figures/列维-施特劳斯",
+  "shared_alias": [
+   "claude lévi-strauss"
+  ],
+  "canon_size": 2314,
+  "dup_size": 2794,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/热奈特",
+  "dup": "figures/勒兹拉",
+  "shared_alias": [
+   "gérard genette"
+  ],
+  "canon_size": 3301,
+  "dup_size": 450,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/沃伦",
+  "dup": "figures/华伦",
+  "shared_alias": [
+   "r.p. warren",
+   "robert penn warren"
+  ],
+  "canon_size": 1470,
+  "dup_size": 1394,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/哈特曼",
+  "dup": "figures/哈特维尔",
+  "shared_alias": [
+   "哈特曼",
+   "杰弗里·哈特曼",
+   "geoffrey hartman"
+  ],
+  "canon_size": 674,
+  "dup_size": 2017,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/哈特曼",
+  "dup": "figures/杰弗里·哈特曼",
+  "shared_alias": [
+   "杰弗里·哈特曼",
+   "geoffrey hartman"
+  ],
+  "canon_size": 674,
+  "dup_size": 2057,
+  "canon_in": 2,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/杰弗里·哈特曼",
+  "dup": "figures/哈特维尔",
+  "shared_alias": [
+   "杰弗里·哈特曼",
+   "geoffrey hartman",
+   "hartman"
+  ],
+  "canon_size": 2057,
+  "dup_size": 2017,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/布鲁姆",
+  "dup": "figures/哈罗德·布鲁姆",
+  "shared_alias": [
+   "哈罗德·布鲁姆",
+   "harold bloom",
+   "bloom"
+  ],
+  "canon_size": 5313,
+  "dup_size": 1924,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/艾柯",
+  "dup": "figures/埃科",
+  "shared_alias": [
+   "埃科",
+   "艾柯",
+   "umberto eco"
+  ],
+  "canon_size": 712,
+  "dup_size": 505,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/奥斯丁",
+  "dup": "figures/简·奥斯丁",
+  "shared_alias": [
+   "简·奥斯丁",
+   "jane austen",
+   "珍·奥斯丁"
+  ],
+  "canon_size": 1932,
+  "dup_size": 1012,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/威廉斯",
+  "dup": "figures/雷蒙·威廉斯",
+  "shared_alias": [
+   "雷蒙·威廉斯",
+   "raymond williams",
+   "williams"
+  ],
+  "canon_size": 6595,
+  "dup_size": 805,
+  "canon_in": 1,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/雷蒙德·威廉斯",
+  "dup": "figures/威廉斯",
+  "shared_alias": [
+   "雷蒙德·威廉斯",
+   "雷蒙·威廉斯",
+   "raymond williams",
+   "williams"
+  ],
+  "canon_size": 1153,
+  "dup_size": 6595,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/尤内斯库",
+  "dup": "figures/尤奈斯库",
+  "shared_alias": [
+   "尤内斯库",
+   "eugène ionesco"
+  ],
+  "canon_size": 1393,
+  "dup_size": 489,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/约翰生",
+  "dup": "figures/巴伯拉·约翰逊",
+  "shared_alias": [
+   "johnson"
+  ],
+  "canon_size": 1624,
+  "dup_size": 2018,
+  "canon_in": 7,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/巴尔特",
+  "dup": "figures/巴特",
+  "shared_alias": [
+   "roland barthes",
+   "巴特"
+  ],
+  "canon_size": 1399,
+  "dup_size": 2286,
+  "canon_in": 73,
+  "dup_in": 6
+ },
+ {
+  "canon": "figures/布迪厄",
+  "dup": "figures/皮埃尔·布尔迪厄",
+  "shared_alias": [
+   "布迪厄",
+   "pierre bourdieu"
+  ],
+  "canon_size": 3566,
+  "dup_size": 1308,
+  "canon_in": 2,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/布鲁克斯",
+  "dup": "figures/彼得·布鲁克斯",
+  "shared_alias": [
+   "brooks"
+  ],
+  "canon_size": 2170,
+  "dup_size": 1900,
+  "canon_in": 3,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/斯宾格勒",
+  "dup": "figures/斯本格勒",
+  "shared_alias": [
+   "oswald spengler"
+  ],
+  "canon_size": 1867,
+  "dup_size": 463,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/维姆萨特",
+  "dup": "figures/温萨特",
+  "shared_alias": [
+   "wimsatt"
+  ],
+  "canon_size": 2036,
+  "dup_size": 1799,
+  "canon_in": 8,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/爱伦·坡",
+  "dup": "figures/艾伦·坡",
+  "shared_alias": [
+   "埃德加·爱伦·坡",
+   "edgar allan poe",
+   "poe"
+  ],
+  "canon_size": 1661,
+  "dup_size": 2224,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/理查兹",
+  "dup": "figures/瑞恰兹",
+  "shared_alias": [
+   "i.a. richards",
+   "瑞恰兹"
+  ],
+  "canon_size": 1099,
+  "dup_size": 3239,
+  "canon_in": 3,
+  "dup_in": 1
+ },
+ {
+  "canon": "figures/米歇利特",
+  "dup": "figures/米歇莱",
+  "shared_alias": [
+   "jules michelet"
+  ],
+  "canon_size": 2234,
+  "dup_size": 439,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/雷蒙德·威廉斯",
+  "dup": "figures/雷蒙·威廉斯",
+  "shared_alias": [
+   "雷蒙·威廉斯",
+   "raymond williams",
+   "williams"
+  ],
+  "canon_size": 1153,
+  "dup_size": 805,
+  "canon_in": 3,
+  "dup_in": 0
+ },
+ {
+  "canon": "figures/霍伽特",
+  "dup": "figures/霍加特",
+  "shared_alias": [
+   "richard hoggart"
+  ],
+  "canon_size": 2659,
+  "dup_size": 1361,
+  "canon_in": 0,
+  "dup_in": 0
+ },
+ {
+  "canon": "movements/史诗戏剧",
+  "dup": "movements/政治剧场",
+  "shared_alias": [
+   "布莱希特戏剧理论"
+  ],
+  "canon_size": 1767,
+  "dup_size": 1875,
+  "canon_in": 2,
+  "dup_in": 1
+ },
+ {
+  "canon": "movements/后殖民主义",
+  "dup": "movements/后殖民批评",
+  "shared_alias": [
+   "后殖民批评"
+  ],
+  "canon_size": 3654,
+  "dup_size": 2148,
+  "canon_in": 4,
+  "dup_in": 4
+ },
+ {
+  "canon": "movements/后殖民理论",
+  "dup": "movements/后殖民主义",
+  "shared_alias": [
+   "后殖民批评",
+   "后殖民理论",
+   "postcolonialism",
+   "postcolonial theory"
+  ],
+  "canon_size": 1984,
+  "dup_size": 3654,
+  "canon_in": 5,
+  "dup_in": 4
+ },
+ {
+  "canon": "movements/后殖民理论",
+  "dup": "movements/后殖民批评",
+  "shared_alias": [
+   "后殖民批评"
+  ],
+  "canon_size": 1984,
+  "dup_size": 2148,
+  "canon_in": 5,
+  "dup_in": 4
+ },
+ {
+  "canon": "movements/后结构主义",
+  "dup": "movements/解构主义",
+  "shared_alias": [
+   "解构主义"
+  ],
+  "canon_size": 2254,
+  "dup_size": 3652,
+  "canon_in": 8,
+  "dup_in": 4
+ },
+ {
+  "canon": "movements/女性主义批评",
+  "dup": "movements/女性主义文论",
+  "shared_alias": [
+   "女性主义文论",
+   "女权主义文论",
+   "feminist literary theory"
+  ],
+  "canon_size": 4598,
+  "dup_size": 571,
+  "canon_in": 4,
+  "dup_in": 4
+ },
+ {
+  "canon": "movements/女性主义批评",
+  "dup": "movements/女权主义批评",
+  "shared_alias": [
+   "女性主义批评",
+   "女性主义文论",
+   "女权主义文论",
+   "feminist criticism",
+   "feminism"
+  ],
+  "canon_size": 4598,
+  "dup_size": 5937,
+  "canon_in": 4,
+  "dup_in": 3
+ },
+ {
+  "canon": "movements/女性主义文论",
+  "dup": "movements/女权主义批评",
+  "shared_alias": [
+   "女性主义文论",
+   "女权主义文论"
+  ],
+  "canon_size": 571,
+  "dup_size": 5937,
+  "canon_in": 4,
+  "dup_in": 3
+ },
+ {
+  "canon": "movements/接受美学",
+  "dup": "movements/康士坦茨学派",
+  "shared_alias": [
+   "康斯坦茨学派"
+  ],
+  "canon_size": 1894,
+  "dup_size": 920,
+  "canon_in": 6,
+  "dup_in": 4
+ },
+ {
+  "canon": "movements/精神分析批评",
+  "dup": "movements/心理分析批评",
+  "shared_alias": [
+   "精神分析文论"
+  ],
+  "canon_size": 4958,
+  "dup_size": 2216,
+  "canon_in": 5,
+  "dup_in": 0
+ },
+ {
+  "canon": "movements/接受美学",
+  "dup": "movements/文学接受理论",
+  "shared_alias": [
+   "文学接受理论",
+   "reception aesthetics"
+  ],
+  "canon_size": 1894,
+  "dup_size": 3009,
+  "canon_in": 6,
+  "dup_in": 2
+ },
+ {
+  "canon": "movements/读者反应批评",
+  "dup": "movements/文学接受理论",
+  "shared_alias": [
+   "reception theory"
+  ],
+  "canon_size": 2521,
+  "dup_size": 3009,
+  "canon_in": 3,
+  "dup_in": 2
+ },
+ {
+  "canon": "movements/社会主义现实主义",
+  "dup": "movements/社会现实主义",
+  "shared_alias": [
+   "社会主义现实主义",
+   "社会现实主义"
+  ],
+  "canon_size": 2160,
+  "dup_size": 1555,
+  "canon_in": 3,
+  "dup_in": 0
+ }
+]

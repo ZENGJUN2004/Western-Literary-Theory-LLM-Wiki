@@ -1,0 +1,171 @@
+[
+  {
+    "action": "merge",
+    "canon": "concepts/异延",
+    "dup": "concepts/分延",
+    "aliases_to_add": ["分延"],
+    "reason": "différance 同一概念的三种通行译名（异延/延异/分延）。canon 取入链最高者异延(3)。已吸收分延页独有内容：四核心解构概念表（异延/播撒/踪迹/替补）、意义链对结构主义的颠覆、德里达引文"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/异延",
+    "dup": "concepts/延异",
+    "aliases_to_add": ["延异"],
+    "reason": "同一概念 différance 的另一通行译名。已吸收延异页独有内容：理论来源（索绪尔差异理论/胡塞尔时间意识）、différance 拼写策略、两维度对照表"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/异延",
+    "dup": "concepts/差异",
+    "aliases_to_add": ["差异", "差异与延宕", "延迟-差异", "德里达差异理论"],
+    "reason": "差异页正文讲的即德里达 différance（索绪尔差异理论仅为其理论来源之一，并非独立的索绪尔差异原则页），故并入同一 canon。已吸收其在场形而上学批判、学术影响（含艾森曼建筑应用）、二十世纪文论选上对照行。注意：未收 'difference' 为别名，避免与索绪尔意义的 difference 混淆"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/摹仿-mimesis",
+    "dup": "concepts/模仿-mimesis",
+    "aliases_to_add": ["模仿-mimesis"],
+    "reason": "同为 mimesis 概念；canon 为正名页（入链28）。已吸收 mimēsis 双重含义（对现实的模仿/对理想的模仿）说明"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/摹仿-mimesis",
+    "dup": "concepts/模仿论",
+    "aliases_to_add": ["模仿论"],
+    "reason": "模仿论即 mimesis 学说的通行称呼，同一概念。已吸收独有内容：贯穿西方文论史的学说流变（19世纪现实主义推向高峰、20世纪与表现论/形式论三足鼎立）及表现-expression、现实主义、模仿古典、寓教于乐链接"
+  },
+  {
+    "action": "merge",
+    "canon": "movements/后殖民主义",
+    "dup": "movements/后殖民理论",
+    "aliases_to_add": ["后殖民主义文论"],
+    "reason": "同一运动的三个名称（后殖民主义/后殖民理论/后殖民批评）。canon 取内容最全(3654B)且别名已含全部三名者。已吸收理论页独有内容：代表人物国籍与卡萨诺瓦《文学世界共和国》、法农殖民心理分析、理论影响一节"
+  },
+  {
+    "action": "merge",
+    "canon": "movements/后殖民主义",
+    "dup": "movements/后殖民批评",
+    "aliases_to_add": ["postcolonial criticism"],
+    "reason": "同一运动。已吸收批评页独有内容：在文论史中的地位段（复调/杂语链接）及混成概念链接"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/希望哲学",
+    "dup": "concepts/希望原理",
+    "aliases_to_add": ["希望原理", "The Principle of Hope"],
+    "reason": "布洛赫 Das Prinzip Hoffnung 同义（原理页偏重著作、哲学页偏重学说，实为一体）。canon 取内容最全的希望哲学页(2644B)。已吸收希望原理页独有内容：乌托邦剩余物(utopian surplus)概念、文化产品分析、本雅明灵韵/阿多诺/詹姆逊对话、法兰克福学派与乌托邦研究复兴影响谱系及乌托邦精神/审美乌托邦/法兰克福学派链接"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/伍尔夫",
+    "dup": "figures/弗吉尼娅·沃尔夫",
+    "aliases_to_add": ["弗吉尼亚·沃尔夫", "弗吉尼娅·吴尔夫", "Woolf"],
+    "reason": "同一人（Virginia Woolf）。canon 取入链5的伍尔夫页（通译名）。已吸收沃尔夫页独有内容：朱立元 ch5.3.2 的《现代小说》宣言（惯例暴君论、半透明光晕、心理的真实=生命本身）、《班奈特先生和勃朗太太》演讲（勃朗太、英法俄对照、英国文学伟大时期预言）、对乔伊斯的评价、勃卢姆斯布里细节"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/热奈特",
+    "dup": "figures/勒兹拉",
+    "aliases_to_add": ["勒兹拉"],
+    "reason": "勒兹拉为 OCR 乱码/异译页(450B)，页内自注'应为 Gérard Genette 的异译'，无独立内容价值；仅吸收其叙事语法/空间叙事两个链接后并入热奈特正名页"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/奥斯丁",
+    "dup": "figures/简·奥斯丁",
+    "aliases_to_add": [],
+    "reason": "同一人（Jane Austen）；简·奥斯丁页本身即重定向页且 canon 别名已含全部译名（简·奥斯丁/Jane Austen/珍·奥斯丁），故 aliases_to_add 为空。已吸收其独有链接：福斯特、艾布拉姆斯、亨利·詹姆斯"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/布迪厄",
+    "dup": "figures/皮埃尔·布尔迪厄",
+    "aliases_to_add": ["皮埃尔·布尔迪厄"],
+    "reason": "同一人（Pierre Bourdieu）。布迪厄页(3566B、入链2)内容为布尔迪厄页(1308B)的严格超集，无独有内容需吸收，仅补别名'皮埃尔·布尔迪厄'（canon 原缺，仅有'皮埃尔·布迪厄'）"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/爱伦·坡",
+    "dup": "figures/艾伦·坡",
+    "aliases_to_add": ["艾伦·坡"],
+    "reason": "同一人（Edgar Allan Poe）异译。canon 取标准译名爱伦·坡（入链3）。已吸收艾伦·坡页独有内容：精神分析批评史专节（波拿巴《黑猫》移置分析、拉康《窃信案》强迫重复、拉康→德里达→巴拉·翰逊→霍兰德'阐释的阐释'链条）及波拿巴/霍兰德/论窃信案/压缩与移置/能指与所指链接"
+  },
+  {
+    "action": "merge",
+    "canon": "movements/史诗戏剧",
+    "dup": "movements/政治剧场",
+    "aliases_to_add": ["政治剧场", "政治戏剧", "Political Theatre"],
+    "reason": "布莱希特语境下同一术语群：两页的间离效果、叙事剧vs戏剧剧对照表、反净化立场高度重叠（约七成）。canon 取通译名史诗戏剧（入链2，别名已含叙事剧/史诗剧/布莱希特戏剧理论）。已吸收政治剧场页独有内容：皮斯卡托（政治剧场术语首创者）、博尔论坛剧场/观演者、剧场作为政治实验室、爱森斯坦蒙太奇与文化研究影响、《戏剧小工具篇》、马新国ch16与名著教程下ch10对照行"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {
+        "page": "concepts/叙述叙事",
+        "remove_aliases": ["元叙事"]
+      }
+    ],
+    "reason": "不同概念：叙述叙事页讲热奈特 diegesis/叙事层次（故事层/叙事层/预叙事层），元叙事页讲利奥塔 metanarrative（宏伟叙事的解合法化）。元叙事作为别名错误挂靠在叙述叙事页上"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {
+        "page": "concepts/元叙事",
+        "remove_aliases": ["myth"]
+      }
+    ],
+    "reason": "不同概念：myth（神话，弗雷泽/列维-斯特劳斯/巴尔特）与 metanarrative（利奥塔）完全不同；元叙事页仅因最新文论教程 ch7.2 将'神话'并列为关键词而误收 myth 别名"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {
+        "page": "concepts/身份认同",
+        "remove_aliases": ["主体", "subject", "subjectivity"]
+      }
+    ],
+    "reason": "不同概念：identity（身份认同，卡勒 ch8 的建构论谱系）与 subject/subjectivity（主体，现象学先验主体、女性主义主体重构）是两个概念；主体有独立专页且内容充实，不应由身份认同页通过别名接管"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {
+        "page": "concepts/观审",
+        "remove_aliases": ["情感净化"]
+      }
+    ],
+    "reason": "按任务指定按不同实体处理（亚里士多德净化 vs 叔本华观审），严禁 merge。⚠️但实读发现：观审页正文通篇讲的是亚里士多德 katharsis（怜悯与恐惧、净化说三种解释、《诗学》引文），与净化-catharsis 页高度重复而非叔本华观审——建议后续批次人工复核是否真正合并。本次仅移除检测到的共享别名'情感净化'（保留于净化-catharsis 主页）"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {
+        "page": "concepts/本事与情节",
+        "remove_aliases": ["情节"]
+      }
+    ],
+    "reason": "不同概念（术语对 vs 单概念）：本事与情节页专讲俄国形式主义 fabula/syuzet 术语对（什克洛夫斯基），情节页是亚里士多德 mythos/plot 的通用概念页；本事与情节页正文亦自注'本库另有情节专页'。'情节'别名应从本事与情节页移除"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {
+        "page": "concepts/生命哲学",
+        "remove_aliases": ["绵延"]
+      }
+    ],
+    "reason": "不同层次：durée/绵延是柏格森的个别概念（有独立专页），生命哲学是含柏格森、狄尔泰等的流派。另注：生命哲学页 aliases 中的'柏格森'（人名挂流派页）亦有同类问题，且正文存在将'柏格森'误替换为生命哲学内链的多处错误（如'以[[concepts/生命哲学]]（Henri Bergson）为代表'），建议另行修复"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      {
+        "page": "concepts/自身",
+        "remove_aliases": ["self"],
+        "add_aliases": ["自性"]
+      }
+    ],
+    "reason": "推翻任务提示的 merge 预选：实读发现自身页专讲荣格'自身原型'（人格核心原型，调节其他部分，通译'自性'/Self archetype），自我页讲哲学史上的 self（笛卡尔→洛克→休谟→康德→黑格尔→后结构），二者是不同概念而非同义页——恰为荣格本人严格区分的 Self 与 ego。故按'不同实体错误共享别名'处理：从自身页移除 self（保留于自我页），并补入更规范译名'自性'"
+  }
+]

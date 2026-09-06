@@ -1,0 +1,173 @@
+[
+  {
+    "action": "merge",
+    "canon": "concepts/述行语言",
+    "dup": "concepts/述行性",
+    "aliases_to_add": ["performativity", "述行力"],
+    "reason": "述行性(performativity)与述行语言(performatives)内容重叠严重：同一奥斯丁→德里达→巴特勒谱系，文学述行部分基本重复。并入述行语言作总览页（覆盖对应：述行语言|述行性、言语行为|述行性、性别述行|述行性三对），canon 新增'述行语与述行性'术语区分节并吸收双重结构、阅读/批评述行性、制度话语应用等独有内容。性别述行（巴特勒性别理论分支）保持独立页。dup 别名'性别述行'不迁移（属性别述行页）"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/言语行为",
+    "dup": "concepts/语言行为",
+    "aliases_to_add": ["语言行为", "speech act theory"],
+    "reason": "speech act 同一概念异译（言语行为|语言行为对）。canon 更全（含塞尔系统化、四类适切条件、法理学传统、朱立元来源，2776B vs 2234B 且入链 1 vs 0）；dup 独有的经典例句（命名船/道歉）已并入述行语定义处"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      { "page": "concepts/性别述行", "remove_aliases": ["述行性"] },
+      { "page": "concepts/述行语言", "remove_aliases": ["性别述行", "gender performativity"] },
+      { "page": "concepts/言语行为", "remove_aliases": ["述行语"] }
+    ],
+    "reason": "述行簇概念层级区分（对应对：性别述行|述行性、述行语言|性别述行、述行语言|言语行为）：性别述行(Butler gender performativity)、述行语言(performatives 总览)、言语行为(Austin/Searle speech act)是相关但可区分的概念/层级，清理三页间交叉别名；'述行语'归述行语言，'性别述行/gender performativity'归性别述行页"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/哈特曼",
+    "dup": "figures/哈特维尔",
+    "aliases_to_add": ["哈特维尔"],
+    "reason": "哈特维尔疑为 Geoffrey Hartman 的音近/OCR 误名（哈特维尔页自注'本页暂按杰弗里·哈特曼创建'），同一人（哈特曼|哈特维尔、杰弗里·哈特曼|哈特维尔两对）。canon 依入链最高(2)与库内'统一为哈特曼'译名说明确定，已重写为全页：吸收哈特维尔独有的不确定性阐释学、后弥尔顿诗人自我在场论、《超越形式主义》、合编《解构与批评》及跨教材对照"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/哈特曼",
+    "dup": "figures/杰弗里·哈特曼",
+    "aliases_to_add": ["杰弗里·哈特曼·利文森", "Geoffrey Hartman-Levinson", "Hartman"],
+    "reason": "同一人（Geoffrey Hartman，耶鲁学派四主将之一）。杰弗里·哈特曼页独有的激进解构主义/文学伦理学论述、《拯救文本》《阅读的命运》等著作、朱立元/马新国/最新文论教程跨教材表均已并入 canon（哈特曼页已重写）"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      { "page": "figures/哈特维尔", "remove_aliases": ["温特斯（待考）", "Yvor Winters"] }
+    ],
+    "reason": "温特斯(Yvor Winters)是另一人物（美国新批评，斯坦福），仅是'哈特维尔'的待考备选而非译名；哈特维尔并入哈特曼后，若保留该别名会把 Winters 错误映射到哈特曼"
+  },
+  {
+    "action": "merge",
+    "canon": "movements/女性主义批评",
+    "dup": "movements/女性主义文论",
+    "aliases_to_add": [],
+    "reason": "同一流派（女性主义批评|女性主义文论对）：dup 页自注为'[[movements/女性主义批评]]的别名/重定向页'，无独有正文；canon 为入链最高(4)者。dup 的 sources（最新文论教程 ch1-5、朱立元 ch18）建议并入 canon sources；别名（女性主义文论/女权主义文论/feminist literary theory）canon 已有"
+  },
+  {
+    "action": "merge",
+    "canon": "movements/女性主义批评",
+    "dup": "movements/女权主义批评",
+    "aliases_to_add": ["女权主义批评", "女权批评", "妇女批评", "feminist literary criticism"],
+    "reason": "同一流派三种称谓（女性主义批评|女权主义批评、女性主义文论|女权主义批评两对）。canon=女性主义批评：入链最高(4)且'女性主义文论'重定向页指向它。女权主义批评页(5937B)独有内容已并入 canon：三大理论资源、肖瓦尔特'双重血统'名言、黑人女权批评(巴拉·史密斯/威利斯/迈克多威尔)、卡普兰/莫尔斯、'与相邻流派的关系'节(含英法内部张力)、马新国三派比较"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/意象-image",
+    "dup": "concepts/复合体",
+    "aliases_to_add": ["复合体", "意象复合体", "compound", "image complex"],
+    "reason": "庞德的'复合体'是意象定义（'一个意象是瞬息间呈现出来的一个理智和情的复合体'）的构成概念，属意象概念的一部分而非独立概念（意象-image|复合体对），dup 入链 0。独有内容（并置/碰撞/瞬间统一、费诺罗萨与中国诗并置、新批评悖论/张力/含混发展、与传统象征对比）已并入 canon 新增'意象复合体'节；canon 原把庞德误链为 [[concepts/复合体]]，已改链 [[figures/庞德]]。dup 别名'庞德'系人名不迁移（见 aliasfix）"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      { "page": "concepts/复合体", "remove_aliases": ["庞德"] }
+    ],
+    "reason": "人名误作概念别名：庞德(Ezra Pound)是意象派领袖人物（figures/庞德），不是'复合体/意象复合体'的译名，不得映射到概念页"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      { "page": "concepts/形象", "remove_aliases": ["image"] }
+    ],
+    "reason": "image 与 形象 是不同范畴（意象-image|形象对）：形象=美学/艺术理论基本范畴（艺术形象、典型、形象思维），意象=庞德意象派核心概念。歧义裸别名 image 保留给 concepts/意象-image（庞德 image，入链 21），形象页保留 艺术形象/审美形象"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/互文性",
+    "dup": "concepts/文本间性",
+    "aliases_to_add": ["文本间性", "互文"],
+    "reason": "intertextuality 同一概念两种译名（互文性|文本间性对）。canon 入链 10>1 且为更通行译名。文本间性页独有内容（文本/作品之分与能指游戏、引文/结构/功能三类型、阿尔都塞'问题式'、作者='空间中的一个点'）已并入 canon 新增第 5 节；canon 中把克里斯蒂娃/巴赫金误链为 [[concepts/文本间性]] 处已改为纯文本人名。dup 别名'克里斯蒂娃''巴赫金'系人名不迁移（见 aliasfix）"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      { "page": "concepts/文本间性", "remove_aliases": ["克里斯蒂娃", "巴赫金"] }
+    ],
+    "reason": "人名误作概念别名：克里斯蒂娃、巴赫金是人物，不是 intertextuality 的译名，不得经文本间性页映射到互文性概念"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/叙述",
+    "dup": "concepts/故事与话语",
+    "aliases_to_add": ["histoire et discours", "叙事与话语", "Fabula and Syuzhet"],
+    "reason": "叙述页已含 story/discourse 区分专节（叙述|故事与话语对），dup 为该区分的专门条目（两页互链、双入链 0）。dup 独有内容（什克洛夫斯基本事/情节源头、热奈特时间/频率/语式三层面表、省略/场景/概括/停顿、故事与话语辩证关系）已并入 canon'故事/话语之分'节；'故事与话语''story and discourse'别名 canon 已有"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      { "page": "concepts/形式与内容的统一", "remove_aliases": ["形式内容关系"] }
+    ],
+    "reason": "形式与内容的统一是'形式与内容'总范畴下'辩证统一论'（黑格尔—马克思主义）的子命题，两页为总条目/专门条目关系（形式与内容页明文互链委派），非同一实体、内容不重叠，故不 merge；共享裸别名'形式内容关系'保留给总条目 concepts/形式与内容"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/文化帝国主义",
+    "dup": "concepts/文化扩张",
+    "aliases_to_add": ["文化扩张", "Cultural Expansion"],
+    "reason": "cultural imperialism 同义（文化帝国主义|文化扩张对；dup 别名即 Cultural Imperialism）。dup 仅 589B 短文，独有内容（文化扩张的界定、好莱坞/英语霸权/跨国传媒等隐蔽载体、文化霸权表述）已并入 canon 核心定义处；dup 的 broken 链接（[[美国梦]]）不再保留"
+  },
+  {
+    "action": "merge",
+    "canon": "concepts/直觉",
+    "dup": "concepts/直觉-intuition",
+    "aliases_to_add": ["直觉-intuition"],
+    "reason": "同一概念（柏格森直觉主义，直觉|直觉-intuition对）。canon 更全（2795B vs 1445B、朱立元 ch5 深度内容）。dup 独有内容（克罗齐《美学原理》艺术即直觉即表现、胡塞尔感性直观/本质直观、绵延与审美经验时间性）已并入 canon 新增'理论谱系扩展'节"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      { "page": "concepts/逻各斯中心主义", "remove_aliases": ["语音中心主义"] }
+    ],
+    "reason": "logocentrism 与 phonocentrism 相关但可区分：语音中心主义是逻各斯中心主义在语言层面的表现（言语>书写的等级），已有独立页且内容不重叠（对索绪尔的批判、解构策略仅见于语音中心主义页；两页互为链接），保留双页，仅移除错误共享别名"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/保罗·德·曼",
+    "dup": "figures/德·曼",
+    "aliases_to_add": ["德曼"],
+    "reason": "同一人（Paul de Man，耶鲁学派，保罗·德·曼|德·曼对）。canon 更全(2215B)。dup 独有的'盲视与洞见'命题（洞见以误读为代价）已并入 canon 寓言阅读节；dup 别名'德曼'（无间隔号变体）补入"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/沃伦",
+    "dup": "figures/华伦",
+    "aliases_to_add": ["华伦"],
+    "reason": "同一人（Robert Penn Warren，R.P. Warren 异译，沃伦|华伦对）。dup 页自注'与 figures/沃伦 为同一人'；dup 独有的规范译名《一切国王的人》及'政治反讽与权力悖论'表述已订正并入 canon（原 canon 作'《所有国王的 men》'系中英混杂误题）"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/尤内斯库",
+    "dup": "figures/尤奈斯库",
+    "aliases_to_add": ["尤奈斯库"],
+    "reason": "同一人（Eugène Ionesco 异译，尤内斯库|尤奈斯库对）。canon 更全(1393B vs 489B，含剧目、语言哲学、法兰西学士院)。dup 独有的'与贝克特、热内共同开创荒诞派戏剧运动'已并入 canon"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      { "page": "figures/布鲁克斯", "remove_aliases": ["brooks"] },
+      { "page": "figures/彼得·布鲁克斯", "remove_aliases": ["brooks"] }
+    ],
+    "reason": "已知不同人物：Cleanth Brooks（新批评，1906-1994）与 Peter Brooks（叙事学家，1941-，'叙事欲望'理论），移除两页共享的歧义裸别名 brooks/Brooks（布鲁克斯|彼得·布鲁克斯对）"
+  },
+  {
+    "action": "merge",
+    "canon": "figures/瑞恰兹",
+    "dup": "figures/理查兹",
+    "aliases_to_add": ["理查兹", "欧文·阿切爾·理察茲"],
+    "reason": "同一人（I.A. Richards 异译，理查兹|瑞恰兹对），推翻预选 canon=理查兹：瑞恰兹页内容三倍于理查兹页(3239B vs 1099B)且为朱立元标准译名、含完整语义学批评体系。dup 独有内容（指涉功能/情感功能之分、诗歌语言综合能力、文学教育思想与国际语义学协会）已并入 canon。注：理查兹页入链 3>1，靠别名'理查兹'保链接解析"
+  },
+  {
+    "action": "aliasfix",
+    "edits": [
+      { "page": "movements/后结构主义", "remove_aliases": ["解构主义"] }
+    ],
+    "reason": "已知不同流派：后结构主义与解构主义是两个概念（后者是前者的分支/德里达一脉，各教材分立章节），移除后结构主义页错误共享别名'解构主义'（该别名归 movements/解构主义 页；后结构主义|解构主义对）"
+  }
+]
