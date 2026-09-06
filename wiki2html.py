@@ -243,6 +243,7 @@ TEMPLATE = '''<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title} - 西方文论 Wiki</title>
+<base href="/Western-Literary-Theory-LLM-Wiki/">
 <style>
 :root {{
   --bg: #fafaf8;
