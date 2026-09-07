@@ -1,5 +1,5 @@
 """
-西方文论 Wiki 静态站点生成器
+文论 Wiki 静态站点生成器
 将 kb/wiki/ 下的 markdown 页面转换为 GitHub Pages 静态 HTML
 支持：frontmatter 解析、[[wiki-link]] 转换、目录生成、搜索索引
 """
@@ -255,7 +255,7 @@ TEMPLATE = '''<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title} - 西方文论 Wiki</title>
+<title>{title} - 文论 Wiki</title>
 <base href="/Western-Literary-Theory-LLM-Wiki/">
 <style>
 :root {{
@@ -503,7 +503,7 @@ a:hover {{ text-decoration: underline; }}
 <div class="layout">
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <h1>西方文论 Wiki</h1>
+    <h1>文论 Wiki</h1>
     <p>Western Literary Theory Knowledge Base</p>
   </div>
   <input type="text" class="search-box" placeholder="搜索页面…" id="searchBox" onkeyup="filterNav()">
@@ -656,7 +656,7 @@ def generate_page(filepath):
 
 def main():
     print("=" * 50)
-    print("西方文论 Wiki 静态站点生成器")
+    print("文论 Wiki 静态站点生成器")
     print("=" * 50)
 
     # 收集所有页面并排序
@@ -767,11 +767,16 @@ def main():
     generate_qa_page()
 
     # 驾驶舱页面（从仓库根目录源码复制到输出目录）
+    # 驾驶舱兼作首页（index.html），保留其内置的搜索入口
     _cockpit_src = SCRIPT_DIR / "cockpit.html"
-    _cockpit_dst = OUTPUT_DIR / "cockpit.html"
     if _cockpit_src.exists():
-        _cockpit_dst.write_text(_cockpit_src.read_text(encoding="utf-8"), encoding="utf-8")
-        print(f"驾驶舱页面: cockpit.html ({_cockpit_dst.stat().st_size // 1024}KB)")
+        _cockpit_content = _cockpit_src.read_text(encoding="utf-8")
+        _cockpit_dst = OUTPUT_DIR / "cockpit.html"
+        _cockpit_dst.write_text(_cockpit_content, encoding="utf-8")
+        # 将驾驶舱内容同时输出为首页 index.html
+        _home_dst = OUTPUT_DIR / "index.html"
+        _home_dst.write_text(_cockpit_content, encoding="utf-8")
+        print(f"驾驶舱页面: cockpit.html / index.html (首页) ({_home_dst.stat().st_size // 1024}KB)")
     else:
         print("警告: 源码 cockpit.html 不存在，驾驶舱页面未生成")
 
@@ -783,7 +788,7 @@ def main():
         items = [p for p in search_idx if p["type"] == type_key]
         items.sort(key=lambda x: x["title"])
         type_html = f'''<!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"><title>{type_dir} · 西方文论 Wiki</title>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>{type_dir} · 文论 Wiki</title>
 <style>
 :root {{ --bg:#fafaf8; --fg:#1a1a1a; --muted:#6b6b6b; --accent:#2563eb; --accent-light:#dbeafe; --border:#e2e2e0; --card-bg:#fff; }}
 @media (prefers-color-scheme:dark) {{ :root {{ --bg:#1a1a1a; --fg:#e8e8e6; --muted:#999; --accent:#60a5fa; --accent-light:#1e3a5f; --border:#333; --card-bg:#222; }} }}
@@ -828,7 +833,7 @@ def generate_homepage(search_idx):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>西方文论 Wiki · 首页</title>
+<title>文论 Wiki · 首页</title>
 <base href="{base_href}">
 <style>
 :root {{
@@ -870,8 +875,8 @@ h2 {{ font-size: 20px; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8p
 </head>
 <body>
 <div class="container">
-  <h1>西方文论 Wiki</h1>
-  <p class="subtitle">Western Literary Theory Knowledge Base · 共 {total} 个页面</p>
+  <h1>文论 Wiki</h1>
+  <p class="subtitle">Literary Theory Knowledge Base · 共 {total} 个页面</p>
 
   <div class="stats">
     <div class="stat-card"><div class="stat-num">{figures}</div><div class="stat-label">人物</div></div>
@@ -972,7 +977,7 @@ def generate_search_page():
     search_html = f'''<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>搜索 · 西方文论 Wiki</title>
+<title>搜索 · 文论 Wiki</title>
 <base href="{BASE_HREF}">
 <style>
 body {{ font-family:-apple-system,"Noto Serif SC",Georgia,serif; background:#fafaf8; color:#1a1a1a; line-height:1.7; margin:0; padding:40px 24px; max-width:820px; }}
@@ -1124,7 +1129,7 @@ def generate_graph_page():
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>关系图谱 · 西方文论 Wiki</title>
+<title>关系图谱 · 文论 Wiki</title>
 <base href="{BASE_HREF}">
 <style>
 :root {{
@@ -1604,7 +1609,7 @@ def generate_stats_page():
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>量化分析 · 西方文论 Wiki</title>
+<title>量化分析 · 文论 Wiki</title>
 <base href="{BASE_HREF}">
 <style>
 :root {{
@@ -2199,7 +2204,7 @@ def generate_qa_page():
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>知识问答 · 西方文论 Wiki</title>
+<title>知识问答 · 文论 Wiki</title>
 <base href="{BASE_HREF}">
 <style>
 :root {{
