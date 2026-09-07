@@ -2267,6 +2267,41 @@ h1 {{ font-size: 28px; font-weight: 700; margin-bottom: 6px; }}
   font-size: 14px; color: var(--muted); line-height: 1.6;
 }}
 .context-body.show {{ display: block; }}
+
+/* 综合回答样式 */
+.summary-block {{
+  background: linear-gradient(135deg, var(--accent-light) 0%, var(--card-bg) 100%);
+  border: 2px solid var(--accent);
+  border-radius: 14px;
+  padding: 28px;
+  margin-bottom: 20px;
+}}
+.summary-block h3 {{
+  font-size: 18px; color: var(--accent); margin-bottom: 16px;
+  border-bottom: 1px solid var(--border); padding-bottom: 10px;
+}}
+.summary-body {{
+  font-size: 16px; line-height: 2; color: var(--fg);
+}}
+.summary-sentence {{
+  margin-bottom: 10px; padding: 8px 0;
+  border-bottom: 1px dashed var(--border);
+}}
+.summary-sentence:last-child {{ border-bottom: none; }}
+.cite {{
+  font-size: 11px; color: var(--accent); margin-left: 2px; font-weight: 600;
+  vertical-align: super;
+}}
+.cite a {{ color: var(--accent); }}
+.summary-sources {{
+  margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border);
+  font-size: 13px; line-height: 2;
+}}
+.cite-source {{
+  display: inline-block; margin-right: 12px; color: var(--muted);
+}}
+.cite-source sup {{ color: var(--accent); font-weight: 600; margin-right: 2px; }}
+.cite-source a {{ font-size: 13px; }}
 </style>
 </head>
 <body>
@@ -2426,20 +2461,100 @@ function bm25Score(queryTerms, df, doc) {{
 // 从文档中提取最相关句子
 function extractRelevantSentences(queryTerms, doc, maxSentences) {{
   const sentences = doc.sentences || [];
-  const scored = sentences.map(s => {{
+  const scored = sentences.map((s, idx) => {{
     let sScore = 0;
     const sLower = s.toLowerCase();
     queryTerms.forEach(qt => {{
       if (sLower.includes(qt.toLowerCase())) {{
-        // 长词权重高
         sScore += qt.length >= 3 ? 3 : 1;
       }}
     }});
-    return {{ text: s, score: sScore, idx: sentences.indexOf(s) }};
+    return {{ text: s, score: sScore, idx: idx, docRef: doc }};
   }}).filter(s => s.score > 0);
 
   scored.sort((a, b) => b.score - a.score);
   return scored.slice(0, maxSentences);
+}}
+
+// === 答案整合引擎 ===
+// 从多个文档收集所有相关句子
+function collectAllSentences(queryTerms, topDocs, maxPerDoc) {{
+  const all = [];
+  topDocs.forEach((item, docRank) => {{
+    const sents = extractRelevantSentences(queryTerms, item.doc, maxPerDoc);
+    sents.forEach(s => {{
+      all.push({{
+        text: s.text,
+        score: s.score,
+        docRank: docRank,
+        docScore: item.score,
+        docRef: item.doc,
+        sentenceIdx: s.idx,
+      }});
+    }});
+  }});
+  return all;
+}}
+
+// Jaccard 相似度去重
+function isDuplicate(text, accepted, threshold) {{
+  const terms = new Set(extractTerms(text));
+  for (const a of accepted) {{
+    const aTerms = new Set(extractTerms(a));
+    let inter = 0;
+    terms.forEach(t => {{ if (aTerms.has(t)) inter++; }});
+    const union = terms.size + aTerms.size - inter;
+    if (union > 0 && inter / union >= threshold) return true;
+  }}
+  return false;
+}}
+
+// 句子排序：综合 文档相关度、句子匹配分、位置信息
+function rankSentences(sentences) {{
+  return sentences.map(s => ({{
+    ...s,
+    rankScore: s.docScore * 0.4 + s.score * 2 + (1 / (s.docRank + 1)) * 5,
+  }})).sort((a, b) => b.rankScore - a.rankScore);
+}}
+
+// 生成整合概述
+function generateSummary(queryTerms, topDocs) {{
+  const all = collectAllSentences(queryTerms, topDocs, 5);
+  const ranked = rankSentences(all);
+
+  // 去重，保留得分最高的
+  const accepted = [];
+  const acceptedTexts = [];
+  for (const s of ranked) {{
+    if (accepted.length >= 8) break;
+    if (isDuplicate(s.text, acceptedTexts, 0.6)) continue;
+    accepted.push(s);
+    acceptedTexts.push(s.text);
+  }}
+
+  // 按"定义→展开→具体→总结"的逻辑排序
+  // 启发式：含"是""指""定义""含义"的定义句优先
+  // 含"认为""主张""提出"的观点句次之
+  // 其他按原始文档顺序
+  const defPattern = /(是指|是一种|指的是|定义为|含义是|意思是|概念|是一种|是指)/;
+  const claimPattern = /(认为|主张|提出|强调|指出|主张|核心|基本|主要|关键|本质)/;
+  const examplePattern = /(例如|比如|如|以|具体|实例|案例)/;
+
+  const definitions = accepted.filter(s => defPattern.test(s.text));
+  const claims = accepted.filter(s => !defPattern.test(s.text) && claimPattern.test(s.text));
+  const examples = accepted.filter(s => examplePattern.test(s.text));
+  const others = accepted.filter(s => !defPattern.test(s.text) && !claimPattern.test(s.text) && !examplePattern.test(s.text));
+
+  const ordered = [...definitions, ...claims, ...others, ...examples];
+
+  // 生成概述文本
+  let summaryParts = ordered.map(s => ({{
+    text: s.text,
+    source: s.docRef,
+    docScore: s.docScore,
+  }}));
+
+  return summaryParts;
 }}
 
 // 高亮关键词（避免正则转义问题，使用 split/join）
@@ -2497,12 +2612,37 @@ function doAsk() {{
     return;
   }}
 
+  // === 生成整合概述 ===
+  const summaryParts = generateSummary(queryTerms, topDocs);
   let html = '';
+
+  if (summaryParts.length > 0) {{
+    // 综合回答区块
+    let summaryHtml = '';
+    summaryParts.forEach((part, i) => {{
+      const highlighted = highlight(part.text, queryTerms);
+      summaryHtml += `<div class="summary-sentence">${{highlighted}}<sup class="cite">[<a href="${{BASE}}${{part.source.slug}}.html">${{i+1}}</a>]</sup></div>`;
+    }});
+
+    // 来源列表
+    const sources = [...new Set(summaryParts.map(p => p.source))];
+    let sourceHtml = sources.map((s, i) =>
+      `<span class="cite-source"><sup>[${{i+1}}]</sup><a href="${{BASE}}${{s.slug}}.html">${{s.title}}</a></span>`
+    ).join('');
+
+    html += `<div class="answer-section summary-block">
+      <h3>综合回答</h3>
+      <div class="summary-body">${{summaryHtml}}</div>
+      <div class="summary-sources"><span style="color:var(--muted);font-size:13px">引用来源：</span>${{sourceHtml}}</div>
+    </div>`;
+  }}
+
+  // === 逐条检索结果 ===
+  html += '<div class="answer-section"><h3>检索来源详情</h3></div>';
   topDocs.forEach((item, i) => {{
     const doc = item.doc;
     const sents = extractRelevantSentences(queryTerms, doc, 3);
 
-    // 构建答案段落
     let passageHtml = '';
     sents.forEach(s => {{
       passageHtml += `<div class="answer-passage">${{highlight(s.text, queryTerms)}}
@@ -2514,7 +2654,6 @@ function doAsk() {{
       </div>`;
     }});
 
-    // 上下文展开
     if (sents.length > 0) {{
       const ctxIdx = sents[0].idx;
       const ctxBefore = (doc.sentences[ctxIdx - 1] || "").trim();
@@ -2526,7 +2665,6 @@ function doAsk() {{
       passageHtml += `<div class="context-expand" onclick="this.nextElementSibling.classList.toggle('show')">展开上下文 ▸</div><div class="context-body">${{ctxParts}}</div>`;
     }}
 
-    // 相关页面链接
     const relatedLinks = scored.slice(i + 1, i + 4).map(r =>
       `<a href="${{BASE}}${{r.doc.slug}}.html">${{r.doc.title}}</a>`
     ).join('');
@@ -2535,7 +2673,7 @@ function doAsk() {{
     }}
 
     html += `<div class="answer-section">
-      <h3>答案 ${{i + 1}} · ${{doc.title}}</h3>
+      <h3>${{i + 1}} · ${{doc.title}}</h3>
       ${{passageHtml}}
     </div>`;
   }});
