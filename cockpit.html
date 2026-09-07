@@ -868,6 +868,15 @@ function buildGraph(){
   window.addEventListener("load", function(){
     if(network){ network.fit({ animation:false }); }
   });
+  // 兜底：大网络稳定化可能不收敛/耗时过长，延迟强制隐藏加载层并适配视图
+  setTimeout(function(){
+    var g = document.getElementById("graphLoading");
+    if(g){ g.style.display = "none"; }
+    if(network){
+      network.setOptions({ physics: false });
+      network.fit({ animation:false });
+    }
+  }, 3000);
 
   // degree lookup
   const inDeg = {}, outDeg = {};
