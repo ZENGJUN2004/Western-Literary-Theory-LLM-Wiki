@@ -241,7 +241,7 @@ button{font-family:inherit}
 
 /* graph pane */
 #graphPane{position:relative}
-#visNetwork{width:100%;height:100%}
+#visNetwork{position:absolute;inset:0;width:100%;height:100%}
 .graph-hint{
   position:absolute;top:10px;left:12px;
   font-size:11px;color:var(--muted);
@@ -857,12 +857,16 @@ function buildGraph(){
     el("graphLoading").querySelector("div:last-child").textContent =
       "正在布局知识图谱… "+pct+"%";
   });
-  network.once("stabilizationIterationsDone", function(){
+  network.on("stabilizationIterationsDone", function(){
     el("graphLoading").style.display = "none";
     network.fit({ animation:false });
   });
-  network.on("stabilizationIterationsDone", function(){
-    el("graphLoading").style.display = "none";
+  // 容器尺寸变化时重新适配视图（防止图谱缩在角落/超出视口）
+  window.addEventListener("resize", function(){
+    if(network){ network.fit({ animation:false }); }
+  });
+  window.addEventListener("load", function(){
+    if(network){ network.fit({ animation:false }); }
   });
 
   // degree lookup
