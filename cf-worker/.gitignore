@@ -1,0 +1,9 @@
+# Wrangler 本地凭据/日志/配置目录（不提交，避免泄露 token）
+.wrangler/
+.wrangler-home/
+.xdg/
+.wrangler-local/
+node_modules/
+
+# 部署辅助脚本（含 API token/secret，如不需入库可保留在 gitignore）
+/cf_deploy_api.py

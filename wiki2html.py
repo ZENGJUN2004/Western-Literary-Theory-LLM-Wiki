@@ -129,7 +129,7 @@ BASE_HREF = "/Western-Literary-Theory-LLM-Wiki/"
 # AI 问答后端（Cloudflare Worker）地址。留空则 qa.html 仅做本地检索摘要；
 # 填入 Worker 地址（如 https://your-worker.workers.dev）即启用 LLM 整合回答。
 # 可用环境变量 QA_API_BASE 覆盖，例如: python wiki2html.py（默认读取 .env 或此处）
-QA_API_BASE = os.environ.get("QA_API_BASE", "")
+QA_API_BASE = os.environ.get("QA_API_BASE", "https://western-theory-ai.zjunc-theory.workers.dev")
 
 
 def convert_wiki_links(text):
