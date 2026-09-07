@@ -751,6 +751,11 @@ def main():
     generate_graph_data(all_pages)
     generate_graph_page()
 
+    # 生成量化分析数据和页面
+    print("\n生成量化分析数据…")
+    generate_stats_data(all_pages)
+    generate_stats_page()
+
     # 为每个类型目录生成索引页（用keys而不是values）
     for type_key in TYPE_DIRS.keys():
         type_dir = TYPE_DIRS[type_key]
@@ -868,6 +873,7 @@ h2 {{ font-size: 20px; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8p
     <a href="{base_href}synthesis/">综合</a>
     <a href="{base_href}summaries/">摘要</a>
     <a href="{base_href}graph.html" style="border-color:var(--accent);color:var(--accent);font-weight:600;">关系图谱</a>
+    <a href="{base_href}stats.html" style="border-color:#16a34a;color:#16a34a;font-weight:600;">量化分析</a>
   </div>
 
   <input class="search-box" type="text" id="searchInput" placeholder="搜索页面…" oninput="doSearch(this.value)">
@@ -1387,6 +1393,687 @@ function updateInfo(hitCount) {{
     out_path = OUTPUT_DIR / "graph.html"
     out_path.write_text(graph_html, encoding="utf-8")
     print(f"关系图谱页: {out_path}")
+
+
+def generate_stats_data(all_pages):
+    """生成量化分析数据 stats-data.json"""
+    from collections import Counter, defaultdict
+
+    # 加载图谱边数据（用于中心性计算）
+    graph_path = OUTPUT_DIR / "graph-data.json"
+    edges = []
+    if graph_path.exists():
+        graph_data = json.loads(graph_path.read_text(encoding="utf-8"))
+        edges = graph_data["edges"]
+
+    # 节点元数据
+    node_meta = {}  # slug -> {type, title, tags, nationality, lifespan, book, chapter, body_len}
+    tag_counter = Counter()
+    nationality_counter = Counter()
+    book_counter = Counter()
+    type_counter = Counter()
+    body_lengths = []
+    era_counter = Counter()
+
+    wiki_link_re = re.compile(r"\[\[([^\]|]+)(?:\|([^]]+))?\]\]")
+
+    for type_dir, filepath in all_pages:
+        try:
+            content = filepath.read_text(encoding="utf-8-sig")
+            fm, body = parse_frontmatter(content)
+            rel = filepath.relative_to(KB_ROOT)
+            slug = str(rel.with_suffix("")).replace("\\", "/")
+
+            title = ""
+            for bl in body.split("\n"):
+                if bl.startswith("# "):
+                    title = bl[2:].strip()
+                    break
+            if not title:
+                title = filepath.stem
+
+            tags = fm.get("tags", [])
+            if isinstance(tags, str):
+                tags = [t.strip() for t in tags.split(",") if t.strip()]
+
+            meta = {
+                "type": type_dir,
+                "title": title,
+                "tags": tags,
+                "body_len": len(body),
+            }
+
+            for t in tags:
+                tag_counter[t] += 1
+
+            type_counter[type_dir] += 1
+            body_lengths.append(len(body))
+
+            # figures 特有
+            if type_dir == "figure":
+                nat = fm.get("wiki_nationality", [])
+                if isinstance(nat, str):
+                    nat = [n.strip() for n in nat.split(",") if n.strip()]
+                if isinstance(nat, list):
+                    for n in nat:
+                        nationality_counter[n] += 1
+                meta["nationality"] = nat if isinstance(nat, list) else []
+
+                lifespan = fm.get("wiki_lifespan", "")
+                if lifespan:
+                    # 提取世纪/年代
+                    m = re.search(r"(\d{4})", str(lifespan))
+                    if m:
+                        year = int(m.group(1))
+                        century = (year // 100) + 1
+                        era_label = f"{century}世纪"
+                        era_counter[era_label] += 1
+                        meta["era"] = era_label
+                    else:
+                        meta["era"] = str(lifespan)[:10]
+                else:
+                    meta["era"] = ""
+
+            # summaries 特有
+            if type_dir == "summary":
+                book = fm.get("book", "")
+                if book:
+                    book_counter[book] += 1
+                    meta["book"] = book
+                else:
+                    meta["book"] = ""
+
+            node_meta[slug] = meta
+        except Exception as e:
+            pass
+
+    # === 1. 度中心性 ===
+    in_deg = Counter()
+    out_deg = Counter()
+    for e in edges:
+        out_deg[e["from"]] += 1
+        in_deg[e["to"]] += 1
+
+    degree_list = []
+    for slug, meta in node_meta.items():
+        total = in_deg[slug] + out_deg[slug]
+        degree_list.append({
+            "slug": slug,
+            "title": meta["title"],
+            "type": meta["type"],
+            "in": in_deg[slug],
+            "out": out_deg[slug],
+            "total": total,
+        })
+    degree_list.sort(key=lambda x: x["total"], reverse=True)
+
+    # 孤立节点
+    isolated = [d for d in degree_list if d["total"] == 0]
+
+    # === 2. 类型间关系矩阵 ===
+    type_matrix = defaultdict(lambda: defaultdict(int))
+    for e in edges:
+        src_type = node_meta.get(e["from"], {}).get("type", "unknown")
+        tgt_type = node_meta.get(e["to"], {}).get("type", "unknown")
+        type_matrix[src_type][tgt_type] += 1
+
+    type_matrix_dict = {}
+    for src in type_matrix:
+        type_matrix_dict[src] = dict(type_matrix[src])
+
+    # === 3. 页面长度分布 ===
+    if body_lengths:
+        max_len = max(body_lengths)
+        bins = [0, 500, 1000, 2000, 3000, 5000, 8000, 12000, 20000, 50000]
+        bin_labels = ["<500", "500-1k", "1k-2k", "2k-3k", "3k-5k", "5k-8k", "8k-12k", "12k-20k", "20k-50k", "50k+"]
+        length_hist = [0] * len(bin_labels)
+        for bl in body_lengths:
+            placed = False
+            for i in range(len(bins) - 1):
+                if bins[i] <= bl < bins[i + 1]:
+                    length_hist[i] += 1
+                    placed = True
+                    break
+            if not placed:
+                length_hist[-1] += 1
+    else:
+        bin_labels = []
+        length_hist = []
+
+    # === 汇总 ===
+    stats = {
+        "total_pages": len(node_meta),
+        "total_edges": len(edges),
+        "type_distribution": dict(type_counter),
+        "degree_top50": degree_list[:50],
+        "in_degree_top30": sorted(degree_list, key=lambda x: x["in"], reverse=True)[:30],
+        "out_degree_top30": sorted(degree_list, key=lambda x: x["out"], reverse=True)[:30],
+        "isolated_count": len(isolated),
+        "isolated_sample": isolated[:30],
+        "tag_top50": tag_counter.most_common(50),
+        "nationality_distribution": nationality_counter.most_common(30),
+        "era_distribution": era_counter.most_common(20),
+        "book_distribution": book_counter.most_common(30),
+        "type_matrix": type_matrix_dict,
+        "length_histogram": {"labels": bin_labels, "data": length_hist},
+        "avg_body_length": int(sum(body_lengths) / len(body_lengths)) if body_lengths else 0,
+        "max_body_length": max(body_lengths) if body_lengths else 0,
+        "node_meta": node_meta,
+    }
+
+    out_path = OUTPUT_DIR / "stats-data.json"
+    out_path.write_text(json.dumps(stats, ensure_ascii=False), encoding="utf-8")
+    print(f"量化分析数据: {len(node_meta)} 节点 → {out_path}")
+    return stats
+
+
+def generate_stats_page():
+    """生成量化分析页面 stats.html（自然语言查询 + Chart.js 可视化）"""
+    stats_html = f'''<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>量化分析 · 西方文论 Wiki</title>
+<base href="{BASE_HREF}">
+<style>
+:root {{
+  --bg: #fafaf8; --fg: #1a1a1a; --muted: #6b6b6b;
+  --accent: #2563eb; --accent-light: #dbeafe;
+  --border: #e2e2e0; --card-bg: #ffffff; --green: #16a34a; --orange: #f59e0b; --purple: #a855f7;
+}}
+@media (prefers-color-scheme: dark) {{
+  :root {{
+    --bg: #1a1a1a; --fg: #e8e8e6; --muted: #999;
+    --accent: #60a5fa; --accent-light: #1e3a5f;
+    --border: #333; --card-bg: #222;
+  }}
+}}
+* {{ box-sizing: border-box; margin: 0; padding: 0; }}
+body {{ font-family: -apple-system, "Noto Serif SC", Georgia, serif; background: var(--bg); color: var(--fg); line-height: 1.7; }}
+a {{ color: var(--accent); text-decoration: none; }}
+a:hover {{ text-decoration: underline; }}
+.container {{ max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }}
+h1 {{ font-size: 28px; font-weight: 700; margin-bottom: 6px; }}
+.subtitle {{ color: var(--muted); font-size: 15px; margin-bottom: 28px; }}
+.back {{ font-size: 14px; color: var(--muted); margin-bottom: 16px; display: inline-block; }}
+
+.query-box {{
+  display: flex; gap: 8px; margin-bottom: 16px;
+}}
+.query-box input {{
+  flex: 1; padding: 12px 16px; border: 2px solid var(--border); border-radius: 10px;
+  background: var(--card-bg); color: var(--fg); font-size: 16px; outline: none; transition: border-color 0.2s;
+}}
+.query-box input:focus {{ border-color: var(--accent); }}
+.query-box button {{
+  padding: 12px 24px; border: none; border-radius: 10px; background: var(--accent); color: #fff;
+  font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+}}
+.query-box button:hover {{ opacity: 0.9; }}
+
+.suggestions {{ display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }}
+.sug-chip {{
+  padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px;
+  font-size: 13px; cursor: pointer; transition: all 0.2s; color: var(--fg); background: var(--card-bg);
+}}
+.sug-chip:hover {{ border-color: var(--accent); color: var(--accent); background: var(--accent-light); }}
+
+.result-header {{
+  display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px;
+}}
+.result-title {{ font-size: 20px; font-weight: 600; }}
+.result-desc {{ font-size: 14px; color: var(--muted); }}
+
+.cards {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 32px; }}
+.card {{ background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 18px; text-align: center; }}
+.card-num {{ font-size: 30px; font-weight: 700; color: var(--accent); }}
+.card-label {{ font-size: 13px; color: var(--muted); margin-top: 4px; }}
+
+.chart-wrap {{
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 24px; margin-bottom: 24px;
+}}
+.chart-wrap h3 {{ font-size: 16px; font-weight: 600; margin-bottom: 16px; }}
+.chart-container {{ position: relative; height: 380px; }}
+
+.matrix-table {{ width: 100%; border-collapse: collapse; font-size: 13px; }}
+.matrix-table th, .matrix-table td {{
+  border: 1px solid var(--border); padding: 6px 10px; text-align: center;
+}}
+.matrix-table th {{ background: var(--accent-light); color: var(--accent); font-weight: 600; }}
+.matrix-table td {{ color: var(--muted); }}
+.matrix-table td.hot {{ color: var(--fg); font-weight: 600; }}
+
+.rank-list {{ list-style: none; }}
+.rank-list li {{
+  display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}}
+.rank-list li:last-child {{ border-bottom: none; }}
+.rank-num {{ font-size: 13px; color: var(--muted); width: 28px; }}
+.rank-title {{ flex: 1; }}
+.rank-title a {{ color: var(--fg); }}
+.rank-title a:hover {{ color: var(--accent); }}
+.rank-bar {{ flex: 0 0 120px; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }}
+.rank-bar-inner {{ height: 100%; background: var(--accent); border-radius: 4px; }}
+.rank-val {{ font-size: 13px; color: var(--muted); width: 40px; text-align: right; }}
+.rank-type {{ font-size: 11px; padding: 1px 8px; border-radius: 10px; background: var(--accent-light); color: var(--accent); }}
+
+.empty {{ text-align: center; padding: 60px 20px; color: var(--muted); }}
+.loading {{ text-align: center; padding: 40px; color: var(--muted); }}
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back" href="{BASE_HREF}">← 返回首页</a>
+  <h1>量化分析</h1>
+  <p class="subtitle">用自然语言提问，自动生成图表 · 数据来源：wiki 页面与关系网络</p>
+
+  <div class="query-box">
+    <input id="q" type="text" placeholder="例如：谁连接度最高？有多少美国文论家？哪些标签最热门？" onkeydown="if(event.key==='Enter')doQuery()">
+    <button onclick="doQuery()">分析</button>
+  </div>
+
+  <div class="suggestions" id="suggestions"></div>
+
+  <div id="results"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+const BASE = "{BASE_HREF}";
+const TYPE_LABELS = {{ figure:"人物", concept:"概念", movement:"流派", work:"原典",
+  summary:"摘要", comparison:"对比", overview:"谱系", synthesis:"综合" }};
+const TYPE_COLORS = {{
+  figure: "#ef4444", concept: "#2563eb", movement: "#16a34a", work: "#a855f7",
+  summary: "#f59e0b", comparison: "#06b6d4", overview: "#ec4899", synthesis: "#6b7280",
+}};
+
+let STATS = null;
+let currentChart = null;
+
+const SUGGESTIONS = [
+  "整体概况",
+  "谁连接度最高？",
+  "哪些概念被引用最多？",
+  "各类型页面数量",
+  "最热门的标签",
+  "文论家来自哪些国家？",
+  "各世纪文论家分布",
+  "哪些教材贡献最多？",
+  "哪些页面没有连接？",
+  "页面内容长度分布",
+  "类型间关系矩阵",
+];
+
+function renderSuggestions() {{
+  const c = document.getElementById('suggestions');
+  c.innerHTML = SUGGESTIONS.map(s =>
+    `<span class="sug-chip" onclick="document.getElementById('q').value='${{s}}';doQuery()">${{s}}</span>`
+  ).join('');
+}}
+
+fetch(BASE + 'stats-data.json')
+  .then(r => r.json())
+  .then(data => {{ STATS = data; renderSuggestions(); }})
+  .catch(e => {{ document.getElementById('results').innerHTML = '<div class="empty">数据加载失败</div>'; }});
+
+function doQuery() {{
+  const q = document.getElementById('q').value.trim();
+  if (!q) return;
+  if (!STATS) {{ document.getElementById('results').innerHTML = '<div class="loading">数据加载中…</div>'; return; }}
+  const intent = classify(q);
+  renderResult(intent, q);
+}}
+
+function classify(q) {{
+  const ql = q.toLowerCase();
+  // 国别
+  if (/国别|国家|来自|美国|德国|法国|英国|俄国|苏联|中国|日本|意大利|国别|国籍/.test(q)) return 'nationality';
+  // 时期/世纪
+  if (/世纪|时期|年代|时代|20世纪|19世纪|18世纪|古典/.test(q)) return 'era';
+  // 教材/来源
+  if (/教材|来源|贡献|哪本书|原书|章节|书目/.test(q)) return 'book';
+  // 孤立
+  if (/孤立|没有连接|孤岛|未连接|无连接|断开/.test(q)) return 'isolated';
+  // 长度/体量
+  if (/长度|字数|体量|内容量|篇幅|多少字/.test(q)) return 'length';
+  // 关系矩阵
+  if (/关系矩阵|类型间|跨类型|关联矩阵|互联/.test(q)) return 'matrix';
+  // 连接度/中心性/重要
+  if (/连接度|中心性|最重要|核心|影响力|度中心|枢纽|关键节点/.test(q)) return 'degree';
+  // 被引用/入度
+  if (/被引用|被提及|被链接|入度|指向/.test(q)) return 'in_degree';
+  // 出度/引用
+  if (/引用了|链接了|出度|指向了/.test(q)) return 'out_degree';
+  // 标签/关键词
+  if (/标签|关键词|热门|高频|词频/.test(q)) return 'tags';
+  // 类型分布/数量
+  if (/类型|各类|多少个|数量|分布|统计|多少/.test(q)) return 'type_dist';
+  // 概览
+  if (/概览|总览|概况|整体|全貌|汇总|总览/.test(q)) return 'overview';
+  // 默认：概览
+  return 'overview';
+}}
+
+function destroyChart() {{
+  if (currentChart) {{ currentChart.destroy(); currentChart = null; }}
+}}
+
+function makeChart(ctx, cfg) {{
+  destroyChart();
+  const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  Chart.defaults.color = dark ? '#999' : '#6b6b6b';
+  Chart.defaults.borderColor = dark ? '#333' : '#e2e2e0';
+  currentChart = new Chart(ctx, cfg);
+}}
+
+function renderResult(intent, q) {{
+  const r = document.getElementById('results');
+  let html = '';
+
+  switch(intent) {{
+    case 'overview':
+      html = renderOverview();
+      break;
+    case 'degree':
+      html = renderDegree('total');
+      break;
+    case 'in_degree':
+      html = renderDegree('in');
+      break;
+    case 'out_degree':
+      html = renderDegree('out');
+      break;
+    case 'type_dist':
+      html = renderTypeDist();
+      break;
+    case 'tags':
+      html = renderTags();
+      break;
+    case 'nationality':
+      html = renderNationality();
+      break;
+    case 'era':
+      html = renderEra();
+      break;
+    case 'book':
+      html = renderBook();
+      break;
+    case 'isolated':
+      html = renderIsolated();
+      break;
+    case 'length':
+      html = renderLength();
+      break;
+    case 'matrix':
+      html = renderMatrix();
+      break;
+  }}
+  r.innerHTML = html;
+  if (typeof drawChart === 'function' && window._pendingChart) {{
+    drawChart(window._pendingChart);
+    window._pendingChart = null;
+  }}
+}}
+
+function renderOverview() {{
+  const s = STATS;
+  return `
+    <div class="result-header"><span class="result-title">整体概况</span><span class="result-desc">知识库宏观统计</span></div>
+    <div class="cards">
+      <div class="card"><div class="card-num">${{s.total_pages}}</div><div class="card-label">页面总数</div></div>
+      <div class="card"><div class="card-num">${{s.total_edges}}</div><div class="card-label">关系链接</div></div>
+      <div class="card"><div class="card-num">${{Object.keys(s.type_distribution).length}}</div><div class="card-label">内容类型</div></div>
+      <div class="card"><div class="card-num">${{s.tag_top50.length > 0 ? s.tag_top50.length : 0}}</div><div class="card-label">标签种类</div></div>
+      <div class="card"><div class="card-num">${{s.isolated_count}}</div><div class="card-label">孤立节点</div></div>
+      <div class="card"><div class="card-num">${{(s.avg_body_length/1000).toFixed(1)}}k</div><div class="card-label">平均字数</div></div>
+    </div>
+    <div class="chart-wrap"><h3>各类型页面数量</h3><div class="chart-container"><canvas id="cv1"></canvas></div></div>
+    <div class="chart-wrap"><h3>页面内容长度分布</h3><div class="chart-container"><canvas id="cv2"></canvas></div></div>
+  `;
+}}
+
+function renderDegree(metric) {{
+  const labels = {{ total: '总连接度', in: '被引用数（入度）', out: '引用数（出度）' }};
+  const dataKey = metric === 'total' ? 'degree_top50' : (metric === 'in' ? 'in_degree_top30' : 'out_degree_top30');
+  const items = STATS[dataKey].slice(0, 20);
+  return `
+    <div class="result-header"><span class="result-title">${{labels[metric]}} Top 20</span><span class="result-desc">基于 wiki 页面间的 [[链接]] 关系计算</span></div>
+    <div class="chart-wrap"><h3>${{labels[metric]}} 排名</h3><div class="chart-container"><canvas id="cv1"></canvas></div></div>
+    <div class="chart-wrap"><h3>详细列表</h3>
+      <ul class="rank-list">${{items.map((d, i) => {{
+        const pct = (d[metric] / items[0][metric] * 100).toFixed(0);
+        return `<li>
+          <span class="rank-num">${{i+1}}</span>
+          <span class="rank-type">${{TYPE_LABELS[d.type] || d.type}}</span>
+          <span class="rank-title"><a href="${{BASE}}${{d.slug}}.html">${{d.title}}</a></span>
+          <div class="rank-bar"><div class="rank-bar-inner" style="width:${{pct}}%"></div></div>
+          <span class="rank-val">${{d[metric]}}</span>
+        </li>`;
+      }}).join('')}}</ul>
+    </div>
+  `;
+}}
+
+function renderTypeDist() {{
+  return `
+    <div class="result-header"><span class="result-title">各类型页面数量</span><span class="result-desc">按内容类型统计</span></div>
+    <div class="chart-wrap"><h3>类型分布</h3><div class="chart-container"><canvas id="cv1"></canvas></div></div>
+  `;
+}}
+
+function renderTags() {{
+  const items = STATS.tag_top50.slice(0, 25);
+  return `
+    <div class="result-header"><span class="result-title">热门标签 Top 25</span><span class="result-desc">基于页面 frontmatter 中的 tags 字段</span></div>
+    <div class="chart-wrap"><h3>标签频次</h3><div class="chart-container"><canvas id="cv1"></canvas></div></div>
+  `;
+}}
+
+function renderNationality() {{
+  const items = STATS.nationality_distribution;
+  return `
+    <div class="result-header"><span class="result-title">文论家国别分布</span><span class="result-desc">基于人物页面的 wiki_nationality 字段</span></div>
+    <div class="chart-wrap"><h3>国别占比</h3><div class="chart-container"><canvas id="cv1"></canvas></div></div>
+  `;
+}}
+
+function renderEra() {{
+  const items = STATS.era_distribution;
+  return `
+    <div class="result-header"><span class="result-title">文论家世纪分布</span><span class="result-desc">基于人物页面的 wiki_lifespan 字段</span></div>
+    <div class="chart-wrap"><h3>各世纪文论家数量</h3><div class="chart-container"><canvas id="cv1"></canvas></div></div>
+  `;
+}}
+
+function renderBook() {{
+  const items = STATS.book_distribution.slice(0, 20);
+  return `
+    <div class="result-header"><span class="result-title">教材/原典贡献 Top 20</span><span class="result-desc">基于摘要页面的 book 字段</span></div>
+    <div class="chart-wrap"><h3>各教材摘要数量</h3><div class="chart-container"><canvas id="cv1"></canvas></div></div>
+  `;
+}}
+
+function renderIsolated() {{
+  const items = STATS.isolated_sample;
+  return `
+    <div class="result-header"><span class="result-title">孤立节点</span><span class="result-desc">共 ${{STATS.isolated_count}} 个页面没有任何 wiki 链接（入度+出度=0）</span></div>
+    <div class="chart-wrap">
+      <ul class="rank-list">${{items.map((d, i) => `
+        <li>
+          <span class="rank-num">${{i+1}}</span>
+          <span class="rank-type">${{TYPE_LABELS[d.type] || d.type}}</span>
+          <span class="rank-title"><a href="${{BASE}}${{d.slug}}.html">${{d.title}}</a></span>
+          <span class="rank-val" style="color:var(--orange)">0</span>
+        </li>`).join('')}}</ul>
+    </div>
+  `;
+}}
+
+function renderLength() {{
+  return `
+    <div class="result-header"><span class="result-title">页面内容长度分布</span><span class="result-desc">平均 ${{(STATS.avg_body_length/1000).toFixed(1)}}k 字，最长 ${{(STATS.max_body_length/1000).toFixed(1)}}k 字</span></div>
+    <div class="chart-wrap"><h3>字数区间分布</h3><div class="chart-container"><canvas id="cv1"></canvas></div></div>
+  `;
+}}
+
+function renderMatrix() {{
+  const types = Object.keys(STATS.type_matrix);
+  let header = '<th>→</th>';
+  types.forEach(t => {{ header += `<th>${{TYPE_LABELS[t] || t}}</th>`; }});
+  let rows = '';
+  types.forEach(src => {{
+    let row = `<th>${{TYPE_LABELS[src] || src}}</th>`;
+    types.forEach(tgt => {{
+      const v = (STATS.type_matrix[src] || {{}})[tgt] || 0;
+      const cls = v > 0 ? 'hot' : '';
+      row += `<td class="${{cls}}">${{v || ''}}</td>`;
+    }});
+    rows += `<tr>${{row}}</tr>`;
+  }});
+  return `
+    <div class="result-header"><span class="result-title">类型间关系矩阵</span><span class="result-desc">行=引用方，列=被引用方，数值=wiki 链接数</span></div>
+    <div class="chart-wrap">
+      <table class="matrix-table"><thead><tr>${{header}}</tr></thead><tbody>${{rows}}</tbody></table>
+    </div>
+  `;
+}}
+
+// 图表绘制
+function drawChart(type) {{
+  const ctx = document.getElementById('cv1');
+  if (!ctx) return;
+  const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  if (type === 'degree') {{
+    const items = STATS.degree_top50.slice(0, 20).reverse();
+    makeChart(ctx, {{
+      type: 'bar',
+      data: {{
+        labels: items.map(d => d.title),
+        datasets: [{{ label: '总连接度', data: items.map(d => d.total),
+          backgroundColor: items.map(d => TYPE_COLORS[d.type] || '#6b7280') }}]
+      }},
+      options: {{ indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: {{ legend: {{ display: false }} }},
+        scales: {{ x: {{ beginAtZero: true }}, y: {{ ticks: {{ font: {{ size: 11 }} }} }} }} }}
+    }});
+  }} else if (type === 'type_dist') {{
+    const td = STATS.type_distribution;
+    const labels = Object.keys(td).map(t => TYPE_LABELS[t] || t);
+    makeChart(ctx, {{
+      type: 'doughnut',
+      data: {{ labels, datasets: [{{ data: Object.values(td),
+        backgroundColor: Object.keys(td).map(t => TYPE_COLORS[t] || '#6b7280') }}] }},
+      options: {{ responsive: true, maintainAspectRatio: false,
+        plugins: {{ legend: {{ position: 'right' }} }} }}
+    }});
+  }} else if (type === 'tags') {{
+    const items = STATS.tag_top50.slice(0, 25).reverse();
+    makeChart(ctx, {{
+      type: 'bar',
+      data: {{ labels: items.map(d => d[0]), datasets: [{{ label: '频次', data: items.map(d => d[1]), backgroundColor: '#2563eb' }}] }},
+      options: {{ indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: {{ legend: {{ display: false }} }},
+        scales: {{ x: {{ beginAtZero: true }} }} }}
+    }});
+  }} else if (type === 'nationality') {{
+    const items = STATS.nationality_distribution;
+    makeChart(ctx, {{
+      type: 'pie',
+      data: {{ labels: items.map(d => d[0]), datasets: [{{ data: items.map(d => d[1]),
+        backgroundColor: ['#ef4444','#2563eb','#16a34a','#a855f7','#f59e0b','#06b6d4','#ec4899','#6b7280','#f43f5e','#84cc16'] }}] }},
+      options: {{ responsive: true, maintainAspectRatio: false,
+        plugins: {{ legend: {{ position: 'right' }} }} }}
+    }});
+  }} else if (type === 'era') {{
+    const items = STATS.era_distribution;
+    makeChart(ctx, {{
+      type: 'bar',
+      data: {{ labels: items.map(d => d[0]), datasets: [{{ label: '文论家数', data: items.map(d => d[1]), backgroundColor: '#16a34a' }}] }},
+      options: {{ responsive: true, maintainAspectRatio: false,
+        plugins: {{ legend: {{ display: false }} }},
+        scales: {{ y: {{ beginAtZero: true }} }} }}
+    }});
+  }} else if (type === 'book') {{
+    const items = STATS.book_distribution.slice(0, 20).reverse();
+    makeChart(ctx, {{
+      type: 'bar',
+      data: {{ labels: items.map(d => d[0]), datasets: [{{ label: '摘要数', data: items.map(d => d[1]), backgroundColor: '#a855f7' }}] }},
+      options: {{ indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: {{ legend: {{ display: false }} }},
+        scales: {{ x: {{ beginAtZero: true }}, y: {{ ticks: {{ font: {{ size: 10 }} }} }} }} }}
+    }});
+  }} else if (type === 'length') {{
+    const h = STATS.length_histogram;
+    makeChart(ctx, {{
+      type: 'bar',
+      data: {{ labels: h.labels, datasets: [{{ label: '页面数', data: h.data, backgroundColor: '#f59e0b' }}] }},
+      options: {{ responsive: true, maintainAspectRatio: false,
+        plugins: {{ legend: {{ display: false }} }},
+        scales: {{ y: {{ beginAtZero: true }} }} }}
+    }});
+  }}
+}}
+
+// 概览页面需要两个图表
+function drawOverviewCharts() {{
+  // cv1: 类型分布
+  const ctx1 = document.getElementById('cv1');
+  if (ctx1) {{
+    const td = STATS.type_distribution;
+    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    Chart.defaults.color = dark ? '#999' : '#6b6b6b';
+    Chart.defaults.borderColor = dark ? '#333' : '#e2e2e0';
+    currentChart = new Chart(ctx1, {{
+      type: 'bar',
+      data: {{ labels: Object.keys(td).map(t => TYPE_LABELS[t] || t),
+        datasets: [{{ label: '页面数', data: Object.values(td),
+          backgroundColor: Object.keys(td).map(t => TYPE_COLORS[t] || '#6b7280') }}] }},
+      options: {{ responsive: true, maintainAspectRatio: false,
+        plugins: {{ legend: {{ display: false }} }},
+        scales: {{ y: {{ beginAtZero: true }} }} }}
+    }});
+  }}
+  // cv2: 长度分布
+  const ctx2 = document.getElementById('cv2');
+  if (ctx2) {{
+    const h = STATS.length_histogram;
+    new Chart(ctx2, {{
+      type: 'bar',
+      data: {{ labels: h.labels, datasets: [{{ label: '页面数', data: h.data, backgroundColor: '#f59e0b' }}] }},
+      options: {{ responsive: true, maintainAspectRatio: false,
+        plugins: {{ legend: {{ display: false }} }},
+        scales: {{ y: {{ beginAtZero: true }} }} }}
+    }});
+  }}
+}}
+
+// 覆盖 renderResult 中的图表调用
+const _origRenderResult = renderResult;
+renderResult = function(intent, q) {{
+  _origRenderResult(intent, q);
+  // 延迟绘制图表（等 DOM 更新）
+  setTimeout(() => {{
+    if (intent === 'overview') drawOverviewCharts();
+    else {{
+      const chartMap = {{
+        degree: 'degree', in_degree: 'degree', out_degree: 'degree',
+        type_dist: 'type_dist', tags: 'tags', nationality: 'nationality',
+        era: 'era', book: 'book', length: 'length',
+      }};
+      if (chartMap[intent]) drawChart(chartMap[intent]);
+    }}
+  }}, 50);
+}};
+</script>
+</body>
+</html>'''
+    out_path = OUTPUT_DIR / "stats.html"
+    out_path.write_text(stats_html, encoding="utf-8")
+    print(f"量化分析页: {out_path}")
 
 
 if __name__ == "__main__":
