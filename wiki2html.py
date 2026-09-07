@@ -2083,8 +2083,26 @@ renderResult = function(intent, q) {{
 
 
 def generate_qa_index(all_pages):
-    """生成问答检索索引 qa-index.json（全量正文 + 句子分割）"""
+    """生成问答检索索引 qa-index.json（句子分割 + 预算倒排索引）"""
+    from collections import Counter
+
+    def extract_terms(text):
+        """提取中文 2-gram/3-gram + 英文单词"""
+        terms = []
+        for w in re.findall(r"[a-zA-Z]{2,}", text):
+            terms.append(w.lower())
+        cn = re.sub(r"[^\u4e00-\u9fa5]", "", text)
+        for i in range(len(cn) - 1):
+            terms.append(cn[i:i+2])
+            if i < len(cn) - 2:
+                terms.append(cn[i:i+3])
+        return terms
+
     qa_docs = []
+    df = {}  # document frequency
+    doc_tf = []  # 每个文档的 term frequency
+    total_len = 0
+
     for type_dir, filepath in all_pages:
         try:
             content = filepath.read_text(encoding="utf-8-sig")
@@ -2104,9 +2122,8 @@ def generate_qa_index(all_pages):
             if isinstance(tags, str):
                 tags = [t.strip() for t in tags.split(",") if t.strip()]
 
-            # 清理 markdown 标记，提取纯文本句子
+            # 清理 markdown 标记
             clean_body = body
-            # 去掉 wiki-link 括号但保留 display 文本
             clean_body = re.sub(r"\[\[([^\]|]+)(?:\|([^]]+))?\]\]", r"\2|\1", clean_body)
             clean_body = re.sub(r"^#+\s+", "", clean_body, flags=re.MULTILINE)
             clean_body = re.sub(r"\*\*(.+?)\*\*", r"\1", clean_body)
@@ -2115,12 +2132,15 @@ def generate_qa_index(all_pages):
             clean_body = re.sub(r"^>\s*", "", clean_body, flags=re.MULTILINE)
             clean_body = re.sub(r"^-\s+", "", clean_body, flags=re.MULTILINE)
             clean_body = re.sub(r"^\d+\.\s+", "", clean_body, flags=re.MULTILINE)
-            clean_body = re.sub(r"\[\[.*?\]\]", "", clean_body)  # 残留链接
+            clean_body = re.sub(r"\[\[.*?\]\]", "", clean_body)
             clean_body = re.sub(r"^---.*$", "", clean_body, flags=re.MULTILINE)
 
-            # 按句子分割（中文句号、问号、感叹号、换行）
+            # 按句子分割
             sentences = re.split(r"[。\n！？；]", clean_body)
             sentences = [s.strip() for s in sentences if s.strip() and len(s.strip()) > 8]
+
+            doc_len = len(clean_body)
+            total_len += doc_len
 
             qa_docs.append({
                 "slug": slug,
@@ -2128,16 +2148,24 @@ def generate_qa_index(all_pages):
                 "type": type_dir,
                 "tags": tags,
                 "sentences": sentences,
-                "len": len(clean_body),
+                "len": doc_len,
             })
         except Exception:
             pass
 
+    avg_len = total_len / len(qa_docs) if qa_docs else 1
+
+    # 输出（不包含 df，查询时用 indexOf 即可）
+    qa_data = {
+        "docs": qa_docs,
+        "avg_len": avg_len,
+        "total_docs": len(qa_docs),
+    }
+
     out_path = OUTPUT_DIR / "qa-index.json"
-    out_path.write_text(json.dumps(qa_docs, ensure_ascii=False), encoding="utf-8")
-    total_chars = sum(d["len"] for d in qa_docs)
-    print(f"问答索引: {len(qa_docs)} 文档, {total_chars} 字 → {out_path}")
-    return qa_docs
+    out_path.write_text(json.dumps(qa_data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    print(f"问答索引: {len(qa_docs)} 文档, {total_len} 字 → {out_path}")
+    return qa_data
 
 
 def generate_qa_page():
@@ -2265,7 +2293,6 @@ const TYPE_LABELS = {{
 }};
 
 let DOCS = [];
-let DF = {{}}; // document frequency per term
 let AVG_LEN = 1;
 let TOTAL_DOCS = 0;
 
@@ -2293,31 +2320,17 @@ function renderSuggestions() {{
   ).join('');
 }}
 
-// 加载问答索引
+// 加载问答索引（无 DF，查询时用 indexOf 即可）
 document.getElementById('status').innerHTML = '<div class="loading">正在加载知识库…</div>';
+const loadStart = performance.now();
 fetch(BASE + 'qa-index.json')
   .then(r => r.json())
   .then(data => {{
-    DOCS = data;
-    TOTAL_DOCS = DOCS.length;
-    let totalLen = 0;
-
-    // 构建倒排索引：词 -> 出现该词的文档数
-    DOCS.forEach(doc => {{
-      totalLen += doc.len;
-      const docText = doc.title + " " + (doc.sentences || []).join(" ");
-      // 对每个文档提取关键词
-      const terms = extractTerms(docText);
-      const seen = new Set();
-      terms.forEach(t => {{
-        if (!seen.has(t)) {{
-          seen.add(t);
-          DF[t] = (DF[t] || 0) + 1;
-        }}
-      }});
-    }});
-    AVG_LEN = totalLen / TOTAL_DOCS;
-    document.getElementById('status').innerHTML = '';
+    DOCS = data.docs;
+    AVG_LEN = data.avg_len;
+    TOTAL_DOCS = data.total_docs;
+    const loadTime = ((performance.now() - loadStart) / 1000).toFixed(1);
+    document.getElementById('status').innerHTML = '<div class="status-bar">知识库已就绪 · ' + TOTAL_DOCS + ' 页面 · 加载耗时 ' + loadTime + 's</div>';
     renderSuggestions();
     document.getElementById('q').focus();
   }})
@@ -2354,45 +2367,54 @@ function extractQueryTerms(query) {{
   return terms;
 }}
 
-// BM25 评分
-function bm25Score(queryTerms, doc) {{
+// 计算查询词的 DF（文档频率）——仅需遍历文档一次
+function computeDF(queryTerms) {{
+  const df = {{}};
+  queryTerms.forEach(t => df[t] = 0);
+  DOCS.forEach(doc => {{
+    const docLower = (doc.title + " " + (doc.sentences || []).join(" ")).toLowerCase();
+    queryTerms.forEach(qt => {{
+      if (docLower.indexOf(qt) >= 0) df[qt]++;
+    }});
+  }});
+  return df;
+}}
+
+// BM25 评分（使用 indexOf 匹配）
+function bm25Score(queryTerms, df, doc) {{
   const k1 = 1.5, b = 0.75;
   let score = 0;
+
   const docText = doc.title + " " + (doc.sentences || []).join(" ");
-  const docTerms = extractTerms(docText);
-
-  // 统计文档中每个词的频率
-  const tf = {{}};
-  docTerms.forEach(t => {{ tf[t] = (tf[t] || 0) + 1; }});
-
-  // 对标题加权
-  const titleTerms = extractTerms(doc.title);
-  const titleTf = {{}};
-  titleTerms.forEach(t => {{ titleTf[t] = (titleTf[t] || 0) + 1; }});
-
-  // 标签加权
-  const tagText = (doc.tags || []).join(" ");
-  const tagTerms = extractTerms(tagText);
+  const docLower = docText.toLowerCase();
+  const titleLower = doc.title.toLowerCase();
+  const tagText = (doc.tags || []).join(" ").toLowerCase();
 
   const dl = doc.len || 1;
-  const idf_denom = TOTAL_DOCS;
 
   const seen = new Set();
   queryTerms.forEach(qt => {{
     if (seen.has(qt)) return;
     seen.add(qt);
 
-    const df = DF[qt] || 0;
-    if (df === 0) return;
+    const df_val = df[qt] || 0;
+    if (df_val === 0) return;
 
-    const idf = Math.log((idf_denom - df + 0.5) / (df + 0.5) + 1);
-    const f = tf[qt] || 0;
-    const titleF = titleTf[qt] || 0;
-    const tagF = tagTerms.filter(t => t === qt).length;
+    let f = 0;
+    let pos = docLower.indexOf(qt);
+    while (pos >= 0) {{ f++; pos = docLower.indexOf(qt, pos + qt.length); }}
+
+    let titleF = 0;
+    pos = titleLower.indexOf(qt);
+    while (pos >= 0) {{ titleF++; pos = titleLower.indexOf(qt, pos + qt.length); }}
+
+    let tagF = 0;
+    pos = tagText.indexOf(qt);
+    while (pos >= 0) {{ tagF++; pos = tagText.indexOf(qt, pos + qt.length); }}
 
     if (f === 0 && titleF === 0 && tagF === 0) return;
 
-    // 综合频率：body + 3*title + 2*tags
+    const idf = Math.log((TOTAL_DOCS - df_val + 0.5) / (df_val + 0.5) + 1);
     const combinedF = f + 3 * titleF + 2 * tagF;
     const tfNorm = (combinedF * (k1 + 1)) / (combinedF + k1 * (1 - b + b * dl / AVG_LEN));
     score += idf * tfNorm;
@@ -2455,16 +2477,19 @@ function doAsk() {{
   }}
 
   // BM25 检索
+  const queryStart = performance.now();
+  const df = computeDF(queryTerms);
   const scored = DOCS.map(doc => ({{
     doc,
-    score: bm25Score(queryTerms, doc),
+    score: bm25Score(queryTerms, df, doc),
   }})).filter(d => d.score > 0);
 
   scored.sort((a, b) => b.score - a.score);
 
   const topDocs = scored.slice(0, 5);
+  const queryTime = ((performance.now() - queryStart) / 1000).toFixed(2);
   const status = document.getElementById('status');
-  status.innerHTML = `<div class="status-bar">检索到 ${{scored.length}} 个相关页面，展示 Top ${{topDocs.length}}，提取最相关段落</div>`;
+  status.innerHTML = `<div class="status-bar">检索到 ${{scored.length}} 个相关页面 · 耗时 ${{queryTime}}s · 展示 Top ${{topDocs.length}}</div>`;
 
   const results = document.getElementById('results');
   if (topDocs.length === 0) {{
