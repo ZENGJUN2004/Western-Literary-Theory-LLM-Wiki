@@ -123,8 +123,13 @@ def resolve_link(target):
     return None, display
 
 
-# GitHub Pages subpath base URL
+# GitHub Pages subpath base
 BASE_HREF = "/Western-Literary-Theory-LLM-Wiki/"
+
+# AI 问答后端（Cloudflare Worker）地址。留空则 qa.html 仅做本地检索摘要；
+# 填入 Worker 地址（如 https://your-worker.workers.dev）即启用 LLM 整合回答。
+# 可用环境变量 QA_API_BASE 覆盖，例如: python wiki2html.py（默认读取 .env 或此处）
+QA_API_BASE = os.environ.get("QA_API_BASE", "")
 
 
 def convert_wiki_links(text):
@@ -990,10 +995,19 @@ h1 {{ font-size:28px; margin-bottom:8px; }}
 const url = new URL(location.href);
 const initial = url.searchParams.get('q') || '';
 document.getElementById('q').value = initial;
-fetch('{BASE_HREF}search-index.json').then(r => r.json()).then(INDEX => {{
-  window._INDEX = INDEX;
-  if (initial) doSearch(initial);
-}});
+// 自动检测基础路径：GitHub Pages 部署在子路径，本地预览在根路径
+const BASE = location.pathname.startsWith("/Western-Literary-Theory-LLM-Wiki")
+  ? "/Western-Literary-Theory-LLM-Wiki/"
+  : "/";
+fetch(BASE + 'search-index.json')
+  .then(r => r.json())
+  .then(INDEX => {{
+    window._INDEX = INDEX;
+    if (initial) doSearch(initial);
+  }})
+  .catch(() => {{
+    document.getElementById('results').innerHTML = '<li style="color:#6b6b6b">索引加载失败（需通过 HTTP 服务访问）</li>';
+  }});
 function doSearch(q) {{
   const results = document.getElementById('results');
   if (!q.trim()) {{ results.innerHTML = ''; return; }}
@@ -1007,7 +1021,7 @@ function doSearch(q) {{
     comparison:"对比", overview:"谱系", synthesis:"综合", summary:"摘要" }};
   results.innerHTML = hits.map(p => `
     <li>
-      <a href="{BASE_HREF}${{p.slug}}.html">
+      <a href="${{BASE}}${{p.slug}}.html">
         <span class="result-type">${{labels[p.type] || p.type}}</span>
         <span class="result-title">${{p.title}}</span>
       </a>
@@ -2332,6 +2346,9 @@ h1 {{ font-size: 28px; font-weight: 700; margin-bottom: 6px; }}
 
 <script>
 const BASE = "{BASE_HREF}";
+// AI 整合回答后端地址（Cloudflare Worker）。
+// 填入 Worker 部署地址即可启用 LLM 整合回答；留空则仅显示本地检索摘要。
+const API_BASE = "{QA_API_BASE}";
 const TYPE_LABELS = {{
   figure:"人物", concept:"概念", movement:"流派", work:"原典",
   summary:"摘要", comparison:"对比", overview:"谱系", synthesis:"综合"
@@ -2688,7 +2705,101 @@ function doAsk() {{
     </div>`;
   }});
 
+  // === AI 整合回答（LLM）区块 ===
+  // 放在综合回答之前，优先展示。
+  let aiHtml = '<div class="answer-section summary-block" id="block-ai-answer">'
+    + '<h3>🤖 AI 整合回答</h3>'
+    + '<div class="ai-answer-body" id="ai-answer-body">'
+    + (API_BASE
+        ? '<div class="loading">正在调用 AI 整合回答…</div>'
+        : '<div style="color:var(--muted);font-size:13px">未配置 LLM 后端（API_BASE 为空），当前仅展示本地检索摘要。</div>')
+    + '</div>'
+    + '<div class="ai-answer-meta" id="ai-answer-meta"></div>'
+    + '</div>';
+  html = aiHtml + html;
+
   results.innerHTML = html;
+
+  // 若配置了 LLM 后端，则触发流式整合
+  if (API_BASE) {{
+    askLLM(q, topDocs, queryTerms);
+  }}
+}}
+
+// === AI 整合回答：把 BM25 检索到的最相关段落交给 LLM，流式生成整合回答 ===
+function buildContext(topDocs, queryTerms) {{
+  // 收集每个文档的最相关句子，构成给 LLM 的语境
+  const contextParts = [];
+  const sources = [];
+  topDocs.forEach((item, i) => {{
+    const sents = extractRelevantSentences(queryTerms, item.doc, 3);
+    if (sents.length === 0) return;
+    sources.push({{ slug: item.doc.slug, title: item.doc.title, type: item.doc.type, score: item.score }});
+    sents.forEach(s => {{
+      contextParts.push('[' + sources.length + '] 来源：' + item.doc.title + '\\n' + s.text);
+    }});
+  }});
+  return {{ context: contextParts.join('\\n\\n'), sources }};
+}}
+
+async function askLLM(q, topDocs, queryTerms) {{
+  const built = buildContext(topDocs, queryTerms);
+  const context = built.context;
+  const sources = built.sources;
+  const bodyEl = document.getElementById('ai-answer-body');
+  const metaEl = document.getElementById('ai-answer-meta');
+  if (sources.length > 0) {{
+    let srcHtml = '<span style="color:var(--muted);font-size:13px">引用来源：</span>';
+    srcHtml += sources.map((s, idx) =>
+      '<span class="cite-source"><sup>[' + (idx + 1) + ']</sup><a href="' + BASE + s.slug + '.html">' + s.title + '</a></span>'
+    ).join('');
+    metaEl.innerHTML = srcHtml;
+  }}
+
+  try {{
+    const resp = await fetch(API_BASE + '/api/ask', {{
+      method: 'POST',
+      headers: {{ 'Content-Type': 'application/json' }},
+      body: JSON.stringify({{ query: q, context: context, sources: sources }}),
+    }});
+    if (!resp.ok || !resp.body) {{
+      const err = await resp.json().catch(() => ({{}}));
+      bodyEl.innerHTML = '<div class="no-result">AI 后端错误：' + (err.error || ('HTTP ' + resp.status)) + '</div>';
+      return;
+    }}
+    // SSE 流式读取
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let acc = '';
+    let buffer = '';
+    bodyEl.innerHTML = '<div class="ai-answer-text"></div>';
+    const textEl = bodyEl.querySelector('.ai-answer-text');
+    while (true) {{
+      const chunk = await reader.read();
+      if (chunk.done) break;
+      buffer += decoder.decode(chunk.value, {{ stream: true }});
+      const events = buffer.split('\\n\\n');
+      buffer = events.pop();
+      for (const evt of events) {{
+        const line = evt.trim();
+        if (!line || !line.startsWith('data: ')) continue;
+        const data = JSON.parse(line.slice(6));
+        if (data.error) {{ textEl.innerHTML = '<div class="no-result">' + data.error + '</div>'; return; }}
+        if (data.content) {{ acc += data.content; textEl.innerHTML = acc.replace(/\\n/g, '<br>'); }}
+        if (data.sources && data.sources.length) {{
+          let sm = '<span style="color:var(--muted);font-size:13px">引用来源：</span>';
+          sm += data.sources.map(s =>
+            '<span class="cite-source"><sup>[1]</sup><a href="' + BASE + s.slug + '.html">' + s.title + '</a></span>'
+          ).join('');
+          metaEl.innerHTML = sm;
+        }}
+        if (data.done) break;
+      }}
+    }}
+    if (!acc) textEl.innerHTML = '<div class="no-result">未返回内容</div>';
+  }} catch (err) {{
+    bodyEl.innerHTML = '<div class="no-result">AI 后端连接失败：' + err.message + '</div>';
+  }}
 }}
 </script>
 </body>

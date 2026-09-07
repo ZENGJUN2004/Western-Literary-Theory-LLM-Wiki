@@ -1,0 +1,12 @@
+name = "western-theory-ai"
+main = "src/worker.js"
+compatibility_date = "2025-01-01"
+
+# Worker 仅做 DeepSeek 流式转发，无需持久存储
+
+# ===== SECRET：部署后用 wrangler secret put DEEPSEEK_API_KEY 设置 =====
+
+[env.production]
+vars = { ENV = "production" }
+
+# 观测：wrangler tail --format pretty

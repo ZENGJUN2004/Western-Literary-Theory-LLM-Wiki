@@ -1,0 +1,7 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# 生成的站点内容（由 wiki2html.py 构建，上传时用 deploy_hf.py 的 sync_docs 重新生成）
+wiki-site/docs/
