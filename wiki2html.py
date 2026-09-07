@@ -516,6 +516,8 @@ a:hover {{ text-decoration: underline; }}
 </div>
 
 <script>
+// 基础路径（GitHub Pages subpath）
+const BASE_HREF = "{base_href}";
 // 侧边栏导航数据
 const NAV_DATA = {nav_json};
 
@@ -528,7 +530,7 @@ function buildNav() {{
     for (const [slug, info] of Object.entries(items)) {{
       const title = info.title || slug;
       const active = window.location.pathname.includes(slug + '.html') ? ' active' : '';
-      html += `<a class="nav-item${{active}}" href="${{BASE_HREF}}{{slug}}.html">${{title}}</a>`;
+      html += `<a class="nav-item${{active}}" href="${{BASE_HREF}}${{slug}}.html">${{title}}</a>`;
     }}
     html += '</div>';
   }}
@@ -590,8 +592,8 @@ def get_prev_next(slug, all_slugs):
         idx = all_slugs.index(slug)
     except ValueError:
         return "", ""
-    prev = f'"{all_slugs[idx-1]}.html"' if idx > 0 else ""
-    next_ = f'"{all_slugs[idx+1]}.html"' if idx < len(all_slugs) - 1 else ""
+    prev = all_slugs[idx-1] if idx > 0 else ""
+    next_ = all_slugs[idx+1] if idx < len(all_slugs) - 1 else ""
     return prev, next_
 
 
@@ -640,7 +642,8 @@ def generate_page(filepath):
         title=title,
         body_html=meta_bar + body_html,
         nav_json=generate_nav_data(),
-        prev_next=""  # 将由后续处理填充
+        prev_next="{prev_next}",  # 保留占位符，稍后由主循环替换
+        base_href=BASE_HREF,
     )
 
     return full_html, title, fm
@@ -682,11 +685,11 @@ def main():
             prev, next_ = get_prev_next(slug, all_slugs)
             nav_html = ""
             if prev:
-                nav_html += f'<a href={prev}>← 上一页</a>'
+                nav_html += f'<a href="{BASE_HREF}{prev}.html">← 上一页</a>'
             else:
                 nav_html += '<span></span>'
             if next_:
-                nav_html += f'<a href={next_}>下一页 →</a>'
+                nav_html += f'<a href="{BASE_HREF}{next_}.html">下一页 →</a>'
             else:
                 nav_html += '<span></span>'
             html = html.replace('{prev_next}', nav_html)
@@ -740,6 +743,52 @@ def main():
     # 生成首页
     generate_homepage(search_idx)
 
+    # 生成独立搜索页（供标签等链接使用）
+    generate_search_page()
+
+    # 为每个类型目录生成索引页（用keys而不是values）
+    for type_key in TYPE_DIRS.keys():
+        type_dir = TYPE_DIRS[type_key]
+        type_path = OUTPUT_DIR / type_dir
+        type_path.mkdir(parents=True, exist_ok=True)
+        items = [p for p in search_idx if p["type"] == type_key]
+        items.sort(key=lambda x: x["title"])
+        type_html = f'''<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>{type_dir} · 西方文论 Wiki</title>
+<style>
+:root {{ --bg:#fafaf8; --fg:#1a1a1a; --muted:#6b6b6b; --accent:#2563eb; --accent-light:#dbeafe; --border:#e2e2e0; --card-bg:#fff; }}
+@media (prefers-color-scheme:dark) {{ :root {{ --bg:#1a1a1a; --fg:#e8e8e6; --muted:#999; --accent:#60a5fa; --accent-light:#1e3a5f; --border:#333; --card-bg:#222; }} }}
+body {{ font-family:-apple-system,"Noto Serif SC",Georgia,serif; background:var(--bg); color:var(--fg); line-height:1.7; margin:0; padding:40px 24px; }}
+a {{ color:var(--accent); text-decoration:none; }}
+h1 {{ font-size:28px; margin-bottom:8px; }}
+.back {{ font-size:14px; color:var(--muted); margin-bottom:24px; display:block; }}
+.letter-group {{ margin-bottom:24px; }}
+.letter {{ font-size:22px; font-weight:700; color:var(--accent); margin:16px 0 8px; border-bottom:1px solid var(--border); padding-bottom:4px; }}
+ul {{ list-style:none; padding:0; }}
+li {{ padding:4px 0; }}
+li a {{ font-size:15px; }}
+</style></head><body>
+<h1>{type_dir}</h1>
+<a class="back" href="{BASE_HREF}">← 返回首页</a>
+'''
+        # 按拼音首字母分组
+        current_letter = ""
+        for idx2, p in enumerate(items):
+            title = p["title"]
+            first_char = title[0] if title else "?"
+            if first_char != current_letter:
+                if current_letter and idx2 > 0:
+                    type_html += '</ul></div>\n'
+                current_letter = first_char
+                type_html += f'<div class="letter-group"><div class="letter">{first_char}</div><ul>\n'
+            type_html += f'<li><a href="{BASE_HREF}{p["slug"]}.html">{title}</a></li>\n'
+        if current_letter:
+            type_html += '</ul></div>\n'
+
+        type_html += '</body></html>'
+        (type_path / "index.html").write_text(type_html, encoding="utf-8")
+        print(f"  {type_dir}/index.html ({len(items)} 页)")
+
     print("\n✓ 生成完毕，站点位于:", OUTPUT_DIR)
 
 
@@ -751,6 +800,7 @@ def generate_homepage(search_idx):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>西方文论 Wiki · 首页</title>
+<base href="{base_href}">
 <style>
 :root {{
   --bg: #fafaf8; --fg: #1a1a1a; --muted: #6b6b6b;
@@ -804,14 +854,14 @@ h2 {{ font-size: 20px; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8p
   </div>
 
   <div class="section-nav">
-    <a href="/wiki/figures/">人物</a>
-    <a href="/wiki/concepts/">概念</a>
-    <a href="/wiki/movements/">流派</a>
-    <a href="/wiki/works/">原典</a>
-    <a href="/wiki/comparisons/">对比</a>
-    <a href="/wiki/overviews/">谱系</a>
-    <a href="/wiki/synthesis/">综合</a>
-    <a href="/wiki/summaries/">摘要</a>
+    <a href="{base_href}figures/">人物</a>
+    <a href="{base_href}concepts/">概念</a>
+    <a href="{base_href}movements/">流派</a>
+    <a href="{base_href}works/">原典</a>
+    <a href="{base_href}comparisons/">对比</a>
+    <a href="{base_href}overviews/">谱系</a>
+    <a href="{base_href}synthesis/">综合</a>
+    <a href="{base_href}summaries/">摘要</a>
   </div>
 
   <input class="search-box" type="text" id="searchInput" placeholder="搜索页面…" oninput="doSearch(this.value)">
@@ -825,7 +875,7 @@ h2 {{ font-size: 20px; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8p
 
 <script>
 const INDEX = {search_json};
-const BASE_HREF = "{{base_href}}";
+const BASE_HREF = "{base_href}";
 const TYPE_LABELS = {{figure:"人物", concept:"概念", movement:"流派", work:"原典",
   comparison:"对比", overview:"谱系", synthesis:"综合", summary:"摘要"}};
 
@@ -840,7 +890,7 @@ function doSearch(q) {{
   ).slice(0, 20);
   results.innerHTML = hits.map(p => `
     <li>
-      <a href="{{base_href}}{{p.slug}}.html">
+      <a href="{base_href}${{p.slug}}.html">
         <span class="result-type">${{TYPE_LABELS[p.type] || p.type}}</span>
         <span class="result-title">${{p.title}}</span>
       </a>
@@ -861,7 +911,7 @@ TYPE_ORDER.forEach(t => {{
   if (!byType[t]) return;
   allPages.innerHTML += `<li style="margin-top:12px;font-weight:600;color:var(--accent)">${{TYPE_LABELS[t]||t}}（${{byType[t].length}}）</li>`;
   byType[t].slice(0, 50).forEach(p => {{
-    allPages.innerHTML += `<li><a href="${{BASE_HREF}}{{{{p.slug}}}}.html">${{p.title}}</a></li>`;
+    allPages.innerHTML += `<li><a href="${{BASE_HREF}}${{p.slug}}.html">${{p.title}}</a></li>`;
   }});
   if (byType[t].length > 50) allPages.innerHTML += `<li style="color:var(--muted)">… 还有 ${{byType[t].length - 50}} 个</li>`;
 }});
@@ -883,48 +933,64 @@ TYPE_ORDER.forEach(t => {{
     ), encoding="utf-8")
     print(f"首页: {home_path}")
 
-    # 为每个类型目录生成索引页（用keys而不是values）
-    for type_key in TYPE_DIRS.keys():
-        type_dir = TYPE_DIRS[type_key]
-        type_path = OUTPUT_DIR / type_dir
-        type_path.mkdir(parents=True, exist_ok=True)
-        items = [p for p in search_idx if p["type"] == type_key]
-        items.sort(key=lambda x: x["title"])
-        type_html = f'''<!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"><title>{type_dir} · 西方文论 Wiki</title>
-<style>
-:root {{ --bg:#fafaf8; --fg:#1a1a1a; --muted:#6b6b6b; --accent:#2563eb; --accent-light:#dbeafe; --border:#e2e2e0; --card-bg:#fff; }}
-@media (prefers-color-scheme:dark) {{ :root {{ --bg:#1a1a1a; --fg:#e8e8e6; --muted:#999; --accent:#60a5fa; --accent-light:#1e3a5f; --border:#333; --card-bg:#222; }} }}
-body {{ font-family:-apple-system,"Noto Serif SC",Georgia,serif; background:var(--bg); color:var(--fg); line-height:1.7; margin:0; padding:40px 24px; }}
-a {{ color:var(--accent); text-decoration:none; }}
-h1 {{ font-size:28px; margin-bottom:8px; }}
-.back {{ font-size:14px; color:var(--muted); margin-bottom:24px; display:block; }}
-.letter-group {{ margin-bottom:24px; }}
-.letter {{ font-size:22px; font-weight:700; color:var(--accent); margin:16px 0 8px; border-bottom:1px solid var(--border); padding-bottom:4px; }}
-ul {{ list-style:none; padding:0; }}
-li {{ padding:4px 0; }}
-li a {{ font-size:15px; }}
-</style></head><body>
-<h1>{type_dir}</h1>
-<a class="back" href="/">← 返回首页</a>
-'''
-        # 按拼音首字母分组
-        current_letter = ""
-        for idx2, p in enumerate(items):
-            title = p["title"]
-            first_char = title[0] if title else "?"
-            if first_char != current_letter:
-                if current_letter and idx2 > 0:
-                    type_html += '</ul></div>\n'
-                current_letter = first_char
-                type_html += f'<div class="letter-group"><div class="letter">{first_char}</div><ul>\n'
-            type_html += f'<li><a href="{BASE_HREF}{p["slug"]}.html">{title}</a></li>\n'
-        if current_letter:
-            type_html += '</ul></div>\n'
 
-        type_html += '</body></html>'
-        (type_path / "index.html").write_text(type_html, encoding="utf-8")
-        print(f"  {type_dir}/index.html ({len(items)} 页)")
+def generate_search_page():
+    """生成独立搜索页 search.html（标签等链接指向它）"""
+    search_html = f'''<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>搜索 · 西方文论 Wiki</title>
+<base href="{BASE_HREF}">
+<style>
+body {{ font-family:-apple-system,"Noto Serif SC",Georgia,serif; background:#fafaf8; color:#1a1a1a; line-height:1.7; margin:0; padding:40px 24px; max-width:820px; }}
+a {{ color:#2563eb; text-decoration:none; }}
+h1 {{ font-size:28px; margin-bottom:8px; }}
+.back {{ font-size:14px; color:#6b6b6b; margin-bottom:24px; display:block; }}
+#q {{ width:100%; padding:10px 14px; border:1px solid #e2e2e0; border-radius:8px; font-size:15px; margin-bottom:24px; }}
+.result-list {{ list-style:none; padding:0; }}
+.result-list li {{ padding:8px 12px; border-radius:6px; margin-bottom:4px; }}
+.result-list li:hover {{ background:#dbeafe; }}
+.result-type {{ display:inline-block; padding:1px 8px; border-radius:10px; font-size:11px; font-weight:600; margin-right:8px; background:#dbeafe; color:#2563eb; }}
+.result-title {{ font-weight:500; }}
+.result-body {{ font-size:13px; color:#6b6b6b; margin-top:2px; }}
+</style></head><body>
+<h1>搜索</h1>
+<a class="back" href="{BASE_HREF}">← 返回首页</a>
+<input id="q" type="text" placeholder="输入关键词…" oninput="doSearch(this.value)">
+<ul class="result-list" id="results"></ul>
+<script>
+const url = new URL(location.href);
+const initial = url.searchParams.get('q') || '';
+document.getElementById('q').value = initial;
+fetch('{BASE_HREF}search-index.json').then(r => r.json()).then(INDEX => {{
+  window._INDEX = INDEX;
+  if (initial) doSearch(initial);
+}});
+function doSearch(q) {{
+  const results = document.getElementById('results');
+  if (!q.trim()) {{ results.innerHTML = ''; return; }}
+  q = q.toLowerCase();
+  const hits = (window._INDEX || []).filter(p =>
+    p.title.toLowerCase().includes(q) ||
+    p.body.toLowerCase().includes(q) ||
+    (p.tags || []).some(t => t.toLowerCase().includes(q))
+  ).slice(0, 30);
+  const labels = {{ figure:"人物", concept:"概念", movement:"流派", work:"原典",
+    comparison:"对比", overview:"谱系", synthesis:"综合", summary:"摘要" }};
+  results.innerHTML = hits.map(p => `
+    <li>
+      <a href="{BASE_HREF}${{p.slug}}.html">
+        <span class="result-type">${{labels[p.type] || p.type}}</span>
+        <span class="result-title">${{p.title}}</span>
+      </a>
+      <div class="result-body">${{p.body.substring(0, 100)}}…</div>
+    </li>
+  `).join('');
+}}
+</script>
+</body></html>'''
+    (OUTPUT_DIR / "search.html").write_text(search_html, encoding="utf-8")
+    print(f"搜索页: {OUTPUT_DIR / 'search.html'}")
 
 
 if __name__ == "__main__":

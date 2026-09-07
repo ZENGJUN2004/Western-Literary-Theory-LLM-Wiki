@@ -28,5 +28,6 @@ _broken*.py
 wiki-site/docs/*
 !wiki-site/docs/.nojekyll
 
-# 原始PDF文件
-[OCR]*.pdf
+# 原始PDF文件（OCR扫描版本）
+*[O][C][R]*.pdf
+*.layered.pdf
