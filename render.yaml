@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: western-literary-theory-llm-wiki
+    runtime: python
+    buildCommand: pip install -r requirements.txt && python wiki2html.py
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DEEPSEEK_API_KEY
+        sync: false
+    plan: free
