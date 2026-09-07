@@ -822,6 +822,7 @@ function buildGraph(){
   const container = el("visNetwork");
   const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
   const options = {
+    layout: { improvedLayout: false }, // 关闭改进布局，配合 forceAtlas2Based 求解器正确定位
     nodes: { shape:"dot", scaling:{min:5,max:22} },
     edges: { smooth:{ type:"continuous" } },
     physics:{

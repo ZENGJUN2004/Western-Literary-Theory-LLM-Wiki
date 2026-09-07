@@ -1220,6 +1220,10 @@ a:hover {{ text-decoration: underline; }}
 
 <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
 <script>
+// 自动检测基础路径：GitHub Pages 在子路径，本地预览在根路径
+const BASE = location.pathname.startsWith("/Western-Literary-Theory-LLM-Wiki")
+  ? "/Western-Literary-Theory-LLM-Wiki/"
+  : "/";
 const TYPE_COLORS = {{
   figure: "#ef4444",
   concept: "#2563eb",
@@ -1322,6 +1326,7 @@ function drawNetwork() {{
 
   const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   network = new vis.Network(container, data, {{
+    layout: {{ improvedLayout: false }}, // 关闭改进布局，配合 forceAtlas2Based 求解器正确定位
     nodes: {{
       shape: 'dot',
       scaling: {{ min: 6, max: 30, label: {{ min: 8, max: 16, maxVisible: 30, drawThreshold: 8 }} }},
@@ -1353,7 +1358,7 @@ function drawNetwork() {{
       const nodeId = params.nodes[0];
       const node = allNodes.find(n => n.id === nodeId);
       if (node) {{
-        window.location.href = '{BASE_HREF}' + node.id + '.html';
+        window.location.href = BASE + node.id + '.html';
       }}
     }}
   }});
