@@ -2420,16 +2420,22 @@ function extractRelevantSentences(queryTerms, doc, maxSentences) {{
   return scored.slice(0, maxSentences);
 }}
 
-// 高亮关键词
+// 高亮关键词（避免正则转义问题，使用 split/join）
 function highlight(text, terms) {{
   let result = text;
-  // 按长度降序排列，先替换长词
   const sortedTerms = [...new Set(terms)].sort((a, b) => b.length - a.length);
   sortedTerms.forEach(t => {{
     if (t.length < 2) return;
-    const escaped = t.replace(/[.*+?^${{}}|[\]\\]/g, '\\$&');
-    const re = new RegExp(escaped, 'gi');
-    result = result.replace(re, m => `<span class="hl">${{m}}</span>`);
+    const lower = result.toLowerCase();
+    const tLower = t.toLowerCase();
+    let idx = lower.indexOf(tLower);
+    while (idx >= 0) {{
+      const before = result.substring(0, idx);
+      const match = result.substring(idx, idx + t.length);
+      const after = result.substring(idx + t.length);
+      result = before + '<span class="hl">' + match + '</span>' + after;
+      idx = (before + '<span class="hl">' + match + '</span>' + after).toLowerCase().indexOf(tLower, idx + 25 + t.length);
+    }}
   }});
   return result;
 }}
