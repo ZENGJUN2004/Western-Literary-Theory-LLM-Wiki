@@ -1305,7 +1305,7 @@ function drawNetwork() {{
       keyboard: true,
       multiselect: false,
     }},
-  }};
+  }});
 
   network.on('click', function(params) {{
     if (params.nodes.length > 0) {{
