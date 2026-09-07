@@ -756,6 +756,11 @@ def main():
     generate_stats_data(all_pages)
     generate_stats_page()
 
+    # 生成问答索引和页面
+    print("\n生成问答索引…")
+    generate_qa_index(all_pages)
+    generate_qa_page()
+
     # 为每个类型目录生成索引页（用keys而不是values）
     for type_key in TYPE_DIRS.keys():
         type_dir = TYPE_DIRS[type_key]
@@ -874,6 +879,7 @@ h2 {{ font-size: 20px; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8p
     <a href="{base_href}summaries/">摘要</a>
     <a href="{base_href}graph.html" style="border-color:var(--accent);color:var(--accent);font-weight:600;">关系图谱</a>
     <a href="{base_href}stats.html" style="border-color:#16a34a;color:#16a34a;font-weight:600;">量化分析</a>
+    <a href="{base_href}qa.html" style="border-color:#a855f7;color:#a855f7;font-weight:600;">知识问答</a>
   </div>
 
   <input class="search-box" type="text" id="searchInput" placeholder="搜索页面…" oninput="doSearch(this.value)">
@@ -2074,6 +2080,443 @@ renderResult = function(intent, q) {{
     out_path = OUTPUT_DIR / "stats.html"
     out_path.write_text(stats_html, encoding="utf-8")
     print(f"量化分析页: {out_path}")
+
+
+def generate_qa_index(all_pages):
+    """生成问答检索索引 qa-index.json（全量正文 + 句子分割）"""
+    qa_docs = []
+    for type_dir, filepath in all_pages:
+        try:
+            content = filepath.read_text(encoding="utf-8-sig")
+            fm, body = parse_frontmatter(content)
+            rel = filepath.relative_to(KB_ROOT)
+            slug = str(rel.with_suffix("")).replace("\\", "/")
+
+            title = ""
+            for bl in body.split("\n"):
+                if bl.startswith("# "):
+                    title = bl[2:].strip()
+                    break
+            if not title:
+                title = filepath.stem
+
+            tags = fm.get("tags", [])
+            if isinstance(tags, str):
+                tags = [t.strip() for t in tags.split(",") if t.strip()]
+
+            # 清理 markdown 标记，提取纯文本句子
+            clean_body = body
+            # 去掉 wiki-link 括号但保留 display 文本
+            clean_body = re.sub(r"\[\[([^\]|]+)(?:\|([^]]+))?\]\]", r"\2|\1", clean_body)
+            clean_body = re.sub(r"^#+\s+", "", clean_body, flags=re.MULTILINE)
+            clean_body = re.sub(r"\*\*(.+?)\*\*", r"\1", clean_body)
+            clean_body = re.sub(r"\*(.+?)\*", r"\1", clean_body)
+            clean_body = re.sub(r"`(.+?)`", r"\1", clean_body)
+            clean_body = re.sub(r"^>\s*", "", clean_body, flags=re.MULTILINE)
+            clean_body = re.sub(r"^-\s+", "", clean_body, flags=re.MULTILINE)
+            clean_body = re.sub(r"^\d+\.\s+", "", clean_body, flags=re.MULTILINE)
+            clean_body = re.sub(r"\[\[.*?\]\]", "", clean_body)  # 残留链接
+            clean_body = re.sub(r"^---.*$", "", clean_body, flags=re.MULTILINE)
+
+            # 按句子分割（中文句号、问号、感叹号、换行）
+            sentences = re.split(r"[。\n！？；]", clean_body)
+            sentences = [s.strip() for s in sentences if s.strip() and len(s.strip()) > 8]
+
+            qa_docs.append({
+                "slug": slug,
+                "title": title,
+                "type": type_dir,
+                "tags": tags,
+                "sentences": sentences,
+                "len": len(clean_body),
+            })
+        except Exception:
+            pass
+
+    out_path = OUTPUT_DIR / "qa-index.json"
+    out_path.write_text(json.dumps(qa_docs, ensure_ascii=False), encoding="utf-8")
+    total_chars = sum(d["len"] for d in qa_docs)
+    print(f"问答索引: {len(qa_docs)} 文档, {total_chars} 字 → {out_path}")
+    return qa_docs
+
+
+def generate_qa_page():
+    """生成问答页面 qa.html（BM25 检索 + 段落提取）"""
+    qa_html = f'''<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>知识问答 · 西方文论 Wiki</title>
+<base href="{BASE_HREF}">
+<style>
+:root {{
+  --bg: #fafaf8; --fg: #1a1a1a; --muted: #6b6b6b;
+  --accent: #2563eb; --accent-light: #dbeafe;
+  --border: #e2e2e0; --card-bg: #ffffff;
+  --highlight: #fde68a;
+}}
+@media (prefers-color-scheme: dark) {{
+  :root {{
+    --bg: #1a1a1a; --fg: #e8e8e6; --muted: #999;
+    --accent: #60a5fa; --accent-light: #1e3a5f;
+    --border: #333; --card-bg: #222;
+    --highlight: #92710a;
+  }}
+}}
+* {{ box-sizing: border-box; margin: 0; padding: 0; }}
+body {{ font-family: -apple-system, "Noto Serif SC", Georgia, serif; background: var(--bg); color: var(--fg); line-height: 1.7; }}
+a {{ color: var(--accent); text-decoration: none; }}
+a:hover {{ text-decoration: underline; }}
+.container {{ max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }}
+h1 {{ font-size: 28px; font-weight: 700; margin-bottom: 6px; }}
+.subtitle {{ color: var(--muted); font-size: 15px; margin-bottom: 28px; }}
+.back {{ font-size: 14px; color: var(--muted); margin-bottom: 16px; display: inline-block; }}
+
+.query-box {{ display: flex; gap: 8px; margin-bottom: 16px; }}
+.query-box input {{
+  flex: 1; padding: 14px 18px; border: 2px solid var(--border); border-radius: 12px;
+  background: var(--card-bg); color: var(--fg); font-size: 17px; outline: none; transition: border-color 0.2s;
+}}
+.query-box input:focus {{ border-color: var(--accent); }}
+.query-box button {{
+  padding: 14px 28px; border: none; border-radius: 12px; background: var(--accent); color: #fff;
+  font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+}}
+.query-box button:hover {{ opacity: 0.9; }}
+
+.suggestions {{ display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }}
+.sug-chip {{
+  padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px;
+  font-size: 13px; cursor: pointer; transition: all 0.2s; color: var(--fg); background: var(--card-bg);
+}}
+.sug-chip:hover {{ border-color: var(--accent); color: var(--accent); background: var(--accent-light); }}
+
+.answer-section {{
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 24px; margin-bottom: 16px;
+}}
+.answer-section h3 {{ font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--accent); }}
+
+.answer-passage {{
+  padding: 16px 18px; border-left: 3px solid var(--accent); margin-bottom: 14px;
+  background: var(--bg); border-radius: 0 8px 8px 0; font-size: 15px; line-height: 1.8;
+}}
+.answer-passage .source {{
+  margin-top: 10px; font-size: 13px; color: var(--muted);
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}}
+.answer-passage .source .type-tag {{
+  padding: 1px 8px; border-radius: 10px; font-size: 11px; font-weight: 600;
+  background: var(--accent-light); color: var(--accent);
+}}
+.answer-passage .score {{
+  font-size: 12px; color: var(--muted); margin-left: auto;
+}}
+.hl {{ background: var(--highlight); padding: 0 2px; border-radius: 3px; }}
+
+.no-result {{ text-align: center; padding: 60px 20px; color: var(--muted); font-size: 16px; }}
+.loading {{ text-align: center; padding: 40px; color: var(--muted); }}
+
+.related-pages {{ margin-top: 12px; }}
+.related-pages a {{
+  display: inline-block; margin: 4px 6px 4px 0; padding: 4px 12px;
+  border: 1px solid var(--border); border-radius: 6px; font-size: 13px; color: var(--fg);
+}}
+.related-pages a:hover {{ border-color: var(--accent); color: var(--accent); }}
+
+.status-bar {{
+  font-size: 13px; color: var(--muted); margin-bottom: 16px; padding: 0 4px;
+}}
+
+.context-expand {{
+  margin-top: 8px; font-size: 13px; color: var(--accent); cursor: pointer;
+  user-select: none;
+}}
+.context-expand:hover {{ text-decoration: underline; }}
+.context-body {{
+  display: none; margin-top: 8px; padding: 12px; background: var(--bg); border-radius: 8px;
+  font-size: 14px; color: var(--muted); line-height: 1.6;
+}}
+.context-body.show {{ display: block; }}
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back" href="{BASE_HREF}">← 返回首页</a>
+  <h1>知识问答</h1>
+  <p class="subtitle">用自然语言提问，自动从知识库 1381 个页面中检索最相关答案</p>
+
+  <div class="query-box">
+    <input id="q" type="text" placeholder="例如：什么是互文性？弗洛伊德的精神分析批评如何影响文论？" onkeydown="if(event.key==='Enter')doAsk()">
+    <button onclick="doAsk()">提问</button>
+  </div>
+
+  <div class="suggestions" id="suggestions"></div>
+  <div id="status"></div>
+  <div id="results"></div>
+</div>
+
+<script>
+const BASE = "{BASE_HREF}";
+const TYPE_LABELS = {{
+  figure:"人物", concept:"概念", movement:"流派", work:"原典",
+  summary:"摘要", comparison:"对比", overview:"谱系", synthesis:"综合"
+}};
+
+let DOCS = [];
+let DF = {{}}; // document frequency per term
+let AVG_LEN = 1;
+let TOTAL_DOCS = 0;
+
+const STOP_WORDS = new Set([
+  "的","了","是","在","和","与","或","也","都","就","还","又","把","被","让","使","对","为","以","于","从","到","向","由","按","据","说","着","过","起","来","去","上","下","中","里","外","前","后","间","侧","们","这","那","些","某","其","此","该","它","他","她","你","我","什么","怎么","如何","为什么","哪些","哪个","请","帮","给","关于","对于","请问","一下"
+]);
+
+const SUGGESTIONS = [
+  "什么是互文性？",
+  "什么是结构主义？",
+  "弗洛伊德的精神分析批评如何影响文论？",
+  "马克思对文论有什么贡献？",
+  "新批评的核心观点是什么？",
+  "什么是三一律？",
+  "后结构主义有哪些代表人物？",
+  "解释学的发展历程？",
+  "什么是作者之死？",
+  "女性主义批评的主要观点？",
+];
+
+function renderSuggestions() {{
+  const c = document.getElementById('suggestions');
+  c.innerHTML = SUGGESTIONS.map(s =>
+    `<span class="sug-chip" onclick="document.getElementById('q').value='${{s.replace(/'/g,"\\'")}}';doAsk()">${{s}}</span>`
+  ).join('');
+}}
+
+// 加载问答索引
+document.getElementById('status').innerHTML = '<div class="loading">正在加载知识库…</div>';
+fetch(BASE + 'qa-index.json')
+  .then(r => r.json())
+  .then(data => {{
+    DOCS = data;
+    TOTAL_DOCS = DOCS.length;
+    let totalLen = 0;
+
+    // 构建倒排索引：词 -> 出现该词的文档数
+    DOCS.forEach(doc => {{
+      totalLen += doc.len;
+      const docText = doc.title + " " + (doc.sentences || []).join(" ");
+      // 对每个文档提取关键词
+      const terms = extractTerms(docText);
+      const seen = new Set();
+      terms.forEach(t => {{
+        if (!seen.has(t)) {{
+          seen.add(t);
+          DF[t] = (DF[t] || 0) + 1;
+        }}
+      }});
+    }});
+    AVG_LEN = totalLen / TOTAL_DOCS;
+    document.getElementById('status').innerHTML = '';
+    renderSuggestions();
+    document.getElementById('q').focus();
+  }})
+  .catch(e => {{
+    document.getElementById('status').innerHTML = '<div class="no-result">知识库加载失败</div>';
+  }});
+
+// 提取关键词（2-4字汉字组 + 英文单词）
+function extractTerms(text) {{
+  const terms = [];
+  // 提取英文单词
+  const enWords = text.match(/[a-zA-Z]{{2,}}/g);
+  if (enWords) terms.push(...enWords.map(w => w.toLowerCase()));
+  // 提取中文 2-gram, 3-gram
+  const cnChars = text.replace(/[^\u4e00-\u9fa5]/g, "");
+  for (let i = 0; i < cnChars.length - 1; i++) {{
+    terms.push(cnChars.substr(i, 2));
+    if (i < cnChars.length - 2) {{
+      terms.push(cnChars.substr(i, 3));
+    }}
+  }}
+  return terms;
+}}
+
+// 从问题中提取查询词
+function extractQueryTerms(query) {{
+  // 去掉停用词
+  const words = query.replace(/[^\u4e00-\u9fa5a-zA-Z0-9？？]/g, " ").trim().split(/\s+/);
+  const filtered = words.filter(w => w.length > 1 && !STOP_WORDS.has(w));
+  // 重新组合并提取 n-gram
+  const text = filtered.join("");
+  const terms = extractTerms(text);
+  // 对英文词也要过滤停用词
+  return terms;
+}}
+
+// BM25 评分
+function bm25Score(queryTerms, doc) {{
+  const k1 = 1.5, b = 0.75;
+  let score = 0;
+  const docText = doc.title + " " + (doc.sentences || []).join(" ");
+  const docTerms = extractTerms(docText);
+
+  // 统计文档中每个词的频率
+  const tf = {{}};
+  docTerms.forEach(t => {{ tf[t] = (tf[t] || 0) + 1; }});
+
+  // 对标题加权
+  const titleTerms = extractTerms(doc.title);
+  const titleTf = {{}};
+  titleTerms.forEach(t => {{ titleTf[t] = (titleTf[t] || 0) + 1; }});
+
+  // 标签加权
+  const tagText = (doc.tags || []).join(" ");
+  const tagTerms = extractTerms(tagText);
+
+  const dl = doc.len || 1;
+  const idf_denom = TOTAL_DOCS;
+
+  const seen = new Set();
+  queryTerms.forEach(qt => {{
+    if (seen.has(qt)) return;
+    seen.add(qt);
+
+    const df = DF[qt] || 0;
+    if (df === 0) return;
+
+    const idf = Math.log((idf_denom - df + 0.5) / (df + 0.5) + 1);
+    const f = tf[qt] || 0;
+    const titleF = titleTf[qt] || 0;
+    const tagF = tagTerms.filter(t => t === qt).length;
+
+    if (f === 0 && titleF === 0 && tagF === 0) return;
+
+    // 综合频率：body + 3*title + 2*tags
+    const combinedF = f + 3 * titleF + 2 * tagF;
+    const tfNorm = (combinedF * (k1 + 1)) / (combinedF + k1 * (1 - b + b * dl / AVG_LEN));
+    score += idf * tfNorm;
+  }});
+
+  return score;
+}}
+
+// 从文档中提取最相关句子
+function extractRelevantSentences(queryTerms, doc, maxSentences) {{
+  const sentences = doc.sentences || [];
+  const scored = sentences.map(s => {{
+    let sScore = 0;
+    const sLower = s.toLowerCase();
+    queryTerms.forEach(qt => {{
+      if (sLower.includes(qt.toLowerCase())) {{
+        // 长词权重高
+        sScore += qt.length >= 3 ? 3 : 1;
+      }}
+    }});
+    return {{ text: s, score: sScore, idx: sentences.indexOf(s) }};
+  }}).filter(s => s.score > 0);
+
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, maxSentences);
+}}
+
+// 高亮关键词
+function highlight(text, terms) {{
+  let result = text;
+  // 按长度降序排列，先替换长词
+  const sortedTerms = [...new Set(terms)].sort((a, b) => b.length - a.length);
+  sortedTerms.forEach(t => {{
+    if (t.length < 2) return;
+    const escaped = t.replace(/[.*+?^${{}}|[\]\\]/g, '\\$&');
+    const re = new RegExp(escaped, 'gi');
+    result = result.replace(re, m => `<span class="hl">${{m}}</span>`);
+  }});
+  return result;
+}}
+
+function doAsk() {{
+  const q = document.getElementById('q').value.trim();
+  if (!q) return;
+  if (DOCS.length === 0) {{
+    document.getElementById('results').innerHTML = '<div class="loading">知识库加载中…</div>';
+    return;
+  }}
+
+  const queryTerms = extractQueryTerms(q);
+  if (queryTerms.length === 0) {{
+    document.getElementById('results').innerHTML = '<div class="no-result">请输入更具体的问题</div>';
+    return;
+  }}
+
+  // BM25 检索
+  const scored = DOCS.map(doc => ({{
+    doc,
+    score: bm25Score(queryTerms, doc),
+  }})).filter(d => d.score > 0);
+
+  scored.sort((a, b) => b.score - a.score);
+
+  const topDocs = scored.slice(0, 5);
+  const status = document.getElementById('status');
+  status.innerHTML = `<div class="status-bar">检索到 ${{scored.length}} 个相关页面，展示 Top ${{topDocs.length}}，提取最相关段落</div>`;
+
+  const results = document.getElementById('results');
+  if (topDocs.length === 0) {{
+    results.innerHTML = '<div class="no-result">未找到相关内容，请换一种提问方式试试</div>';
+    return;
+  }}
+
+  let html = '';
+  topDocs.forEach((item, i) => {{
+    const doc = item.doc;
+    const sents = extractRelevantSentences(queryTerms, doc, 3);
+
+    // 构建答案段落
+    let passageHtml = '';
+    sents.forEach(s => {{
+      passageHtml += `<div class="answer-passage">${{highlight(s.text, queryTerms)}}
+        <div class="source">
+          <span class="type-tag">${{TYPE_LABELS[doc.type] || doc.type}}</span>
+          <a href="${{BASE}}${{doc.slug}}.html">${{doc.title}}</a>
+          <span class="score">相关度 ${{item.score.toFixed(2)}} · 句子匹配 ${{s.score}}</span>
+        </div>
+      </div>`;
+    }});
+
+    // 上下文展开
+    if (sents.length > 0) {{
+      const ctxIdx = sents[0].idx;
+      const ctxBefore = (doc.sentences[ctxIdx - 1] || "").trim();
+      const ctxAfter = (doc.sentences[ctxIdx + 1] || "").trim();
+      let ctxParts = '';
+      if (ctxBefore) ctxParts += `<div>… ${{highlight(ctxBefore, queryTerms)}}</div>`;
+      ctxParts += `<div style="color:var(--muted);margin:4px 0">[ 以上为提取的关键段落 ]</div>`;
+      if (ctxAfter) ctxParts += `<div>… ${{highlight(ctxAfter, queryTerms)}}</div>`;
+      passageHtml += `<div class="context-expand" onclick="this.nextElementSibling.classList.toggle('show')">展开上下文 ▸</div><div class="context-body">${{ctxParts}}</div>`;
+    }}
+
+    // 相关页面链接
+    const relatedLinks = scored.slice(i + 1, i + 4).map(r =>
+      `<a href="${{BASE}}${{r.doc.slug}}.html">${{r.doc.title}}</a>`
+    ).join('');
+    if (relatedLinks) {{
+      passageHtml += `<div class="related-pages"><span style="color:var(--muted);font-size:13px">相关页面：</span>${{relatedLinks}}</div>`;
+    }}
+
+    html += `<div class="answer-section">
+      <h3>答案 ${{i + 1}} · ${{doc.title}}</h3>
+      ${{passageHtml}}
+    </div>`;
+  }});
+
+  results.innerHTML = html;
+}}
+</script>
+</body>
+</html>'''
+    out_path = OUTPUT_DIR / "qa.html"
+    out_path.write_text(qa_html, encoding="utf-8")
+    print(f"问答页: {out_path}")
 
 
 if __name__ == "__main__":
