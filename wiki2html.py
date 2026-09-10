@@ -671,7 +671,9 @@ def generate_wendumap():
     out_path.write_text(html, encoding="utf-8")
     # 同时输出数据文件供参考
     (OUTPUT_DIR / "wendumap-data.json").write_text(json_str, encoding="utf-8")
-    print(f"文论地图: {len(data['schools'])} 流派, {len(data['links'])} 连线 → wendumap.html")
+    # 文论地图兼作首页（index.html），替代原驾驶舱首页
+    (OUTPUT_DIR / "index.html").write_text(html, encoding="utf-8")
+    print(f"文论地图: {len(data['schools'])} 流派, {len(data['links'])} 连线 → wendumap.html / index.html (首页)")
 
 
 def main():
@@ -789,17 +791,14 @@ def main():
     # 文论地图页面（读取结构化数据源，填充模板占位符后输出）
     generate_wendumap()
 
-    # 驾驶舱页面（从仓库根目录源码复制到输出目录）
-    # 驾驶舱兼作首页（index.html），保留其内置的搜索入口
+    # 驾驶舱页面（从仓库根目录源码复制到输出目录，作为次级页面）
+    # 首页已由文论地图（index.html）承担
     _cockpit_src = SCRIPT_DIR / "cockpit.html"
     if _cockpit_src.exists():
         _cockpit_content = _cockpit_src.read_text(encoding="utf-8")
         _cockpit_dst = OUTPUT_DIR / "cockpit.html"
         _cockpit_dst.write_text(_cockpit_content, encoding="utf-8")
-        # 将驾驶舱内容同时输出为首页 index.html
-        _home_dst = OUTPUT_DIR / "index.html"
-        _home_dst.write_text(_cockpit_content, encoding="utf-8")
-        print(f"驾驶舱页面: cockpit.html / index.html (首页) ({_home_dst.stat().st_size // 1024}KB)")
+        print(f"驾驶舱页面: cockpit.html (次级页面) ({_cockpit_dst.stat().st_size // 1024}KB)")
     else:
         print("警告: 源码 cockpit.html 不存在，驾驶舱页面未生成")
 
