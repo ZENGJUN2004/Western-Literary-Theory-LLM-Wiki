@@ -1,0 +1,1442 @@
+{
+  "title": "世界文论地图 · 基于曾军《20世纪西方文学理论学术地图》",
+  "source": "国家×时代×流派 / 曾军 制（新版2020）",
+  "eras": [
+    "18世纪之前",
+    "18世纪",
+    "19世纪",
+    "20世纪初—一战(1900—1914)",
+    "一战—二战(1914—1945)",
+    "二战后—60年代(1945—1970)",
+    "70年代—80年代(1970—1990)",
+    "90年代至今(1990—)"
+  ],
+  "regions": [
+    {
+      "id": "europe",
+      "name": "欧洲文论"
+    },
+    {
+      "id": "north-america",
+      "name": "北美文论"
+    },
+    {
+      "id": "asia",
+      "name": "亚洲文论"
+    },
+    {
+      "id": "africa",
+      "name": "非洲文论"
+    },
+    {
+      "id": "latin",
+      "name": "拉丁美洲文论"
+    },
+    {
+      "id": "oceania",
+      "name": "大洋洲文论"
+    }
+  ],
+  "countries": [
+    {
+      "id": "gb",
+      "name": "英国",
+      "x": 575,
+      "y": 200,
+      "region": "europe"
+    },
+    {
+      "id": "fr",
+      "name": "法国",
+      "x": 600,
+      "y": 268,
+      "region": "europe"
+    },
+    {
+      "id": "ch",
+      "name": "瑞士",
+      "x": 615,
+      "y": 296,
+      "region": "europe"
+    },
+    {
+      "id": "it",
+      "name": "意大利",
+      "x": 625,
+      "y": 328,
+      "region": "europe"
+    },
+    {
+      "id": "at",
+      "name": "奥地利",
+      "x": 648,
+      "y": 285,
+      "region": "europe"
+    },
+    {
+      "id": "hu",
+      "name": "匈牙利",
+      "x": 656,
+      "y": 300,
+      "region": "europe"
+    },
+    {
+      "id": "si",
+      "name": "斯洛文尼亚",
+      "x": 620,
+      "y": 314,
+      "region": "europe"
+    },
+    {
+      "id": "cz",
+      "name": "捷克",
+      "x": 645,
+      "y": 262,
+      "region": "europe"
+    },
+    {
+      "id": "de",
+      "name": "德国",
+      "x": 630,
+      "y": 250,
+      "region": "europe"
+    },
+    {
+      "id": "pl",
+      "name": "波兰",
+      "x": 672,
+      "y": 258,
+      "region": "europe"
+    },
+    {
+      "id": "ru",
+      "name": "俄罗斯",
+      "x": 820,
+      "y": 215,
+      "region": "europe"
+    },
+    {
+      "id": "us",
+      "name": "美国",
+      "x": 268,
+      "y": 240,
+      "region": "north-america"
+    },
+    {
+      "id": "ca",
+      "name": "加拿大",
+      "x": 286,
+      "y": 148,
+      "region": "north-america"
+    },
+    {
+      "id": "il",
+      "name": "以色列",
+      "x": 744,
+      "y": 330,
+      "region": "asia"
+    },
+    {
+      "id": "arab",
+      "name": "阿拉伯·中东",
+      "x": 780,
+      "y": 344,
+      "region": "asia"
+    },
+    {
+      "id": "in",
+      "name": "印度",
+      "x": 848,
+      "y": 378,
+      "region": "asia"
+    },
+    {
+      "id": "cn",
+      "name": "中国",
+      "x": 940,
+      "y": 344,
+      "region": "asia"
+    },
+    {
+      "id": "jp",
+      "name": "日本",
+      "x": 1020,
+      "y": 300,
+      "region": "asia"
+    },
+    {
+      "id": "africa",
+      "name": "非洲",
+      "x": 585,
+      "y": 470,
+      "region": "africa"
+    },
+    {
+      "id": "brasil",
+      "name": "拉丁美洲",
+      "x": 392,
+      "y": 480,
+      "region": "latin"
+    },
+    {
+      "id": "au",
+      "name": "澳大利亚",
+      "x": 1112,
+      "y": 512,
+      "region": "oceania"
+    }
+  ],
+  "schools": [
+    {
+      "id": "r01",
+      "name": "俄国革命民主主义",
+      "country": "ru",
+      "era": 2,
+      "spans": [
+        2,
+        3
+      ],
+      "theme": "phil",
+      "figures": [
+        "别林斯基",
+        "车尔尼雪夫斯基",
+        "杜勃罗留波夫"
+      ],
+      "period": "19世纪末—20世纪初"
+    },
+    {
+      "id": "r02",
+      "name": "苏联马克思主义",
+      "country": "ru",
+      "era": 3,
+      "spans": [
+        3,
+        4,
+        5
+      ],
+      "theme": "marx",
+      "figures": [
+        "普列汉诺夫",
+        "列宁",
+        "斯大林",
+        "卢那察尔斯基"
+      ],
+      "period": "20世纪初—30年代"
+    },
+    {
+      "id": "r03",
+      "name": "巴赫金小组",
+      "country": "ru",
+      "era": 4,
+      "spans": [
+        4,
+        5
+      ],
+      "theme": "formal",
+      "figures": [
+        "巴赫金",
+        "沃洛希诺夫",
+        "梅德维杰夫"
+      ],
+      "period": "20—30年代起"
+    },
+    {
+      "id": "r04",
+      "name": "俄国形式主义",
+      "country": "ru",
+      "era": 3,
+      "spans": [
+        3,
+        4
+      ],
+      "theme": "formal",
+      "figures": [
+        "什克洛夫斯基",
+        "雅各布森",
+        "艾亨鲍姆"
+      ],
+      "period": "1908—1930"
+    },
+    {
+      "id": "r05",
+      "name": "塔尔图-莫斯科符号学派",
+      "country": "ru",
+      "era": 5,
+      "spans": [
+        5,
+        6
+      ],
+      "theme": "formal",
+      "figures": [
+        "洛特曼"
+      ],
+      "period": "50年代以后"
+    },
+    {
+      "id": "r06",
+      "name": "现代主义艺术（俄）",
+      "country": "ru",
+      "era": 3,
+      "spans": [
+        3
+      ],
+      "theme": "art",
+      "figures": [
+        "象征派",
+        "未来派"
+      ],
+      "period": "1900s—20s"
+    },
+    {
+      "id": "g01",
+      "name": "德国古典哲学",
+      "country": "de",
+      "era": 1,
+      "spans": [
+        1,
+        2
+      ],
+      "theme": "phil",
+      "figures": [
+        "康德",
+        "席勒",
+        "黑格尔"
+      ],
+      "period": "18世纪末—19世纪上半叶"
+    },
+    {
+      "id": "g02",
+      "name": "马克思主义（德）",
+      "country": "de",
+      "era": 2,
+      "spans": [
+        2,
+        3
+      ],
+      "theme": "marx",
+      "figures": [
+        "马克思",
+        "恩格斯"
+      ],
+      "period": "19世纪中叶"
+    },
+    {
+      "id": "g03",
+      "name": "唯意志主义",
+      "country": "de",
+      "era": 2,
+      "spans": [
+        2,
+        3
+      ],
+      "theme": "phil",
+      "figures": [
+        "尼采",
+        "叔本华"
+      ],
+      "period": "19世纪中后"
+    },
+    {
+      "id": "g04",
+      "name": "解释学",
+      "country": "de",
+      "era": 2,
+      "spans": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "theme": "herm",
+      "figures": [
+        "施莱尔马赫",
+        "狄尔泰",
+        "海德格尔",
+        "伽达默尔"
+      ],
+      "period": "19世纪—20世纪中"
+    },
+    {
+      "id": "g05",
+      "name": "现象学",
+      "country": "de",
+      "era": 3,
+      "spans": [
+        3,
+        4,
+        5
+      ],
+      "theme": "phen",
+      "figures": [
+        "胡塞尔",
+        "舍勒"
+      ],
+      "period": "1900—"
+    },
+    {
+      "id": "g06",
+      "name": "现代主义艺术（德）",
+      "country": "de",
+      "era": 3,
+      "spans": [
+        3
+      ],
+      "theme": "art",
+      "figures": [
+        "表现主义"
+      ],
+      "period": "1905—30s"
+    },
+    {
+      "id": "g07",
+      "name": "存在主义（德）",
+      "country": "de",
+      "era": 4,
+      "spans": [
+        4,
+        5
+      ],
+      "theme": "phen",
+      "figures": [
+        "海德格尔"
+      ],
+      "period": "1927—"
+    },
+    {
+      "id": "g08",
+      "name": "法兰克福学派",
+      "country": "de",
+      "era": 4,
+      "spans": [
+        4,
+        5,
+        6
+      ],
+      "theme": "marx",
+      "figures": [
+        "霍克海默",
+        "阿多诺",
+        "马尔库塞",
+        "本雅明",
+        "哈贝马斯"
+      ],
+      "period": "1923—70s"
+    },
+    {
+      "id": "g09",
+      "name": "接受美学",
+      "country": "de",
+      "era": 5,
+      "spans": [
+        5,
+        6
+      ],
+      "theme": "herm",
+      "figures": [
+        "尧斯",
+        "伊瑟尔"
+      ],
+      "period": "1967—"
+    },
+    {
+      "id": "g10",
+      "name": "法兰克福学派（第二代）",
+      "country": "de",
+      "era": 6,
+      "spans": [
+        6,
+        7
+      ],
+      "theme": "marx",
+      "figures": [
+        "霍耐特",
+        "佛斯特",
+        "尼森"
+      ],
+      "period": "80s—"
+    },
+    {
+      "id": "cz01",
+      "name": "布拉格学派",
+      "country": "cz",
+      "era": 4,
+      "spans": [
+        4,
+        5
+      ],
+      "theme": "formal",
+      "figures": [
+        "雅各布森",
+        "穆卡洛夫斯基"
+      ],
+      "period": "1926—50s"
+    },
+    {
+      "id": "pl01",
+      "name": "现象学（波兰）",
+      "country": "pl",
+      "era": 4,
+      "spans": [
+        4,
+        5
+      ],
+      "theme": "phen",
+      "figures": [
+        "英伽登"
+      ],
+      "period": "30s—"
+    },
+    {
+      "id": "hu01",
+      "name": "西方马克思主义（匈）",
+      "country": "hu",
+      "era": 4,
+      "spans": [
+        4,
+        5
+      ],
+      "theme": "marx",
+      "figures": [
+        "卢卡奇"
+      ],
+      "period": "1923—"
+    },
+    {
+      "id": "it01",
+      "name": "现代主义艺术（意）",
+      "country": "it",
+      "era": 3,
+      "spans": [
+        3
+      ],
+      "theme": "art",
+      "figures": [
+        "未来主义"
+      ],
+      "period": "1907—"
+    },
+    {
+      "id": "it02",
+      "name": "西方马克思主义（意）",
+      "country": "it",
+      "era": 4,
+      "spans": [
+        4,
+        5
+      ],
+      "theme": "marx",
+      "figures": [
+        "葛兰西"
+      ],
+      "period": "1929—1935"
+    },
+    {
+      "id": "it03",
+      "name": "激进左翼（意）",
+      "country": "it",
+      "era": 7,
+      "spans": [
+        6,
+        7
+      ],
+      "theme": "post",
+      "figures": [
+        "奈格里",
+        "瓦蒂莫",
+        "阿甘本"
+      ],
+      "period": "90s—"
+    },
+    {
+      "id": "it04",
+      "name": "实证主义·文学社会学（意）",
+      "country": "it",
+      "era": 6,
+      "spans": [
+        6,
+        7
+      ],
+      "theme": "analytic",
+      "figures": [
+        "费兰克·莫莱蒂"
+      ],
+      "period": "80s—"
+    },
+    {
+      "id": "it05",
+      "name": "后现代女性主义（意）",
+      "country": "it",
+      "era": 7,
+      "spans": [
+        7
+      ],
+      "theme": "femin",
+      "figures": [
+        "罗西·布拉伊多蒂"
+      ],
+      "period": "90s—"
+    },
+    {
+      "id": "ch01",
+      "name": "现代主义艺术（瑞士）",
+      "country": "ch",
+      "era": 3,
+      "spans": [
+        3
+      ],
+      "theme": "art",
+      "figures": [
+        "达达主义"
+      ],
+      "period": "1916—"
+    },
+    {
+      "id": "ch02",
+      "name": "结构主义语言学（索绪尔）",
+      "country": "ch",
+      "era": 3,
+      "spans": [
+        3,
+        4
+      ],
+      "theme": "struct",
+      "figures": [
+        "索绪尔"
+      ],
+      "period": "1915《普通语言学教程》"
+    },
+    {
+      "id": "ch03",
+      "name": "精神分析学（瑞士）",
+      "country": "ch",
+      "era": 3,
+      "spans": [
+        3,
+        4
+      ],
+      "theme": "psych",
+      "figures": [
+        "荣格"
+      ],
+      "period": "1907以后"
+    },
+    {
+      "id": "at01",
+      "name": "精神分析学（奥）",
+      "country": "at",
+      "era": 3,
+      "spans": [
+        3,
+        4,
+        5
+      ],
+      "theme": "psych",
+      "figures": [
+        "弗洛伊德"
+      ],
+      "period": "1900《梦的解析》"
+    },
+    {
+      "id": "fr01",
+      "name": "现代主义艺术（法）",
+      "country": "fr",
+      "era": 2,
+      "spans": [
+        2,
+        3
+      ],
+      "theme": "art",
+      "figures": [
+        "后期印象主义",
+        "新印象主义",
+        "象征主义"
+      ],
+      "period": "19世纪80年代—"
+    },
+    {
+      "id": "fr02",
+      "name": "超现实主义",
+      "country": "fr",
+      "era": 4,
+      "spans": [
+        4
+      ],
+      "theme": "art",
+      "figures": [
+        "超现实主义"
+      ],
+      "period": "1917—"
+    },
+    {
+      "id": "fr03",
+      "name": "存在主义和荒诞派",
+      "country": "fr",
+      "era": 4,
+      "spans": [
+        4,
+        5
+      ],
+      "theme": "phen",
+      "figures": [
+        "萨特",
+        "加谬"
+      ],
+      "period": "40s—"
+    },
+    {
+      "id": "fr04",
+      "name": "现象学（法）",
+      "country": "fr",
+      "era": 5,
+      "spans": [
+        5
+      ],
+      "theme": "phen",
+      "figures": [
+        "萨特",
+        "梅洛-庞蒂",
+        "杜夫海纳"
+      ],
+      "period": "40年代以后"
+    },
+    {
+      "id": "fr05",
+      "name": "结构主义",
+      "country": "fr",
+      "era": 5,
+      "spans": [
+        5
+      ],
+      "theme": "struct",
+      "figures": [
+        "列维斯特劳斯",
+        "拉康",
+        "克里斯蒂娃",
+        "罗兰·巴特",
+        "托多罗夫",
+        "格雷马斯",
+        "阿尔都塞"
+      ],
+      "period": "60s—"
+    },
+    {
+      "id": "fr06",
+      "name": "女性主义（法·波伏瓦）",
+      "country": "fr",
+      "era": 5,
+      "spans": [
+        5
+      ],
+      "theme": "femin",
+      "figures": [
+        "波伏瓦"
+      ],
+      "period": "1949—"
+    },
+    {
+      "id": "fr07",
+      "name": "新小说派",
+      "country": "fr",
+      "era": 5,
+      "spans": [
+        5
+      ],
+      "theme": "art",
+      "figures": [
+        "罗伯-格里耶"
+      ],
+      "period": "50s—"
+    },
+    {
+      "id": "fr08",
+      "name": "后结构主义",
+      "country": "fr",
+      "era": 5,
+      "spans": [
+        5,
+        6
+      ],
+      "theme": "struct",
+      "figures": [
+        "德里达",
+        "福柯",
+        "罗兰·巴特",
+        "克里斯蒂娃"
+      ],
+      "period": "60s中后期—"
+    },
+    {
+      "id": "fr09",
+      "name": "后马克思主义（法）",
+      "country": "fr",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "marx",
+      "figures": [
+        "鲍德里亚"
+      ],
+      "period": "70s—"
+    },
+    {
+      "id": "fr10",
+      "name": "后现代主义（法·利奥塔）",
+      "country": "fr",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "post",
+      "figures": [
+        "利奥塔"
+      ],
+      "period": "80s—"
+    },
+    {
+      "id": "fr11",
+      "name": "女性主义（法·后学）",
+      "country": "fr",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "femin",
+      "figures": [
+        "克里斯蒂娃",
+        "埃莱娜·西苏",
+        "露丝·伊瑞格瑞"
+      ],
+      "period": "70s—"
+    },
+    {
+      "id": "fr12",
+      "name": "激进左翼（法）",
+      "country": "fr",
+      "era": 7,
+      "spans": [
+        6,
+        7
+      ],
+      "theme": "post",
+      "figures": [
+        "阿兰·巴迪欧",
+        "朗西埃",
+        "维利里奥",
+        "南希"
+      ],
+      "period": "90s—"
+    },
+    {
+      "id": "fr13",
+      "name": "文学社会学（法·布迪厄）",
+      "country": "fr",
+      "era": 6,
+      "spans": [
+        6,
+        7
+      ],
+      "theme": "analytic",
+      "figures": [
+        "布迪厄"
+      ],
+      "period": "70s—"
+    },
+    {
+      "id": "gb01",
+      "name": "现代主义艺术（英·意识流）",
+      "country": "gb",
+      "era": 3,
+      "spans": [
+        3,
+        4
+      ],
+      "theme": "art",
+      "figures": [
+        "意识流"
+      ],
+      "period": "20s—"
+    },
+    {
+      "id": "gb02",
+      "name": "语义学批评/新批评（英）",
+      "country": "gb",
+      "era": 4,
+      "spans": [
+        4,
+        5
+      ],
+      "theme": "formal",
+      "figures": [
+        "瑞恰兹",
+        "燕卜逊"
+      ],
+      "period": "20年代—"
+    },
+    {
+      "id": "gb03",
+      "name": "女性主义（英·伍尔夫）",
+      "country": "gb",
+      "era": 4,
+      "spans": [
+        4
+      ],
+      "theme": "femin",
+      "figures": [
+        "弗吉尼娅·伍尔夫"
+      ],
+      "period": "1929—"
+    },
+    {
+      "id": "gb04",
+      "name": "文化研究·伯明翰学派",
+      "country": "gb",
+      "era": 5,
+      "spans": [
+        5,
+        6
+      ],
+      "theme": "cult",
+      "figures": [
+        "霍加特",
+        "斯图尔特·霍尔",
+        "戴维·莫利",
+        "雷蒙·威廉斯"
+      ],
+      "period": "1964—2002"
+    },
+    {
+      "id": "gb05",
+      "name": "新马克思主义（英·伊格尔顿）",
+      "country": "gb",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "marx",
+      "figures": [
+        "伊格尔顿"
+      ],
+      "period": "70s—"
+    },
+    {
+      "id": "gb06",
+      "name": "后马克思主义（英）",
+      "country": "gb",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "marx",
+      "figures": [
+        "拉克劳",
+        "莫菲"
+      ],
+      "period": "80s—"
+    },
+    {
+      "id": "gb07",
+      "name": "约翰·伯格",
+      "country": "gb",
+      "era": 6,
+      "spans": [
+        6,
+        7
+      ],
+      "theme": "post",
+      "figures": [
+        "约翰·伯格"
+      ],
+      "period": "70s—"
+    },
+    {
+      "id": "gb08",
+      "name": "神经美学（英）",
+      "country": "gb",
+      "era": 7,
+      "spans": [
+        7
+      ],
+      "theme": "analytic",
+      "figures": [
+        "萨米尔·泽基"
+      ],
+      "period": "90s—"
+    },
+    {
+      "id": "us01",
+      "name": "亨利·詹姆斯",
+      "country": "us",
+      "era": 2,
+      "spans": [
+        2,
+        3
+      ],
+      "theme": "phil",
+      "figures": [
+        "亨利·詹姆斯"
+      ],
+      "period": "19世纪末"
+    },
+    {
+      "id": "us02",
+      "name": "文学激进派/新人文主义",
+      "country": "us",
+      "era": 3,
+      "spans": [
+        3
+      ],
+      "theme": "phil",
+      "figures": [
+        "白璧德",
+        "摩尔"
+      ],
+      "period": "20s—"
+    },
+    {
+      "id": "us03",
+      "name": "新批评（美）",
+      "country": "us",
+      "era": 4,
+      "spans": [
+        4,
+        5
+      ],
+      "theme": "formal",
+      "figures": [
+        "兰色姆",
+        "克林斯·布鲁克斯",
+        "韦勒克"
+      ],
+      "period": "1941—60s"
+    },
+    {
+      "id": "us04",
+      "name": "读者反应批评",
+      "country": "us",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "herm",
+      "figures": [
+        "诺曼·霍兰德",
+        "费什"
+      ],
+      "period": "70s—"
+    },
+    {
+      "id": "us05",
+      "name": "解构主义（耶鲁学派）",
+      "country": "us",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "struct",
+      "figures": [
+        "保罗·德曼",
+        "哈洛德·布鲁姆",
+        "杰夫里·哈特曼",
+        "希利斯·米勒",
+        "乔纳森·卡勒"
+      ],
+      "period": "70年代—"
+    },
+    {
+      "id": "us06",
+      "name": "新马克思主义（美·詹姆逊）",
+      "country": "us",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "marx",
+      "figures": [
+        "詹姆逊"
+      ],
+      "period": "80s—"
+    },
+    {
+      "id": "us07",
+      "name": "后现代主义（美）",
+      "country": "us",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "post",
+      "figures": [
+        "丹尼尔·贝尔",
+        "伊哈布·哈桑",
+        "斯潘诺斯"
+      ],
+      "period": "80年代以后"
+    },
+    {
+      "id": "us08",
+      "name": "后殖民主义",
+      "country": "us",
+      "era": 6,
+      "spans": [
+        6,
+        7
+      ],
+      "theme": "post",
+      "figures": [
+        "萨伊德",
+        "斯皮瓦克",
+        "霍米·巴巴"
+      ],
+      "period": "80年代以后"
+    },
+    {
+      "id": "us09",
+      "name": "新历史主义",
+      "country": "us",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "post",
+      "figures": [
+        "格林布拉特",
+        "海登·怀特"
+      ],
+      "period": "80s—"
+    },
+    {
+      "id": "us10",
+      "name": "女性主义（美）",
+      "country": "us",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "femin",
+      "figures": [
+        "凯特·米勒特",
+        "艾伦·莫尔斯",
+        "桑德拉·吉尔伯特",
+        "伊莱恩·肖瓦尔特"
+      ],
+      "period": "70s—"
+    },
+    {
+      "id": "us11",
+      "name": "言语行为理论",
+      "country": "us",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "analytic",
+      "figures": [
+        "塞尔"
+      ],
+      "period": "70s—"
+    },
+    {
+      "id": "us12",
+      "name": "日常语言文论",
+      "country": "us",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "analytic",
+      "figures": [
+        "斯坦利·卡维尔"
+      ],
+      "period": "70s—"
+    },
+    {
+      "id": "us18",
+      "name": "艺术约定论",
+      "country": "us",
+      "era": 6,
+      "spans": [
+        6,
+        7
+      ],
+      "theme": "analytic",
+      "figures": [
+        "戴维森"
+      ],
+      "period": "70s—"
+    },
+    {
+      "id": "us13",
+      "name": "新叙事学",
+      "country": "us",
+      "era": 6,
+      "spans": [
+        6
+      ],
+      "theme": "struct",
+      "figures": [
+        "韦恩·布斯",
+        "詹姆斯·费伦"
+      ],
+      "period": "80s—"
+    },
+    {
+      "id": "us14",
+      "name": "诗性正义",
+      "country": "us",
+      "era": 7,
+      "spans": [
+        7
+      ],
+      "theme": "phil",
+      "figures": [
+        "玛莎·努斯鲍姆"
+      ],
+      "period": "90s—"
+    },
+    {
+      "id": "us15",
+      "name": "认知科学（美）",
+      "country": "us",
+      "era": 7,
+      "spans": [
+        7
+      ],
+      "theme": "analytic",
+      "figures": [
+        "霍根",
+        "布莱尔",
+        "凯瑟琳·海尔斯"
+      ],
+      "period": "90s—"
+    },
+    {
+      "id": "us16",
+      "name": "新实用主义",
+      "country": "us",
+      "era": 7,
+      "spans": [
+        7
+      ],
+      "theme": "analytic",
+      "figures": [
+        "罗蒂"
+      ],
+      "period": "80s—"
+    },
+    {
+      "id": "us17",
+      "name": "激进左翼（美·哈特）",
+      "country": "us",
+      "era": 7,
+      "spans": [
+        7
+      ],
+      "theme": "post",
+      "figures": [
+        "迈克尔·哈特"
+      ],
+      "period": "90s—"
+    },
+    {
+      "id": "si01",
+      "name": "激进左翼（斯洛文尼亚·齐泽克）",
+      "country": "si",
+      "era": 7,
+      "spans": [
+        7
+      ],
+      "theme": "post",
+      "figures": [
+        "齐泽克"
+      ],
+      "period": "90s—"
+    },
+    {
+      "id": "is01",
+      "name": "认知科学（以色列·楚尔）",
+      "country": "il",
+      "era": 7,
+      "spans": [
+        7
+      ],
+      "theme": "analytic",
+      "figures": [
+        "楚尔"
+      ],
+      "period": "90s—"
+    }
+  ],
+  "links": [
+    {
+      "from": "r04",
+      "to": "cz01",
+      "type": "迁移",
+      "label": "雅各布森移居布拉格"
+    },
+    {
+      "from": "r04",
+      "to": "us03",
+      "type": "影响",
+      "label": "韦勒克融入英美新批评"
+    },
+    {
+      "from": "cz01",
+      "to": "us03",
+      "type": "迁移",
+      "label": "韦勒克转投新批评"
+    },
+    {
+      "from": "cz01",
+      "to": "fr05",
+      "type": "影响",
+      "label": "雅各布森—列维斯特劳斯",
+      "note": "音位学/二元分析模式"
+    },
+    {
+      "from": "ch02",
+      "to": "fr05",
+      "type": "影响",
+      "label": "索绪尔语言学→结构主义"
+    },
+    {
+      "from": "ch02",
+      "to": "r04",
+      "type": "影响",
+      "label": "索绪尔语言学→俄国形式主义"
+    },
+    {
+      "from": "r04",
+      "to": "r03",
+      "type": "影响",
+      "label": "巴赫金小组批判保存形式主义"
+    },
+    {
+      "from": "g05",
+      "to": "g07",
+      "type": "影响",
+      "label": "现象学→存在主义"
+    },
+    {
+      "from": "g05",
+      "to": "pl01",
+      "type": "影响",
+      "label": "现象学→英伽登"
+    },
+    {
+      "from": "g05",
+      "to": "fr04",
+      "type": "影响",
+      "label": "现象学→法国"
+    },
+    {
+      "from": "g04",
+      "to": "g09",
+      "type": "影响",
+      "label": "解释学→接受美学"
+    },
+    {
+      "from": "g09",
+      "to": "us04",
+      "type": "迁移",
+      "label": "接受美学被'经验化'为读者反应"
+    },
+    {
+      "from": "g01",
+      "to": "g05",
+      "type": "影响",
+      "label": "德国古典哲学→现象学",
+      "note": "多源之一"
+    },
+    {
+      "from": "g01",
+      "to": "g02",
+      "type": "影响",
+      "label": "德国古典哲学→马克思主义"
+    },
+    {
+      "from": "g02",
+      "to": "hu01",
+      "type": "影响",
+      "label": "马克思主义→卢卡奇"
+    },
+    {
+      "from": "g02",
+      "to": "g08",
+      "type": "影响",
+      "label": "马克思主义→法兰克福学派"
+    },
+    {
+      "from": "g02",
+      "to": "it02",
+      "type": "影响",
+      "label": "马克思主义→葛兰西"
+    },
+    {
+      "from": "hu01",
+      "to": "gb05",
+      "type": "影响",
+      "label": "西马→伊格尔顿"
+    },
+    {
+      "from": "it02",
+      "to": "gb04",
+      "type": "影响",
+      "label": "'葛兰西转向'→文化研究"
+    },
+    {
+      "from": "fr05",
+      "to": "fr08",
+      "type": "分化",
+      "label": "结构主义→后结构主义（解构）"
+    },
+    {
+      "from": "fr05",
+      "to": "gb04",
+      "type": "影响",
+      "label": "结构主义范式→CCCS"
+    },
+    {
+      "from": "fr08",
+      "to": "us05",
+      "type": "影响",
+      "label": "德里达→耶鲁解构学派"
+    },
+    {
+      "from": "at01",
+      "to": "ch03",
+      "type": "影响",
+      "label": "弗洛伊德→荣格"
+    },
+    {
+      "from": "at01",
+      "to": "g08",
+      "type": "影响",
+      "label": "弗洛伊德主义马克思主义"
+    },
+    {
+      "from": "at01",
+      "to": "fr05",
+      "type": "影响",
+      "label": "弗洛伊德→拉康"
+    },
+    {
+      "from": "at01",
+      "to": "us04",
+      "type": "影响",
+      "label": "弗洛伊德→霍兰德"
+    },
+    {
+      "from": "gb04",
+      "to": "gb06",
+      "type": "影响",
+      "label": "文化研究→后马克思主义"
+    },
+    {
+      "from": "ch03",
+      "to": "pl01",
+      "type": "影响",
+      "label": "原型→文学原型（平行）"
+    }
+  ]
+}

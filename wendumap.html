@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="/Western-Literary-Theory-LLM-Wiki/">
+<title>世界文论地图 · World Literary Theory Map</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%233b82f6'/><stop offset='.55' stop-color='%238b5cf6'/><stop offset='1' stop-color='%23ec4899'/></linearGradient></defs><rect width='32' height='32' rx='7' fill='url(%23g)'/><text x='16' y='22.5' font-family='Georgia,serif' font-size='17' font-weight='bold' fill='%23fff' text-anchor='middle'>W</text></svg>">
+<style>
+:root{
+  --bg:#0b1220; --panel:#151f33; --panel-2:#101a2e;
+  --border:#24314a; --text:#e5eaf3; --muted:#7e8ba6;
+  --accent:#3b82f6; --accent-2:#60a5fa; --gold:#eab308;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  background:
+    radial-gradient(1200px 600px at 78% -10%, rgba(59,130,246,.12), transparent 60%),
+    radial-gradient(900px 500px at 0% 115%, rgba(236,72,153,.07), transparent 55%),
+    var(--bg);
+  color:var(--text); font-family:-apple-system,"Noto Serif SC",Georgia,serif; font-size:13px; line-height:1.5;
+}
+a{color:var(--accent-2);text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:inherit;cursor:pointer}
+.shell{display:grid;grid-template-columns:214px 1fr 300px;grid-template-rows:60px 1fr 34px;grid-template-areas:"top top top""left center right""bot bot bot";height:100vh;width:100vw}
+.top{grid-area:top}.left{grid-area:left}.right{grid-area:right}.center{grid-area:center}.bot{grid-area:bot}
+
+/* top */
+.top{display:flex;align-items:center;gap:12px;padding:0 14px;background:rgba(15,23,42,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:thin}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;color:#fff;white-space:nowrap}
+.mark{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#3b82f6,#8b5cf6,#ec4899);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:800;box-shadow:0 0 0 1px rgba(255,255,255,.15) inset}
+.logo em{font-style:normal;font-weight:500;color:var(--muted);font-size:12px}
+.top .spacer{flex:1}
+.badge{background:var(--panel);border:1px solid var(--border);border-radius:7px;padding:4px 10px;font-size:12px;color:var(--muted);white-space:nowrap}
+.badge b{color:var(--accent-2);font-weight:700}
+
+/* timeline */
+.timeline{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.era-chip{padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--muted);font-size:11px;cursor:pointer;transition:all .18s;white-space:nowrap;line-height:1.35;text-align:center}
+.era-chip:hover{border-color:var(--accent);color:var(--text)}
+.era-chip.active{color:#fff;border-color:var(--accent);background:linear-gradient(135deg,rgba(59,130,246,.35),rgba(139,92,246,.35));box-shadow:0 0 10px rgba(59,130,246,.4)}
+.tl-btn{padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:12px;transition:all .15s}
+.tl-btn:hover{border-color:var(--accent);color:#fff}
+.tl-btn.playing{border-color:#22c55e;color:#4ade80}
+/* region-tabs 已移除，改为纯时间线索排列 */
+
+/* panels */
+.panel{background:var(--panel);border-right:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column}
+.right.panel{border-left:1px solid var(--border);border-right:none}
+.panel-body{overflow-y:auto;flex:1}
+.panel-section{padding:12px 14px;border-bottom:1px solid var(--border)}
+.panel-section:last-child{border-bottom:none}
+.panel-section h3{display:flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:700}
+.panel-section h3::before{content:"";width:3px;height:12px;border-radius:2px;background:linear-gradient(180deg,var(--accent),#8b5cf6)}
+.nav-list{display:flex;flex-direction:column;gap:2px}
+.nav-item{display:flex;align-items:center;justify-content:space-between;padding:7px 9px;border-radius:6px;cursor:pointer;color:var(--text);font-size:12px;border:1px solid transparent;background:transparent;width:100%;text-align:left;transition:all .15s}
+.nav-item:hover{background:var(--panel-2);border-color:var(--border)}
+.nav-item.active{background:rgba(59,130,246,.18);border-color:var(--accent);color:#fff}
+.nav-item .dot{width:8px;height:8px;border-radius:50%;margin-right:8px;flex-shrink:0;box-shadow:0 0 6px var(--dc,transparent)}
+.nav-item .name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-item .cnt{color:var(--muted);font-size:11px}
+.legend-list{display:flex;flex-direction:column;gap:6px}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text)}
+.legend-item .d{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend-item .link-line{width:24px;height:2px;background:#60a5fa;border-radius:2px;flex-shrink:0}
+
+/* center */
+.center{display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+.map-hint{position:absolute;top:8px;left:10px;font-size:11px;color:var(--muted);background:rgba(11,18,32,.65);padding:4px 8px;border-radius:5px;pointer-events:none;z-index:2}
+.frame{position:relative;flex:1;overflow:hidden}
+svg{width:100%;height:100%;display:block}
+.country-anchor{opacity:.7;transition:opacity .2s}
+.country-anchor.on{opacity:1}
+.country-anchor text{fill:var(--muted);font-size:13px;font-weight:600;stroke:#0b1220;stroke-width:3px;paint-order:stroke}
+.school{transition:opacity .25s, filter .25s}
+.school g{cursor:pointer}
+.school .halo{opacity:.18}
+.school.off{opacity:.14}
+.school.dim{opacity:.32}
+.school.on .halo{opacity:.4}
+.school.on .core{filter:drop-shadow(0 0 7px var(--sc))}
+.school .core{transition:r .2s, filter .2s}
+.school text.slabel{fill:#fff;font-size:8.5px;stroke:#0b1220;stroke-width:2.2px;paint-order:stroke;pointer-events:none}
+.sch-link{transition:opacity .25s}
+.sch-link .l{stroke:#60a5fa;stroke-width:1.1;opacity:.55;marker-end:url(#arr)}
+.sch-link .lt{fill:var(--muted);font-size:8px;stroke:#0b1220;stroke-width:1.6px;paint-order:stroke;pointer-events:none}
+.link-arrow{stroke:#60a5fa;fill:#60a5fa}
+.sch-link.off{opacity:.1}
+.sch-link.on .l{opacity:.95;stroke-width:1.6;stroke:#93c5fd}
+
+/* right detail */
+.detail{display:flex;flex-direction:column;gap:8px;font-size:12px}
+.d-title{font-size:15px;font-weight:700;color:#fff;line-height:1.35}
+.d-type{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:10px;font-size:11px}
+.d-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed var(--border)}
+.d-row .k{color:var(--muted)}
+.d-row .v{color:var(--text)}
+.d-fig{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.fig-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:12px;background:var(--panel-2);border:1px solid var(--border);color:var(--text);font-size:11px}
+.fig-chip:hover{border-color:var(--accent);color:#fff;text-decoration:none}
+.d-links{display:flex;flex-direction:column;gap:4px;margin-top:4px}
+.d-link-row{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.d-link-row b{color:var(--accent-2);font-weight:600}
+.d-link-row .lt{color:var(--text);flex:1}
+.cta{display:inline-block;margin-top:8px;padding:6px 10px;text-align:center;background:var(--accent);color:#fff;border-radius:5px;font-size:12px}
+.cta:hover{background:#2563eb;text-decoration:none;color:#fff}
+.empty{color:var(--muted);font-size:12px;text-align:center;padding:20px 8px;line-height:1.7}
+.theme-legend{margin-top:8px}
+
+/* bot */
+.bot{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--panel);border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
+.bot a{color:var(--muted);padding:4px 12px;border-radius:6px;display:inline-flex;align-items:center;gap:5px}
+.bot a:hover{background:var(--panel-2);color:var(--text);text-decoration:none}
+.bot .sep{color:#334155}
+
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#24314a;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#3b82f6}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- TOP -->
+  <header class="top">
+    <div class="logo"><span class="mark">W</span>世界文论地图<em>World Map</em></div>
+      <div class="timeline" id="timeline"></div>
+      <div class="spacer"></div>
+    <span class="badge" id="liveBadge"><b id="liveCount">0</b> 流派点亮</span>
+  </header>
+
+  <!-- LEFT: countries + themes -->
+  <aside class="panel left">
+    <div class="panel-body">
+      <div class="panel-section">
+        <h3>国家 / 地区</h3>
+        <div class="nav-list" id="countryNav"></div>
+      </div>
+      <div class="panel-section">
+        <h3>主题图例</h3>
+        <div class="legend-list" id="themeLegend"></div>
+        <div class="legend-list theme-legend">
+          <div class="legend-item"><span class="link-line"></span>思想传承 / 迁移 / 分化</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CENTER: map -->
+  <main class="center">
+    <div class="frame" id="frame">
+      <div class="map-hint">拖拽平移 · 滚轮缩放 · 点击流派气泡查看详情</div>
+      <svg id="map" viewBox="0 0 1320 700" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path class="link-arrow" d="M0,0 L10,5 L0,10 Z"/>
+          </marker>
+        </defs>
+        <g id="bgLayer"></g>
+        <g id="countryLayer"></g>
+        <g id="linkLayer"></g>
+        <g id="schoolLayer"></g>
+      </svg>
+    </div>
+  </main>
+
+  <!-- RIGHT: detail -->
+  <aside class="panel right">
+    <div class="panel-body">
+      <div class="panel-section">
+        <h3>当前选中 <span class="badge" id="selEra" style="margin-left:auto"></span></h3>
+        <div id="detailBox">
+          <div class="empty">点击地图中的流派气泡<br>查看其时代 · 国家 · 代表人物</div>
+        </div>
+      </div>
+      <div class="panel-section">
+        <h3>关联线索</h3>
+        <div id="relLinks" style="display:flex;flex-direction:column;gap:4px"><div class="empty">暂无选中</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- BOT -->
+  <footer class="bot">
+    <a href="index.html"><span class="bi">⌂</span>首页</a><span class="sep">·</span>
+    <a href="cockpit.html"><span class="bi">◈</span>研究驾驶舱</a><span class="sep">·</span>
+    <a href="graph.html"><span class="bi">◉</span>关系图谱</a><span class="sep">·</span>
+    <a href="stats.html"><span class="bi">◔</span>量化分析</a><span class="sep">·</span>
+    <a href="qa.html"><span class="bi">◒</span>知识问答</a><span class="sep">·</span>
+    <a href="search.html"><span class="bi">⌕</span>搜索</a>
+    <span class="sep">·</span><span>数据源：曾军《20世纪西方文学理论学术地图》(新版2020)</span>
+  </footer>
+
+</div>
+
+<script>
+/* ============ 数据：曾军学术地图（结构化） ============ */
+const BASE = location.pathname.startsWith("/Western-Literary-Theory-LLM-Wiki")
+  ? "/Western-Literary-Theory-LLM-Wiki/" : "/";
+
+// 主题 → 颜色映射（流派按理论谱系着色）
+const THEME = {
+  phil:     {name:"德国古典·美学传统", color:"#eab308"},
+  marx:     {name:"马克思主义谱系",   color:"#ef4444"},
+  formal:   {name:"形式主义·符号学",   color:"#f97316"},
+  struct:   {name:"结构·后结构主义",   color:"#a855f7"},
+  psych:    {name:"精神分析",          color:"#ec4899"},
+  phen:     {name:"现象学·存在主义",   color:"#06b6d4"},
+  herm:     {name:"解释学·接受美学",   color:"#22c55e"},
+  cult:     {name:"文化研究",          color:"#84cc16"},
+  femin:    {name:"女性主义",          color:"#f472b6"},
+  post:     {name:"'后'学·激进左翼",   color:"#8b5cf6"},
+  analytic: {name:"分析·语用·认知",    color:"#0ea5e9"},
+  art:      {name:"现代主义艺术",      color:"#64748b"}
+};
+
+const WENDUMAP = /*__WENDUMAP_DATA__*/{};
+const { eras, countries, schools, links } = WENDUMAP;
+
+const schoolById = {};
+schools.forEach(s => schoolById[s.id] = s);
+const countryById = {};
+countries.forEach(c => countryById[c.id] = c);
+
+/* ---------- 可视化状态 ---------- */
+let view = {
+  era: 0,             // 当前时代（-1=忽略时代筛选）
+  country: null,      // 选中国家
+  school: null,       // 选中流派
+  playIdx: 0, playing:false, timer:null,
+  hovered: null
+};
+let pos = {};         // schoolId -> {x,y}
+
+/* ---------- 坐标：流派气泡围绕所属国家散点 ---------- */
+function computePositions(){
+  const byCountry = {};
+  schools.forEach(s => { (byCountry[s.country] = byCountry[s.country] || []).push(s); });
+  Object.keys(byCountry).forEach(cid => {
+    const list = byCountry[cid], C = countryById[cid];
+    const R = 20 + Math.min(list.length-1, 6)*13;
+    list.forEach((s,i)=>{
+      const n = list.length;
+      const ang = (i/n)*Math.PI*2 - Math.PI/2 + (n>1? Math.PI/n : 0);
+      pos[s.id] = { x: C.x + Math.cos(ang)*R, y: C.y + Math.sin(ang)*R };
+    });
+  });
+}
+
+/* ---------- 背景：世界地图（Natural Earth 风格简化轮廓） ---------- */
+function buildBg(){
+  const L = document.getElementById('bgLayer');
+  L.innerHTML = `<g>
+      <rect x="0" y="0" width="1320" height="700" fill="#0c1e3d"/>
+      <!-- 经纬网格 -->
+      <g stroke="#1c3052" stroke-width="0.5" opacity="0.35">
+        <line x1="0" y1="175" x2="1320" y2="175"/>
+        <line x1="0" y1="350" x2="1320" y2="350"/>
+        <line x1="0" y1="525" x2="1320" y2="525"/>
+        <line x1="330" y1="0" x2="330" y2="700"/>
+        <line x1="660" y1="0" x2="660" y2="700"/>
+        <line x1="990" y1="0" x2="990" y2="700"/>
+      </g>
+      <!-- 各大洲轮廓（Natural Earth 简化） -->
+      <g fill="#15233f" stroke="#263d5c" stroke-width="0.8" stroke-linejoin="round">
+        <!-- 北美洲 -->
+        <path d="M60,85 L95,65 L140,62 L170,72 L205,68 L250,58 L285,65 L310,75
+          L330,90 L335,110 L315,135 L340,145 L370,160 L385,180 L375,205 L360,225
+          L345,240 L325,265 L310,290 L285,310 L265,305 L250,280 L235,260 L220,245
+          L200,235 L175,220 L155,200 L140,185 L125,165 L100,140 L75,120 L60,100 Z"/>
+        <!-- 格陵兰 -->
+        <path d="M370,40 L420,35 L455,50 L460,80 L445,105 L410,110 L380,95 L365,70 Z" opacity="0.6"/>
+        <!-- 中美洲 -->
+        <path d="M265,305 L275,318 L285,330 L290,345 L280,350 L270,340 L260,325 Z"/>
+        <!-- 南美洲 -->
+        <path d="M295,360 L310,350 L335,355 L360,370 L380,395 L395,425 L400,455
+          L395,485 L385,510 L370,535 L350,555 L330,570 L315,565 L305,540
+          L295,510 L290,480 L280,450 L275,420 L280,395 L285,375 Z"/>
+        <!-- 欧洲 -->
+        <path d="M540,120 L555,115 L575,125 L595,118 L610,125 L630,120 L645,130
+          L655,145 L665,155 L680,160 L690,175 L685,190 L695,200 L690,215
+          L680,230 L670,245 L660,260 L655,275 L645,290 L630,305 L615,315
+          L600,320 L585,310 L575,295 L565,280 L555,265 L548,245 L542,225
+          L538,200 L535,175 L532,155 L535,135 Z"/>
+        <!-- 不列颠群岛 -->
+        <path d="M555,155 L570,148 L580,155 L582,175 L575,190 L562,195 L555,180 Z" opacity="0.7"/>
+        <path d="M545,170 L555,168 L558,180 L548,185 Z" opacity="0.5"/>
+        <!-- 斯堪的纳维亚 -->
+        <path d="M590,80 L605,70 L620,65 L635,75 L640,95 L635,115 L625,125 L610,125 L598,115 L592,100 Z" opacity="0.6"/>
+        <!-- 非洲 -->
+        <path d="M560,345 L580,335 L605,330 L630,335 L655,345 L675,360
+          L690,380 L695,405 L690,430 L685,455 L675,480 L660,500 L640,515
+          L620,525 L600,530 L580,520 L565,505 L555,485 L548,460 L540,435
+          L535,410 L538,385 L545,365 Z"/>
+        <!-- 马达加斯加 -->
+        <path d="M690,495 L700,490 L705,510 L698,525 L688,520 Z" opacity="0.5"/>
+        <!-- 亚洲 -->
+        <path d="M695,95 L720,80 L750,70 L785,65 L820,60 L860,55 L900,60
+          L935,70 L960,85 L985,100 L1010,120 L1030,145 L1040,170 L1045,200
+          L1040,230 L1035,255 L1025,275 L1010,290 L990,300 L970,315 L950,330
+          L925,345 L900,355 L875,360 L850,355 L825,345 L800,330 L780,315
+          L760,295 L745,275 L730,255 L720,235 L715,215 L712,195 L710,175
+          L705,155 L700,135 L698,115 Z"/>
+        <!-- 阿拉伯半岛 -->
+        <path d="M720,315 L740,300 L760,310 L770,330 L765,355 L745,365 L725,350 L718,335 Z" opacity="0.7"/>
+        <!-- 印度次大陆 -->
+        <path d="M805,310 L825,295 L845,310 L850,335 L845,360 L830,380 L810,375 L800,355 L798,335 Z" opacity="0.7"/>
+        <!-- 东南亚群岛 -->
+        <path d="M935,380 L955,375 L970,385 L965,400 L950,405 L935,395 Z" opacity="0.5"/>
+        <path d="M970,405 L990,395 L1010,405 L1005,420 L985,425 L970,415 Z" opacity="0.4"/>
+        <!-- 日本列岛 -->
+        <path d="M1025,245 L1035,235 L1045,240 L1050,260 L1045,280 L1035,295 L1025,290 L1022,270 Z" opacity="0.6"/>
+        <path d="M1040,295 L1050,290 L1055,305 L1048,315 L1038,310 Z" opacity="0.4"/>
+        <!-- 澳大利亚 -->
+        <path d="M1020,475 L1050,465 L1085,462 L1115,470 L1140,485 L1150,505
+          L1145,530 L1130,550 L1110,560 L1085,558 L1060,548 L1040,530
+          L1025,510 L1018,490 Z"/>
+        <!-- 新西兰 -->
+        <path d="M1175,540 L1185,535 L1190,550 L1185,565 L1175,560 Z" opacity="0.5"/>
+        <path d="M1178,565 L1185,562 L1188,575 L1182,580 L1175,572 Z" opacity="0.4"/>
+      </g>
+    </g>`;
+}
+/* ---------- 国家锚点 ---------- */
+function buildCountries(){
+  const L = document.getElementById('countryLayer');
+  L.innerHTML = countries.map(c=>`
+    <g class="country-anchor" data-c="`+c.id+`" transform="translate(`+c.x+`,`+c.y+`)">
+      <circle r="4" fill="#60a5fa" opacity="0.85"/>
+      <text y="-9" text-anchor="middle">`+c.name+`</text>
+    </g>`).join('');
+  L.querySelectorAll('.country-anchor').forEach(g=>{
+    g.addEventListener('click',()=>{ toggleCountry(g.dataset.c); });
+  });
+}
+
+/* ---------- 连线 ---------- */
+function buildLinks(){
+  const L = document.getElementById('linkLayer');
+  L.innerHTML = links.map(l=>{
+    const a=pos[l.from], b=pos[l.to];
+    if(!a||!b) return '';
+    return `<g class="sch-link" data-link="`+l.from+`→`+l.to+`">
+      <line class="l" x1="`+a.x+`" y1="`+a.y+`" x2="`+b.x+`" y2="`+b.y+`"/>
+      <text class="lt" x="`+((a.x+b.x)/2)+`" y="`+((a.y+b.y)/2 - 4)+`" text-anchor="middle">`+l.label+`</text>
+    </g>`;
+  }).join('');
+}
+
+/* ---------- 流派气泡 ---------- */
+function buildSchools(){
+  const L = document.getElementById('schoolLayer');
+  L.innerHTML = schools.map(s=>{
+    const p = pos[s.id], c = THEME[s.theme].color;
+    return `<g class="school" data-school="`+s.id+`" transform="translate(`+p.x+`,`+p.y+`)" style="--sc:`+c+`">
+      <circle class="halo" r="13" fill="`+c+`" opacity="0.18"/>
+      <circle class="core" r="6.5" fill="`+c+`" stroke="#fff" stroke-opacity="0.35" stroke-width="0.8"/>
+      <text class="slabel" y="16" text-anchor="middle">`+s.name+`</text>
+    </g>`;
+  }).join('');
+  L.querySelectorAll('.school').forEach(g=>{
+    const id = g.dataset.school;
+    g.addEventListener('click', (e)=>{ e.stopPropagation(); selectSchool(id); });
+    g.addEventListener('mouseenter', ()=>{ view.hovered=id; sync(); });
+    g.addEventListener('mouseleave', ()=>{ view.hovered=null; sync(); });
+  });
+}
+
+/* ---------- 同步可视化：时代点亮 + 国家聚焦 + 选中高亮 ---------- */
+function activeOnEra(s, era){
+  if(era<0) return true;
+  return (s.spans||[s.era]).indexOf(era) >= 0;
+}
+function sync(){
+  const cur = view.era, cid = view.country, sel = view.school, hv = view.hovered;
+
+  // country anchors（全部显示）
+  document.querySelectorAll('.country-anchor').forEach(g=>{
+    g.style.display = '';
+    g.classList.toggle('on', !cid || g.dataset.c===cid);
+  });
+
+  // links visibility（按时代 + 国家）
+  let liveCount = 0;
+  document.querySelectorAll('.sch-link').forEach(g=>{
+    const [f,t] = g.dataset.link.split('→');
+    const sF=schoolById[f], sT=schoolById[t];
+    const matchEra = (cur<0) || activeOnEra(sF,cur) || activeOnEra(sT,cur);
+    const matchCountry = !cid || sF.country===cid || sT.country===cid;
+    const on = matchEra && matchCountry;
+    let rel = false;
+    if(sel){ rel = (f===sel||t===sel); }
+    g.classList.toggle('on', on && (sel? rel : true));
+    g.classList.toggle('off', !(on && (sel? rel : true)));
+  });
+
+  // schools
+  document.querySelectorAll('.school').forEach(g=>{
+    const s = schoolById[g.dataset.school];
+    const matchEra = activeOnEra(s, cur);
+    const matchCountry = !cid || s.country===cid;
+    const base = matchEra && matchCountry;
+    const isSel = sel===s.id;
+    if(!base){ g.classList.add('off'); g.classList.remove('on','dim'); }
+    else{
+      g.classList.remove('off');
+      if(isSel){ g.classList.add('on'); g.classList.remove('dim'); }
+      else if(sel && hv && (links.some(l=>(l.from===s.id&&l.to===sel)||(l.to===s.id&&l.from===sel)))){ g.classList.add('on'); g.classList.remove('dim'); }
+      else if(sel){ g.classList.add('dim'); g.classList.remove('on'); }
+      else{ g.classList.add('on'); g.classList.remove('dim'); }
+      liveCount++;
+    }
+  });
+  document.getElementById('liveCount').textContent = liveCount;
+
+  // timeline chips
+  document.querySelectorAll('.era-chip').forEach(ch=>{
+    ch.classList.toggle('active', ch.dataset.era == cur);
+  });
+  // country nav
+  document.querySelectorAll('#countryNav .nav-item').forEach(it=>{
+    it.classList.toggle('active', it.dataset.c==cid);
+  });
+
+  if(sel){ renderDetail(sel); renderRel(sel); }
+  else{ renderDetail(null); renderRel(null); }
+}
+
+/* ---------- 板块切换 ---------- */
+/* region-tabs 已移除 */
+
+/* ---------- 时间轴 ---------- */
+function renderTimeline(){
+  const box = document.getElementById('timeline');
+  // 每个时代的学校数量和涉及的国家
+  const eraInfo = eras.map((e,i)=>{
+    const eraSchools = schools.filter(s=>(s.spans||[s.era]).indexOf(i)>=0);
+    const eraCountries = [...new Set(eraSchools.map(s=>countryById[s.country]?.name).filter(Boolean))];
+    return { name:e, count:eraSchools.length, countries:eraCountries };
+  });
+  box.innerHTML = `<button class="tl-btn" id="btnPlay" title="播放时代变迁">▶ 播放</button>` +
+    eraInfo.map((e,i)=>{
+      const tip = e.countries.length ? e.countries.join('、') : '—';
+      return `<span class="era-chip" data-era="${i}" title="${tip}">${e.name}<br><small style="opacity:.7">${e.count}个流派</small></span>`;
+    }).join('') +
+    `<button class="tl-btn" id="btnReset" title="显示全部时代" style="margin-left:2px">全部</button>`;
+  box.querySelectorAll('.era-chip').forEach(ch=>{
+    ch.addEventListener('click',()=>{ stopPlay(); view.era=+ch.dataset.era; sync(); });
+  });
+  document.getElementById('btnPlay').addEventListener('click', togglePlay);
+  document.getElementById('btnReset').addEventListener('click',()=>{ stopPlay(); view.era=-1; sync(); });
+}
+function togglePlay(){
+  view.playing = !view.playing;
+  const btn = document.getElementById('btnPlay');
+  btn.textContent = view.playing ? '⏸ 暂停' : '▶ 播放';
+  btn.classList.toggle('playing', view.playing);
+  if(view.playing){
+    if(view.era<0) view.era=0;
+    view.playIdx = view.era;
+    stepPlay();
+  } else { clearInterval(view.timer); }
+}
+function stopPlay(){ if(view.playing){ view.playing=false; document.getElementById('btnPlay').textContent='▶ 播放'; document.getElementById('btnPlay').classList.remove('playing'); clearInterval(view.timer); } }
+function stepPlay(){
+  if(!view.playing) return;
+  view.era = view.playIdx;
+  sync();
+  renderPlayNote();
+  view.playIdx++;
+  if(view.playIdx >= eras.length){ stopPlay(); return; }
+  clearInterval(view.timer);
+  view.timer = setInterval(()=>{
+    view.era = view.playIdx;
+    sync(); renderPlayNote();
+    view.playIdx++;
+    if(view.playIdx >= eras.length){ stopPlay(); }
+  }, 2600);
+}
+function renderPlayNote(){
+  document.getElementById('selEra').textContent = '时代 '+ (view.era+1) +'/'+eras.length +' · '+eras[view.era];
+}
+
+/* ---------- 左侧国家列表 ---------- */
+function renderCountries(){
+  const box = document.getElementById('countryNav');
+  box.innerHTML = countries.map(c=>{
+    const n = schools.filter(s=>s.country===c.id).length;
+    return `<button class="nav-item" data-c="`+c.id+`"><span class="dot" style="--dc:#60a5fa"></span><span class="name">`+c.name+`</span><span class="cnt">`+n+`</span></button>`;
+  }).join('');
+  box.querySelectorAll('.nav-item').forEach(b=>{
+    b.addEventListener('click',()=>{ toggleCountry(b.dataset.c); });
+  });
+}
+function toggleCountry(c){
+  view.country = (view.country===c)? null : c;
+  if(!view.country) view.school = null;
+  sync();
+}
+/* ---------- 主题图例 ---------- */
+function renderLegend(){
+  const box = document.getElementById('themeLegend');
+  box.innerHTML = Object.values(THEME).map(t=>
+    `<div class="legend-item"><span class="d" style="background:`+t.color+`"></span>`+t.name+`</div>`).join('');
+}
+
+/* ---------- 右侧详情 ---------- */
+function renderDetail(sel){
+  const box = document.getElementById('detailBox');
+  const selEra = document.getElementById('selEra');
+  if(!sel){
+    const txt = (view.era<0)? '当前：显示全部时代' : ('当前：'+eras[view.era]);
+    selEra.textContent = txt;
+    box.innerHTML = `<div class="empty">点击地图中的流派气泡<br>查看其时代 · 国家 · 代表人物</div>`;
+    return;
+  }
+  const s = schoolById[sel], c = countryById[s.country], t = THEME[s.theme];
+  selEra.textContent = '时代 '+((s.spans||[s.era]).map(i=>i+1).join('·'));
+  box.innerHTML =
+    `<div class="d-title">`+s.name+`</div>`+
+    `<span class="d-type" style="background:`+t.color+`;color:#fff">`+t.name+`</span>`+
+    `<div class="d-row"><span class="k">所处时代</span><span class="v">`+eras[s.era]+`</span></div>`+
+    `<div class="d-row"><span class="k">国家/地区</span><span class="v">`+c.name+` · `+ (s.period||'—') +`</span></div>`+
+    `<div class="d-row"><span class="k">代表人物</span></div>`+
+    `<div class="d-fig">`+ (s.figures||[]).map(f=>
+      `<a class="fig-chip" href="`+BASE+`search.html?q=`+encodeURIComponent(f)+`">`+f+`</a>`).join('') +`</div>`+
+    `<a class="cta" href="`+BASE+`search.html?q=`+encodeURIComponent(s.name)+`">在知识库检索「`+s.name+`」→</a>`;
+}
+function renderRel(sel){
+  const box = document.getElementById('relLinks');
+  if(!sel){ box.innerHTML = `<div class="empty">暂无选中</div>`; return; }
+  const rel = links.filter(l=>l.from===sel||l.to===sel);
+  if(rel.length===0){ box.innerHTML = `<div class="empty">该流派暂无明显传承连线</div>`; return; }
+  box.innerHTML = rel.map(l=>{
+    const other = (l.from===sel)? schoolById[l.to] : schoolById[l.from];
+    const dir = (l.from===sel)? '→' : '←';
+    return `<div class="d-link-row"><b>`+dir+`</b><span class="lt">`+schoolById[l.from].name+` − `+schoolById[l.to].name+`</span><span class="lt" style="color:var(--muted)">[`+l.type+`: `+l.label+`]</span></div>`;
+  }).join('');
+}
+
+/* ---------- 选中流派 ---------- */
+function selectSchool(id){
+  view.school = (view.school===id)? null : id;
+  sync();
+}
+
+/* ---------- 拖拽平移 ---------- */
+function initPan(){
+  const svg = document.getElementById('map');
+  const frame = document.getElementById('frame');
+  svg.style.cursor = 'grab';
+  let down=false,sx=0,sy=0,tx=0,ty=0,scale=1;
+  const gview = view; // reuse
+  function apply(){ svg.setAttribute('transform','translate('+tx+','+ty+') scale('+scale+')'); }
+  svg.addEventListener('mousedown',e=>{ down=true; sx=e.clientX; sy=e.clientY; svg.style.cursor='grabbing'; });
+  frame.addEventListener('mousemove',e=>{ if(!down)return; tx+=(e.clientX-sx); ty+=(e.clientY-sy); sx=e.clientX; sy=e.clientY; apply(); });
+  window.addEventListener('mouseup',()=>{ down=false; svg.style.cursor='grab'; });
+  frame.addEventListener('wheel',e=>{ e.preventDefault(); scale = Math.max(.4, Math.min(2.4, scale*(e.deltaY<0?1.1:0.9))); apply(); },{passive:false});
+}
+
+/* ---------- boot ---------- */
+computePositions();
+renderTimeline();
+renderCountries();
+renderLegend();
+buildBg();
+buildCountries();
+buildLinks();
+buildSchools();
+renderPlayNote();
+sync();
+initPan();
+</script>
+</body>
+</html>

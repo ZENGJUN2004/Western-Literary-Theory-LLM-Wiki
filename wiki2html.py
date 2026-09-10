@@ -141,8 +141,7 @@ def convert_wiki_links(text):
             # 将相对路径转换为相对于 <base> 的路径
             # href 格式: "concepts/互文性.html" → /Western-Literary-Theory-LLM-Wiki/concepts/互文性.html
             href_clean = href.strip('"')
-            absolute_href = BASE_HREF + href_clean
-            return f'<a href="{absolute_href}" class="wiki-link">{display}</a>'
+            return f'<a href="{href_clean}" class="wiki-link">{display}</a>'
         else:
             # 未找到的链接显示为灰色提示
             return f'<span class="wiki-missing">{inner}</span>'
@@ -256,7 +255,7 @@ TEMPLATE = '''<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title} - 文论 Wiki</title>
-<base href="/Western-Literary-Theory-LLM-Wiki/">
+<script>document.write('<base href="'+(location.pathname.indexOf('/Western-Literary-Theory-LLM-Wiki/')===0?'/Western-Literary-Theory-LLM-Wiki/':'/')+'">')</script>
 <style>
 :root {{
   --bg: #fafaf8;
@@ -535,7 +534,7 @@ function buildNav() {{
     for (const [slug, info] of Object.entries(items)) {{
       const title = info.title || slug;
       const active = window.location.pathname.includes(slug + '.html') ? ' active' : '';
-      html += `<a class="nav-item${{active}}" href="${{BASE_HREF}}${{slug}}.html">${{title}}</a>`;
+      html += `<a class="nav-item${{active}}" href="${{slug}}.html">${{title}}</a>`;
     }}
     html += '</div>';
   }}
@@ -630,7 +629,7 @@ def generate_page(filepath):
     tags = fm.get("tags", [])
     for tag in tags[:5]:
         # 标签链接到搜索
-        meta_parts.append(f'<a class="meta-tag" href="{BASE_HREF}search.html?q={tag}">{tag}</a>')
+        meta_parts.append(f'<a class="meta-tag" href="search.html?q={tag}">{tag}</a>')
 
     lifespan = fm.get("wiki_lifespan", "")
     if lifespan:
@@ -652,6 +651,27 @@ def generate_page(filepath):
     )
 
     return full_html, title, fm
+
+
+def generate_wendumap():
+    """生成文论地图页面 wendumap.html（仿欧洲地图 + 时间轴三联动）"""
+    src = SCRIPT_DIR / "_docmap_data.json"
+    tpl = SCRIPT_DIR / "wendumap.html"
+    if not src.exists() or not tpl.exists():
+        print("警告: _docmap_data.json 或 wendumap.html 不存在，文论地图未生成")
+        return
+    data = json.loads(src.read_text(encoding="utf-8"))
+    html = tpl.read_text(encoding="utf-8")
+    json_str = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+    html = html.replace(
+        "const WENDUMAP = /*__WENDUMAP_DATA__*/{};",
+        "const _WENDUMAP_DATA = " + json_str + ";\nconst WENDUMAP = _WENDUMAP_DATA;",
+    )
+    out_path = OUTPUT_DIR / "wendumap.html"
+    out_path.write_text(html, encoding="utf-8")
+    # 同时输出数据文件供参考
+    (OUTPUT_DIR / "wendumap-data.json").write_text(json_str, encoding="utf-8")
+    print(f"文论地图: {len(data['schools'])} 流派, {len(data['links'])} 连线 → wendumap.html")
 
 
 def main():
@@ -690,11 +710,11 @@ def main():
             prev, next_ = get_prev_next(slug, all_slugs)
             nav_html = ""
             if prev:
-                nav_html += f'<a href="{BASE_HREF}{prev}.html">← 上一页</a>'
+                nav_html += f'<a href="{prev}.html">← 上一页</a>'
             else:
                 nav_html += '<span></span>'
             if next_:
-                nav_html += f'<a href="{BASE_HREF}{next_}.html">下一页 →</a>'
+                nav_html += f'<a href="{next_}.html">下一页 →</a>'
             else:
                 nav_html += '<span></span>'
             html = html.replace('{prev_next}', nav_html)
@@ -765,6 +785,9 @@ def main():
     print("\n生成问答索引…")
     generate_qa_index(all_pages)
     generate_qa_page()
+
+    # 文论地图页面（读取结构化数据源，填充模板占位符后输出）
+    generate_wendumap()
 
     # 驾驶舱页面（从仓库根目录源码复制到输出目录）
     # 驾驶舱兼作首页（index.html），保留其内置的搜索入口
@@ -1722,15 +1745,15 @@ h1 {{ font-size: 28px; font-weight: 700; margin-bottom: 6px; }}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
-const BASE = "{BASE_HREF}";
-const TYPE_LABELS = {{ figure:"人物", concept:"概念", movement:"流派", work:"原典",
-  summary:"摘要", comparison:"对比", overview:"谱系", synthesis:"综合" }};
-const TYPE_COLORS = {{
-  figure: "#ef4444", concept: "#2563eb", movement: "#16a34a", work: "#a855f7",
-  summary: "#f59e0b", comparison: "#06b6d4", overview: "#ec4899", synthesis: "#6b7280",
-}};
-
-let STATS = null;
+const BASE = location.pathname.indexOf("/Western-Literary-Theory-LLM-Wiki/")===0 ? "/Western-Literary-Theory-LLM-Wiki/" : "/";
+ const TYPE_LABELS = {{ figure:"人物", concept:"概念", movement:"流派", work:"原典",
+   summary:"摘要", comparison:"对比", overview:"谱系", synthesis:"综合" }};
+ const TYPE_COLORS = {{
+   figure: "#ef4444", concept: "#2563eb", movement: "#16a34a", work: "#a855f7",
+   summary: "#f59e0b", comparison: "#06b6d4", overview: "#ec4899", synthesis: "#6b7280",
+ }};
+ 
+ let STATS = null;
 let currentChart = null;
 
 const SUGGESTIONS = [
@@ -2355,8 +2378,8 @@ h1 {{ font-size: 28px; font-weight: 700; margin-bottom: 6px; }}
 </div>
 
 <script>
-const BASE = "{BASE_HREF}";
-// AI 整合回答后端地址（Cloudflare Worker）。
+const BASE = location.pathname.indexOf("/Western-Literary-Theory-LLM-Wiki/")===0 ? "/Western-Literary-Theory-LLM-Wiki/" : "/";
+ // AI 整合回答后端地址（Cloudflare Worker）。
 // 填入 Worker 部署地址即可启用 LLM 整合回答；留空则仅显示本地检索摘要。
 const API_BASE = "{QA_API_BASE}";
 const TYPE_LABELS = {{
