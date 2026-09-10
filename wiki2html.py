@@ -791,17 +791,6 @@ def main():
     # 文论地图页面（读取结构化数据源，填充模板占位符后输出）
     generate_wendumap()
 
-    # 驾驶舱页面（从仓库根目录源码复制到输出目录，作为次级页面）
-    # 首页已由文论地图（index.html）承担
-    _cockpit_src = SCRIPT_DIR / "cockpit.html"
-    if _cockpit_src.exists():
-        _cockpit_content = _cockpit_src.read_text(encoding="utf-8")
-        _cockpit_dst = OUTPUT_DIR / "cockpit.html"
-        _cockpit_dst.write_text(_cockpit_content, encoding="utf-8")
-        print(f"驾驶舱页面: cockpit.html (次级页面) ({_cockpit_dst.stat().st_size // 1024}KB)")
-    else:
-        print("警告: 源码 cockpit.html 不存在，驾驶舱页面未生成")
-
     # 为每个类型目录生成索引页（用keys而不是values）
     for type_key in TYPE_DIRS.keys():
         type_dir = TYPE_DIRS[type_key]
@@ -918,7 +907,6 @@ h2 {{ font-size: 20px; font-weight: 600; margin: 32px 0 16px; padding-bottom: 8p
     <a href="{base_href}overviews/">谱系</a>
     <a href="{base_href}synthesis/">综合</a>
     <a href="{base_href}summaries/">摘要</a>
-    <a href="{base_href}cockpit.html" style="border-color:#f97316;color:#f97316;font-weight:600;">研究驾驶舱</a>
     <a href="{base_href}graph.html" style="border-color:var(--accent);color:var(--accent);font-weight:600;">关系图谱</a>
     <a href="{base_href}stats.html" style="border-color:#16a34a;color:#16a34a;font-weight:600;">量化分析</a>
     <a href="{base_href}qa.html" style="border-color:#a855f7;color:#a855f7;font-weight:600;">知识问答</a>
